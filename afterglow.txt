@@ -1,0 +1,7 @@
+"afterglow"
+{
+	"base"     "sandbox"
+	"title"    "Afterglow"
+	"author"   "TankNut"
+	"category" "rp"
+}
