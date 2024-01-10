@@ -1,0 +1,7 @@
+GM.Config.Database = {
+	Host = "localhost",
+	Username = "root",
+	Password = "",
+	Database = "afterglow",
+	Port = 3306
+}
