@@ -49,3 +49,4 @@ IncludeFile("libs/sh_netstream.lua")
 IncludeFile("libs/sh_netvar.lua")
 
 IncludeFile("sh_player_ready.lua")
+IncludeFile("sh_ref.lua")
