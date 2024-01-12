@@ -142,6 +142,10 @@ if CLIENT then
 	SyncCache = SyncCache or {}
 
 	hook.Add("NetworkEntityCreated", "NetVar", function(ent)
+		if ent == LocalPlayer() then
+			return
+		end
+
 		if ent:GetNWBool("NetVarActive", false) then
 			SyncCache[ent] = true
 		end
@@ -149,6 +153,10 @@ if CLIENT then
 
 	hook.Add("NotifyShouldTransmit", "NetVar", function(ent, should)
 		if ent:IsPlayer() or not should or not ent:GetNWBool("NetVarActive", false) then
+			return
+		end
+
+		if ent == LocalPlayer() then
 			return
 		end
 
