@@ -8,7 +8,7 @@ local autofill = {
 	end
 }
 
-local writeLog = log.Category("netvar")
+local writeLog = log.Category("Netvar")
 
 local function writePayload(payload, key, value)
 	if value == nil then
@@ -59,7 +59,7 @@ if CLIENT then
 		end)
 	end)
 
-	hook.Add("InitPostEntity", "netvar", function()
+	hook.Add("InitPostEntity", "NetVar", function()
 		writeLog("Sync Request: Globals")
 		netstream.Send("NetVar")
 	end)
@@ -141,13 +141,13 @@ if CLIENT then
 
 	SyncCache = SyncCache or {}
 
-	hook.Add("NetworkEntityCreated", "netvar", function(ent)
+	hook.Add("NetworkEntityCreated", "NetVar", function(ent)
 		if ent:GetNWBool("NetVarActive", false) then
 			SyncCache[ent] = true
 		end
 	end)
 
-	hook.Add("NotifyShouldTransmit", "netvar", function(ent, should)
+	hook.Add("NotifyShouldTransmit", "NetVar", function(ent, should)
 		if ent:IsPlayer() or not should or not ent:GetNWBool("NetVarActive", false) then
 			return
 		end
@@ -155,7 +155,7 @@ if CLIENT then
 		SyncCache[ent] = true
 	end)
 
-	hook.Add("Tick", "netvar", function()
+	hook.Add("Tick", "NetVar", function()
 		local count = table.Count(SyncCache)
 
 		if count > 0 then
@@ -192,7 +192,7 @@ else
 	end
 
 	function SyncEntities(ply, entList)
-		writeLog("Sync Request for %s %s from %s", #entList, #entList > 1 and "entities" or "entity", ply)
+		writeLog("Sync Request for %s %s from %s", #entList > 1 and #entList or entList[1], #entList > 1 and "entities" or "", ply)
 
 		local payload = {}
 		local userID = ply:UserID()
@@ -256,7 +256,7 @@ else
 	netstream.Hook("NetVarEntity", SyncEntities)
 end
 
-hook.Add("EntityRemoved", "netvar", function(ent)
+hook.Add("EntityRemoved", "NetVar", function(ent)
 	local index = ent:EntIndex()
 
 	if index > 0 then
@@ -289,13 +289,13 @@ function RemoveEntityHook(key, identifier, callback)
 	EntityHooks[key][identifier] = nil
 end
 
-function GM:GlobalNetVarChanged(key, old, new)
+function GM:GlobalNetVarChanged(key, old, value)
 	for identifier, callback in pairs(GlobalHooks[key]) do
 		if isstring(identifier) then
-			callback(key, old, new)
+			callback(key, old, value)
 		else
 			if IsValid(identifier) then
-				callback(identifier, key, old, new)
+				callback(key, old, value)
 			else
 				GlobalHooks[key][identifier] = nil
 			end
@@ -303,19 +303,19 @@ function GM:GlobalNetVarChanged(key, old, new)
 	end
 end
 
-function GM:EntityNetVarChanged(ent, key, old, new)
+function GM:EntityNetVarChanged(ent, key, old, value)
 	local name = "On" .. key .. "Changed"
 
 	if isfunction(ent[name]) then
-		ent[name](ent, key, old, new)
+		ent[name](ent, key, old, value)
 	end
 
 	for identifier, callback in pairs(EntityHooks[key]) do
 		if isstring(identifier) then
-			callback(ent, key, old, new)
+			callback(ent, key, old, value)
 		else
-			if IsValid(identifier) then
-				callback(identifier, key, old, new)
+			if IsValid(identifier) and ent == identifier then
+				callback(ent, key, old, value)
 			else
 				EntityHooks[key][identifier] = nil
 			end
