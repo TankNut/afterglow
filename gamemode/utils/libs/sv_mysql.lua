@@ -99,6 +99,13 @@ function QUERY:BuildInsert(ignore)
 	return string.format("%s `%s` (%s) VALUES (%s)", insert, self.TableName, table.concat(keys, ", "), table.concat(values, ", "))
 end
 
+function QUERY:BuildUpdate()
+	local values = table.Map(self.UpdateList, function(val) return string.format("%s = %s", val[1], val[2]) end)
+	local where = #self.WhereList > 0 and " WHERE " .. table.concat(self.WhereList, " AND ") or ""
+
+	return string.format("UPDATE `%s` SET %s%s", self.TableName, table.concat(values, ", "), where)
+end
+
 function QUERY:BuildUpsert()
 	local insert = self:BuildInsert()
 	local values = table.Map(self.InsertList, function(val) return string.format("%s = %s", val[1], val[2]) end)
