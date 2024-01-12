@@ -2,7 +2,7 @@ function GM:OnPlayerReady(ply)
 end
 
 if CLIENT then
-	hook.Add("InitPostEntity", "player_ready", function()
+	hook.Add("InitPostEntity", "PlayerReady", function()
 		hook.Remove("InitPostEntity", "player_ready")
 		hook.Run("OnPlayerReady")
 	end)
@@ -11,7 +11,7 @@ else
 
 	gameevent.Listen("OnRequestFullUpdate")
 
-	hook.Add("OnRequestFullUpdate", "player_ready", function(data)
+	hook.Add("OnRequestFullUpdate", "PlayerReady", function(data)
 		local ply = Player(data.userid)
 
 		if net.Ready[ply] then

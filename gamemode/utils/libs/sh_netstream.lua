@@ -6,7 +6,7 @@ Cache = Cache or {}
 MessageLimit = 60000 -- 60 KB
 TickLimit = 200000 -- 0.2 MB/s
 
-local writeLog = log.Category("netstream")
+local writeLog = log.Category("Netstream")
 
 function Split(data)
 	local encoded = Encode(data)
@@ -224,7 +224,7 @@ else
 		callback(ply)
 	end)
 
-	hook.Add("OnPlayerReady", "netstream", function(ply)
+	hook.Add("OnPlayerReady", "Netstream", function(ply)
 		Ready[ply] = true
 
 		if Queue[ply] then
@@ -240,7 +240,7 @@ else
 		end
 	end)
 
-	hook.Add("Think", "netstream", function()
+	hook.Add("Think", "Netstream", function()
 		for k, v in pairs(Queue) do
 			if not IsValid(k) then
 				Queue[k] = nil
