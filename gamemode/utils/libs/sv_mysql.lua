@@ -181,8 +181,15 @@ function mysql:Begin()
 end
 
 function mysql:Commit(callback)
-	if not self.Transaction or #self.Transaction < 1 then
+	if not self.Transaction then
+		error("MySQL tried to commit a transaction that doesn't exist!")
+	elseif #self.Transaction < 1 then
 		self.Transaction = nil
+
+		if callback then
+			callback()
+		end
+
 		return
 	end
 
