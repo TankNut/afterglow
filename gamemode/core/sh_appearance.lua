@@ -52,11 +52,3 @@ if SERVER then
 		Update(self)
 	end
 end
-
-netvar.AddEntityHook("Appearance", "Appearance", function(ply, _, _, appearance)
-	if not ply:IsPlayer() then
-		return
-	end
-
-	Apply(ply, appearance)
-end)

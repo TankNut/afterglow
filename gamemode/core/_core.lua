@@ -1,6 +1,7 @@
 AddCSLuaFile()
 
 IncludeFolder("core/hooks")
+IncludeFolder("core/net")
 
 IncludeFile("sv_database.lua")
 IncludeFile("sh_player.lua")
