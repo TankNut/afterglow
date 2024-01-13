@@ -6,7 +6,15 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 function GM:PlayerSpawn(ply)
+	ply:Freeze(not ply:HasCharacter())
 	ply:UpdateAppearance()
+
+	if not ply:HasCharacter() then
+		-- Should only happen during initial spawn
+		ply:KillSilent()
+
+		return
+	end
 
 	hook.Run("PlayerLoadout", ply)
 end

@@ -148,6 +148,24 @@ if SERVER then
 		end
 	end
 
+	function NoCharacter(ply)
+		if ply:HasCharacter() then
+			Unload(ply)
+		end
+
+		LOADING_CHARACTER = true
+
+		ply:SetNetVar("CharID", -1)
+
+		for k, v in pairs(Vars) do
+			ply["Set" .. v.Accessor](ply, nil, true)
+		end
+
+		LOADING_CHARACTER = nil
+
+		ply:KillSilent()
+	end
+
 	function LoadExternal(ply, id)
 		-- Todo: Sanity check whether a character with that ID actually exists (somewhere else? character list?)
 		local query = mysql:Select("rp_character_data")
