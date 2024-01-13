@@ -118,6 +118,11 @@ else
 	function GetTargets(targets)
 		local result = targets
 
+		if isstring(targets) then
+			-- Way too common of a mistake, smh
+			error("netstream.Send missing targets arg, found name instead?")
+		end
+
 		if not targets then
 			result = player.GetAll()
 		elseif TypeID(targets) == TYPE_RECIPIENTFILTER then
