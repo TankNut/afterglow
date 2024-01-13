@@ -37,7 +37,9 @@ if SERVER then
 	function Update(ply)
 		local data = table.Copy(Default)
 
-		hook.Run("GetAppearance", ply, data)
+		if ply:HasCharacter() then
+			hook.Run("GetAppearance", ply, data)
+		end
 
 		ply.HandsAppearance = data.Hands
 		data.Hands = nil
