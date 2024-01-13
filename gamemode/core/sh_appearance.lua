@@ -1,4 +1,4 @@
-module("appearance", package.seeall)
+module("Appearance", package.seeall)
 
 local meta = FindMetaTable("Player")
 

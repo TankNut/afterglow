@@ -1,7 +1,7 @@
 function GM:DatabaseConnected()
-	database.LoadTables()
+	Database.LoadTables()
 end
 
 function GM:PostInitDatabase()
-	items.LoadWorldItems()
+	Item.LoadWorldItems()
 end

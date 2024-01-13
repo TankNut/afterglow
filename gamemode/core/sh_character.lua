@@ -1,4 +1,4 @@
-module("character", package.seeall)
+module("Character", package.seeall)
 
 Vars = Vars or {}
 
@@ -135,7 +135,7 @@ if SERVER then
 
 		LOADING_CHARACTER = nil
 
-		local inventory = inventories.New(ITEM_PLAYER, id)
+		local inventory = Inventory.New(ITEM_PLAYER, id)
 
 		ply:SetInventory(inventory)
 
@@ -219,7 +219,7 @@ if SERVER then
 	end
 
 	function Unload(ply)
-		inventories.Remove(ply:GetNetVar("InventoryID"))
+		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end
 end
 

@@ -17,4 +17,4 @@ IncludeFile("core/_core.lua")
 
 -- Load plugin folder
 -- Load content folder
-items.LoadItems()
+Item.LoadItems()

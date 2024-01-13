@@ -1,4 +1,4 @@
-module("inventories", package.seeall)
+module("Inventory", package.seeall)
 
 local meta = FindMetaTable("Entity")
 
@@ -47,9 +47,9 @@ if SERVER then
 		local receivers = self.Receivers
 
 		if self.StoreType == ITEM_PLAYER then
-			receivers[character.Find(self.StoreID)] = true
+			receivers[Character.Find(self.StoreID)] = true
 		elseif self.StoreType == ITEM_ITEM then
-			table.Merge(receivers, items.Get(self.StoreID):GetInventory():GetReceivers())
+			table.Merge(receivers, Item.Get(self.StoreID):GetInventory():GetReceivers())
 		end
 
 		return table.GetKeys(receivers)

@@ -1,4 +1,4 @@
-player.RegisterVar("RPUserGroup", {
+PlayerVars.Register("RPUserGroup", {
 	Default = "user",
 	Field = "usergroup",
 	ServerOnly = true,

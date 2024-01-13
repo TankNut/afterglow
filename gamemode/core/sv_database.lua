@@ -1,4 +1,4 @@
-module("database", package.seeall)
+module("Database", package.seeall)
 
 function Initialize()
 	local config = GAMEMODE.Config.Database

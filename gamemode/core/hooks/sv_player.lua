@@ -2,7 +2,7 @@ function GM:PlayerInitialSpawn(ply)
 	ply:SetTeam(TEAM_UNASSIGNED)
 	ply:SetUserGroup("user")
 
-	player.LoadVars(ply)
+	PlayerVars.Load(ply)
 end
 
 function GM:PlayerSpawn(ply)

@@ -1,11 +1,11 @@
-module("player", package.seeall)
+module("PlayerVars", package.seeall)
 
 local meta = FindMetaTable("Player")
 
 Vars = Vars or {}
 Fields = Fields or {}
 
-function RegisterVar(key, data)
+function Register(key, data)
 	Vars[key] = data
 
 	data.Key = "Ply" .. (data.Key or key:FirstToUpper())
@@ -89,7 +89,7 @@ function RegisterVar(key, data)
 		end
 
 		if CLIENT and data.Hook then
-			netvar.AddEntityHook(data.Key, "PlayerVar", function(ply, _, old, value)
+			netvar.AddEntityHook(data.Key, "PlayerVars", function(ply, _, old, value)
 				local callValue = value != nil and value or data.Default
 
 				hook.Run(data.Hook, ply, data.Key, old, callValue)
@@ -99,7 +99,7 @@ function RegisterVar(key, data)
 end
 
 if SERVER then
-	function LoadVars(ply)
+	function Load(ply)
 		local query = mysql:Select("rp_player_data")
 			query:Select("key")
 			query:Select("value")
@@ -115,7 +115,7 @@ if SERVER then
 		end)
 	end
 
-	function SaveVar(ply, field, value)
+	function Save(ply, field, value)
 		if value == nil then
 			local query = mysql:Delete("rp_player_data")
 				query:WhereEqual("steamid", ply:SteamID())

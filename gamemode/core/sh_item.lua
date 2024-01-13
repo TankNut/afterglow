@@ -4,7 +4,7 @@ ITEM_PLAYER = 2
 ITEM_CONTAINER = 3
 ITEM_ITEM = 4
 
-module("items", package.seeall)
+module("Item", package.seeall)
 
 List = List or {}
 All = All or setmetatable({}, {__mode = "v"})
