@@ -241,3 +241,5 @@ function Decode(str)
 
 	return res
 end
+
+Default = Encode({})
