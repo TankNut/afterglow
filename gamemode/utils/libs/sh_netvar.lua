@@ -69,6 +69,10 @@ else
 
 		local old = Globals[key]
 
+		if old == value and not istable(value) then
+			return
+		end
+
 		Globals[key] = value
 
 		writeLog("Global: %s (%s -> %s)", key, old, value)
@@ -189,11 +193,15 @@ else
 
 		local old = entry.Value
 
+		if old == value and istable(value) then
+			return
+		end
+
 		entry.ChangeNumber = entry.ChangeNumber + 1
 		entry.Private = private and ent:IsPlayer()
 		entry.Value = value
 
-		writeLog("%s: '%s' (%s -> %s)", ent, key, old, value)
+		writeLog("%s:%s '%s' (%s -> %s)", ent, private and " PRIVATE" or "", key, old, value)
 		hook.Run("EntityNetVarChanged", ent, key, old, value)
 
 		UpdateEntity(ent, key)
