@@ -99,34 +99,34 @@ function Register(key, data)
 end
 
 if SERVER then
-	function Load(ply)
+	Load = coroutine.Bind(function(ply)
 		local query = mysql:Select("rp_player_data")
 			query:Select("key")
 			query:Select("value")
 			query:WhereEqual("steamid", ply:SteamID())
-		query:Execute(function(result)
-			for _, v in pairs(result) do
-				local accessor = Fields[v.key]
+		local data = query:Execute()
 
-				if accessor then
-					ply["Set" .. accessor](ply, pack.Decode(v.value), true)
-				end
+		for _, v in pairs(data) do
+			local accessor = Fields[v.key]
+
+			if accessor then
+				ply["Set" .. accessor](ply, pack.Decode(v.value), true)
 			end
-		end)
-	end
+		end
+	end)
 
 	function Save(ply, field, value)
 		if value == nil then
 			local query = mysql:Delete("rp_player_data")
 				query:WhereEqual("steamid", ply:SteamID())
 				query:WhereEqual("key", field)
-			query:Execute()
+			query:Execute(true)
 		else
 			local query = mysql:Upsert("rp_player_data")
 				query:Insert("steamid", ply:SteamID())
 				query:Insert("key", field)
 				query:Insert("value", pack.Encode(value))
-			query:Execute()
+			query:Execute(true)
 		end
 	end
 end

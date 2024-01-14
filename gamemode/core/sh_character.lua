@@ -115,7 +115,7 @@ if SERVER then
 		self:SetNetVar("CharID", id)
 	end
 
-	function Load(ply, id, fields)
+	Load = coroutine.Bind(function(ply, id, fields)
 		local old = -1
 
 		if ply:HasCharacter() then
@@ -139,14 +139,12 @@ if SERVER then
 
 		ply:SetInventory(inventory)
 
-		if ply:IsTemporaryCharacter() then
-			hook.Run("PostLoadCharacter", ply, old, id)
-		else
-			inventory:LoadItems(function()
-				hook.Run("PostLoadCharacter", ply, old, id)
-			end)
+		if not ply:IsTemporaryCharacter() then
+			inventory:LoadItems()
 		end
-	end
+
+		hook.Run("PostLoadCharacter", ply, old, id)
+	end)
 
 	function NoCharacter(ply)
 		if ply:HasCharacter() then
@@ -166,38 +164,36 @@ if SERVER then
 		ply:KillSilent()
 	end
 
-	function LoadExternal(ply, id)
+	LoadExternal = coroutine.Bind(function(ply, id)
 		-- Todo: Sanity check whether a character with that ID actually exists (somewhere else? character list?)
 		local query = mysql:Select("rp_character_data")
 			query:Select("key")
 			query:Select("value")
 			query:WhereEqual("id", id)
-		query:Execute(function(data)
-			Load(ply, id, data)
-		end)
-	end
+		local data = query:Execute()
 
-	function Create(steamid, fields, callback)
+		Load(ply, id, data)
+	end)
+
+	Create = coroutine.Bind(function(steamid, fields)
 		local query = mysql:Insert("rp_characters")
 			query:Insert("steamid", steamid)
-		query:Execute(function(_, id)
-			mysql:Begin()
+		local _, id = query:Execute()
 
-			for k, v in pairs(fields) do
-				query = mysql:Insert("rp_character_data")
-					query:Insert("id", id)
-					query:Insert("key", k)
-					query:Insert("value", pack.Encode(v))
-				query:Execute()
-			end
+		mysql:Begin()
 
-			mysql:Commit(function()
-				if callback then
-					callback(id)
-				end
-			end)
-		end)
-	end
+		for k, v in pairs(fields) do
+			query = mysql:Insert("rp_character_data")
+				query:Insert("id", id)
+				query:Insert("key", k)
+				query:Insert("value", pack.Encode(v))
+			query:Execute()
+		end
+
+		mysql:Commit()
+
+		return id
+	end)
 
 	function SaveVar(id, field, value)
 		if id <= 0 then
@@ -208,13 +204,13 @@ if SERVER then
 			local query = mysql:Delete("rp_character_data")
 				query:WhereEqual("id", id)
 				query:WhereEqual("key", field)
-			query:Execute()
+			query:Execute(true)
 		else
 			local query = mysql:Upsert("rp_character_data")
 				query:Insert("id", id)
 				query:Insert("key", field)
 				query:Insert("value", pack.Encode(value))
-			query:Execute()
+			query:Execute(true)
 		end
 	end
 

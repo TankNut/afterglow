@@ -99,25 +99,21 @@ if SERVER then
 		netstream.Send(ply, "InventoryRemoved", self.ID)
 	end
 
-	function Class:LoadItems(callback)
+	Class.LoadItems = coroutine.Bind(function(self)
 		local query = mysql:Select("rp_items")
 			query:Select("id")
 			query:Select("class")
 			query:Select("customdata")
 			query:WhereEqual("storetype", self.StoreType)
 			query:WhereEqual("storeid", self.StoreID)
-		query:Execute(function(data)
-			for _, v in pairs(data) do
-				local item = items.Instance(v.class, v.id, pack.Decode(v.customdata))
+		local data = query:Execute()
 
-				item:SetInventory(self, true)
-			end
+		for _, v in pairs(data) do
+			local item = items.Instance(v.class, v.id, pack.Decode(v.customdata))
 
-			if callback then
-				callback()
-			end
-		end)
-	end
+			item:SetInventory(self, true)
+		end
+	end)
 end
 
 function meta:GetInventory()

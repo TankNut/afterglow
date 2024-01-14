@@ -173,18 +173,16 @@ function LoadItems()
 end
 
 if SERVER then
-	function Create(name, data, callback)
+	Create = coroutine.Bind(function(name, data, callback)
 		local query = mysql:Insert("rp_items")
 			query:Insert("class", name)
 			query:Insert("customdata", pack.Encode(data))
-		query:Execute(function(_, id)
-			local item = Instance(name, id, data)
+		local _, id = query:Execute()
 
-			callback(item)
-		end)
-	end
+		return Instance(name, id, data)
+	end)
 
-	function LoadWorldItems()
+	LoadWorldItems = coroutine.Bind(function()
 		local query = mysql:Select("rp_items")
 			query:Select("id")
 			query:Select("class")
@@ -192,17 +190,17 @@ if SERVER then
 			query:Select("worldpos")
 			query:WhereEqual("storetype", ITEM_WORLD)
 			query:WhereEqual("worldmap", game.GetMap())
-		query:Execute(function(data)
-			for _, v in pairs(data) do
-				local item = items.Instance(v.class, v.id, pack.Decode(v.customdata))
-				local worldPos = pack.Decode(v.worldpos)
+		local data = query:Execute()
 
-				local ent = item:SetWorldPos(worldPos.Pos, worldPos.Ang, true)
+		for _, v in pairs(data) do
+			local item = items.Instance(v.class, v.id, pack.Decode(v.customdata))
+			local worldPos = pack.Decode(v.worldpos)
 
-				if ent and worldPos.Frozen then
-					ent:GetPhysicsObject():EnableMotion(false)
-				end
+			local ent = item:SetWorldPos(worldPos.Pos, worldPos.Ang, true)
+
+			if ent and worldPos.Frozen then
+				ent:GetPhysicsObject():EnableMotion(false)
 			end
-		end)
-	end
+		end
+	end)
 end

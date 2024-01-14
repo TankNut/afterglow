@@ -161,7 +161,7 @@ function QUERY:Execute(callback)
 	end
 
 	if query then
-		mysql:Query(query, callback)
+		return mysql:Query(query, callback)
 	end
 end
 
@@ -180,14 +180,66 @@ function mysql:Begin()
 	self.Transaction = {}
 end
 
+local function startQuery(query, suppress, callback)
+	local cr = coroutine.running()
+
+	if isfunction(callback) then
+		query.onSuccess = function(_, data)
+			if suppress then
+				callback(true, data, tonumber(query:lastInsert()))
+			else
+				callback(data, tonumber(query:lastInsert()))
+			end
+		end
+
+		query.onError = function(_, err)
+			if suppress then
+				callback(false, err)
+			else
+				error(string.format("MySQL Error:\n  %s\n", err))
+			end
+		end
+
+		query:start()
+	elseif cr and not callback then
+		query.onSuccess = function(_, data)
+			if suppress then
+				coroutine.Resume(cr, true, data, tonumber(query:lastInsert()))
+			else
+				coroutine.Resume(cr, data, tonumber(query:lastInsert()))
+			end
+		end
+
+		query.onError = function(_, err)
+			if suppress then
+				coroutine.Resume(cr, false, err)
+			else
+				error(string.format("MySQL Error:\n  %s\n", err))
+			end
+		end
+
+		query:start()
+
+		return true
+	else
+		if not suppress then
+			query.onError = function(_, err)
+				error(string.format("MySQL Error:\n  %s\n", err))
+			end
+		end
+
+		query:start()
+	end
+end
+
 function mysql:Commit(callback)
 	if not self.Transaction then
 		error("MySQL tried to commit a transaction that doesn't exist!")
 	elseif #self.Transaction < 1 then
 		self.Transaction = nil
 
-		if callback then
-			callback()
+		if isfunction(callback) then
+			callback(suppress and true)
 		end
 
 		return
@@ -201,18 +253,14 @@ function mysql:Commit(callback)
 		transaction:addQuery(queryObject)
 	end
 
-	transaction.onSuccess = callback
-
-	if not self.SuppressState then
-		transaction.onError = function(_, err)
-			error(string.format("MySQL Transaction Error:\n  %s\n", err))
-		end
-	end
-
-	transaction:start()
+	local yield = startQuery(transaction, self.SuppressState, callback)
 
 	self.Transaction = nil
 	self.SuppressState = nil
+
+	if yield then
+		return coroutine.yield()
+	end
 end
 
 function mysql:Query(query, callback)
@@ -223,22 +271,13 @@ function mysql:Query(query, callback)
 	end
 
 	local queryObject = self.Connection:query(query)
-
-	queryObject.onSuccess = function(_, result)
-		if callback then
-			callback(result, tonumber(queryObject:lastInsert()))
-		end
-	end
-
-	if not self.SuppressState then
-		queryObject.onError = function(_, err)
-			error(string.format("MySQL Query Error:\n  %s\n  %s", query, err))
-		end
-	end
-
-	queryObject:start()
+	local yield = startQuery(queryObject, self.SuppressState, callback)
 
 	self.SuppressState = nil
+
+	if yield then
+		return coroutine.yield()
+	end
 end
 
 function mysql:Suppress()

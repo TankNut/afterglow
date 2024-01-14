@@ -6,7 +6,7 @@ function Initialize()
 	mysql:Connect(config.Host, config.Username, config.Password, config.Database, config.Port)
 end
 
-function LoadTables()
+LoadTables = coroutine.Bind(function()
 	local query
 
 	query = mysql:Create("rp_player_data")
@@ -37,7 +37,7 @@ function LoadTables()
 		query:Create("worldmap", "VARCHAR(255) NOT NULL DEFAULT ''")
 		query:Create("worldpos", "VARCHAR(255) NOT NULL DEFAULT '" .. pack.Default .. "'")
 		query:Create("customdata", "TEXT NOT NULL")
-	query:Execute(function()
-		hook.Run("PostInitDatabase")
-	end)
-end
+	query:Execute()
+
+	hook.Run("PostInitDatabase")
+end)
