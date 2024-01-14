@@ -11,6 +11,7 @@ IncludeFile("sh_appearance.lua")
 IncludeFile("sh_item.lua")
 IncludeFile("sh_inventory.lua")
 
+IncludeFile("sh_interface.lua")
 function GM:Initialize()
 	if SERVER then
 		Database.Initialize()
