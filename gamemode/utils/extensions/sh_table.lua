@@ -1,17 +1,17 @@
-function table.Map(tbl, func)
+function table.Map(tab, func)
 	local res = {}
 
-	for k, v in pairs(tbl) do
+	for k, v in pairs(tab) do
 		res[k] = func(v, k)
 	end
 
 	return res
 end
 
-function table.Lookup(tbl)
+function table.Lookup(tab)
 	local res = {}
 
-	for _, v in pairs(tbl) do
+	for _, v in pairs(tab) do
 		res[v] = true
 	end
 

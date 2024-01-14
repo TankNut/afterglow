@@ -1,10 +1,10 @@
 module("netvar", package.seeall)
 
 local autofill = {
-	__index = function(tbl, key)
-		tbl[key] = {}
+	__index = function(tab, key)
+		tab[key] = {}
 
-		return tbl[key]
+		return tab[key]
 	end
 }
 
