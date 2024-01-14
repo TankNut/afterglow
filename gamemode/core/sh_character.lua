@@ -123,8 +123,6 @@ if SERVER then
 			Unload(ply)
 		end
 
-		LOADING_CHARACTER = true
-
 		ply:SetNetVar("CharID", id)
 
 		for k, v in pairs(Vars) do
@@ -132,8 +130,6 @@ if SERVER then
 
 			ply["Set" .. v.Accessor](ply, val, true)
 		end
-
-		LOADING_CHARACTER = nil
 
 		local inventory = Inventory.New(ITEM_PLAYER, id)
 
@@ -151,15 +147,11 @@ if SERVER then
 			Unload(ply)
 		end
 
-		LOADING_CHARACTER = true
-
 		ply:SetNetVar("CharID", -1)
 
 		for k, v in pairs(Vars) do
 			ply["Set" .. v.Accessor](ply, nil, true)
 		end
-
-		LOADING_CHARACTER = nil
 
 		ply:KillSilent()
 	end
