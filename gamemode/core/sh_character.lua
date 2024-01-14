@@ -167,6 +167,32 @@ if SERVER then
 		Load(ply, id, data)
 	end)
 
+	LoadList = coroutine.Bind(function(ply)
+		local characters = {}
+
+		local query = mysql:Select("rp_characters")
+			query:Select("id")
+			query:WhereEqual("steamid", ply:SteamID())
+		local ids = query:Execute()
+
+		local fields = {}
+
+		hook.Run("GetCharListFields", fields)
+
+		for _, v in pairs(ids) do
+			query = mysql:Select("rp_character_data")
+				query:WhereEqual("id", v.id)
+				query:WhereIn("key", fields)
+			local data = query:Execute() or {}
+
+			data.name = hook.Run("GetCharListName", data) or data.name or "*UNNAMED CHARACTER*"
+
+			characters[v.id] = data
+		end
+
+		ply:SetPrivateNetVar("CharacterList", characters)
+	end)
+
 	Create = coroutine.Bind(function(steamid, fields)
 		local query = mysql:Insert("rp_characters")
 			query:Insert("steamid", steamid)
