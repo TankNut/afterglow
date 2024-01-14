@@ -54,7 +54,7 @@ function QUERY:WhereLTE(key, val) table.insert(self.WhereList, string.format("`%
 function QUERY:WhereIn(key, values)
 	local map = table.Map(values, function(val) return string.format("'%s'", self:Escape(val)) end)
 
-	table.insert(self.WhereList, string.format("`%s` IN (%s)", table.concat(map, ", ")))
+	table.insert(self.WhereList, string.format("`%s` IN (%s)", key, table.concat(map, ", ")))
 end
 
 function QUERY:OrderByDesc(key) table.insert(self.OrderByList, string.format("`%s` DESC", key)) end
