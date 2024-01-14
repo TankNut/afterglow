@@ -28,7 +28,6 @@ function Split(data)
 	return payload, length
 end
 
--- Client doesn't get to compress because we don't trust people not to abuse it, if we're sending enough data that it's a problem then something's gone horribly wrong.
 function Encode(data)
 	return pack.Encode(data)
 end
