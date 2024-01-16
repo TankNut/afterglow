@@ -40,9 +40,9 @@ end
 IncludeFolder("utils/extensions")
 
 -- Everything else
+IncludeFile("libs/sh_log.lua")
 IncludeFile("libs/sv_mysql.lua")
 
-IncludeFile("libs/sh_log.lua")
 IncludeFile("libs/sh_pack.lua")
 IncludeFile("libs/sh_queue.lua")
 IncludeFile("libs/sh_netstream.lua")
