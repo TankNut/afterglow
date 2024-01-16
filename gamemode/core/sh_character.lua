@@ -268,3 +268,15 @@ RegisterVar("RPName", {
 RegisterVar("Description", {
 	Default = ""
 })
+
+RegisterVar("CharacterModel", {
+	Field = "model",
+	Default = "models/player/skeleton.mdl",
+	Hook = SERVER and "PlayerAppearanceChanged"
+})
+
+RegisterVar("CharacterSkin", {
+	Field = "skin",
+	Default = 0,
+	Hook = SERVER and "PlayerAppearanceChanged"
+})
