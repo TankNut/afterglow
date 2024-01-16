@@ -1,8 +1,5 @@
 AddCSLuaFile()
 
-IncludeFolder("core/hooks")
-IncludeFolder("core/net")
-
 IncludeFile("sh_config.lua")
 
 IncludeFile("sv_database.lua")
@@ -17,6 +14,9 @@ IncludeFile("sh_interface.lua")
 IncludeFile("cl_skin.lua")
 IncludeFolder("core/vgui")
 IncludeFolder("core/gui")
+
+IncludeFolder("core/hooks")
+IncludeFolder("core/net")
 
 function GM:Initialize()
 	if SERVER then
