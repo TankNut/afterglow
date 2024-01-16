@@ -157,7 +157,7 @@ if SERVER then
 
 		_G.CHARACTER_LOADING = nil
 
-		hook.Run("PostLoadCharacter", ply, old, id)
+		hook.Run("PostLoadCharacter", ply, id)
 	end)
 
 	function Unload(ply)
@@ -165,13 +165,17 @@ if SERVER then
 			OnUnload(ply)
 		end
 
+		_G.CHARACTER_LOADING = true
+
 		ply:SetNetVar("CharID", -1)
 
 		for k, v in pairs(Vars) do
 			ply["Set" .. v.Accessor](ply, nil, true)
 		end
 
-		ply:KillSilent()
+		_G.CHARACTER_LOADING = nil
+
+		hook.Run("PostLoadCharacter", ply, -1)
 	end
 
 	LoadExternal = coroutine.Bind(function(ply, id)

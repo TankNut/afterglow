@@ -13,7 +13,6 @@ function GM:PlayerSpawn(ply)
 	ply:UpdateAppearance()
 
 	if not ply:HasCharacter() then
-		-- Should only happen during initial spawn
 		ply:KillSilent()
 
 		return

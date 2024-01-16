@@ -5,7 +5,7 @@ if CLIENT then
 		end
 	end)
 else
-	function GM:PostLoadCharacter(ply, old, id)
+	function GM:PostLoadCharacter(ply, id)
 		ply:Spawn()
 	end
 
