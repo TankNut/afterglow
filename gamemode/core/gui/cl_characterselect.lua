@@ -62,6 +62,7 @@ function PANEL:Populate()
 	self.CreateNew:SetText("Create character")
 
 	self.CreateNew.DoClick = function(pnl)
+		Interface.OpenGroup("CharacterCreate", "F2")
 	end
 
 	if numCharacters >= max then

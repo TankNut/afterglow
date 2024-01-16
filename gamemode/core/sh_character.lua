@@ -104,6 +104,14 @@ function Find(id)
 	end
 end
 
+function GetRules()
+	local rules = hook.Run("GetBaseCharacterRules")
+
+	hook.Run("ModifyCharacterRules", rules)
+
+	return rules
+end
+
 function meta:GetCharID()
 	return self:GetNetVar("CharID", -1)
 end
