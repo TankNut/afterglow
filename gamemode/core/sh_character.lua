@@ -130,10 +130,7 @@ if SERVER then
 	end
 
 	Load = coroutine.Bind(function(ply, id, fields)
-		local old = -1
-
 		if ply:HasCharacter() then
-			old = ply:GetCharID()
 			OnUnload(ply)
 		end
 
@@ -183,13 +180,7 @@ if SERVER then
 			query:Select("key")
 			query:Select("value")
 			query:WhereEqual("id", id)
-		local data = query:Execute()
-
-		local fields = {}
-
-		for _, v in pairs(data) do
-			fields[v.key] = pack.Decode(v.value)
-		end
+		local fields = table.DBKeyValues(query:Execute())
 
 		Load(ply, id, fields)
 	end)
@@ -208,9 +199,11 @@ if SERVER then
 
 		for _, v in pairs(ids) do
 			query = mysql:Select("rp_character_data")
+				query:Select("key")
+				query:Select("value")
 				query:WhereEqual("id", v.id)
 				query:WhereIn("key", fields)
-			local data = query:Execute() or {}
+			local data = table.DBKeyValues(query:Execute())
 
 			data.name = hook.Run("GetCharacterListName", data) or data.name or "*UNNAMED CHARACTER*"
 

@@ -37,3 +37,13 @@ function table.Filter(tab, func)
 
 	return res
 end
+
+function table.DBKeyValues(tab)
+	local res = {}
+
+	for _, v in pairs(tab) do
+		res[v.key] = pack.Decode(v.value)
+	end
+
+	return res
+end
