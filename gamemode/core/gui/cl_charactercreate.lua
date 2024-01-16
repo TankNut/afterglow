@@ -51,7 +51,7 @@ function PANEL:Init()
 	self.ModelPanel:SetModel("models/player/skeleton.mdl")
 
 	self.Fields = {
-		RPName = "",
+		Name = "",
 		Description = ""
 	}
 
@@ -117,13 +117,13 @@ function PANEL:BuildFields()
 end
 
 function PANEL:SetCharacterName(name)
-	self.Fields.RPName = name
+	self.Fields.Name = name
 	self:Validate()
 end
 
 function PANEL:SetModel(mdl)
-	self.Fields.CharacterModel = mdl
-	self.Fields.CharacterSkin = 0
+	self.Fields.Model = mdl
+	self.Fields.Skin = 0
 
 	self.ModelPanel:SetModel(mdl)
 	self.ModelPanel:SetSkin(1)
@@ -133,7 +133,7 @@ function PANEL:SetModel(mdl)
 end
 
 function PANEL:SetSkin(index)
-	self.Fields.CharacterSkin = index
+	self.Fields.Skin = index
 	self.ModelPanel:SetSkin(index)
 	self:Validate()
 end
@@ -141,7 +141,7 @@ end
 function PANEL:RebuildSkins()
 	self.SkinScroll:Clear()
 
-	local mdl = self.Fields.CharacterModel
+	local mdl = self.Fields.Model
 
 	for i = 0, util.GetModelSkins(mdl) - 1 do
 		local icon = self.SkinScroll:Add("SpawnIcon")

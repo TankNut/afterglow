@@ -13,13 +13,13 @@ else
 		table.insert(fields, "name")
 	end
 
-	function GM:GetChararacterListName(id, fields)
+	function GM:GetCharacterListName(id, fields)
 	end
 end
 
 function GM:GetBaseCharacterRules()
 	return {
-		RPName = {
+		Name = {
 			validate.Required(),
 			validate.String(),
 			validate.Min(3),
@@ -31,17 +31,17 @@ function GM:GetBaseCharacterRules()
 			validate.Max(2048),
 			validate.AllowedCharacters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789'")
 		},
-		CharacterModel = {
+		Model = {
 			validate.Required(),
 			validate.String(),
 			validate.InList(Config.Get("CharacterModels"))
 		},
-		CharacterSkin = {
+		Skin = {
 			validate.Required(),
 			validate.Number(),
 			validate.Min(0),
 			validate.Callback(function(val)
-				return val < util.GetModelSkins(validate.Cache().CharacterModel), "Skin index out of bounds"
+				return val < util.GetModelSkins(validate.Cache().Model), "Skin index out of bounds"
 			end)
 		}
 	}
