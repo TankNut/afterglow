@@ -8,7 +8,7 @@ Fields = Fields or {}
 function Register(key, data)
 	Vars[key] = data
 
-	data.Key = "Ply" .. (data.Key or key:FirstToUpper())
+	data.Key = "p" .. (data.Key or key:FirstToUpper())
 	data.Accessor = data.Accessor or key:FirstToUpper()
 
 	if data.Field then
@@ -38,6 +38,7 @@ function Register(key, data)
 			ply.PlayerData = ply.PlayerData or {}
 
 			local old = ply.PlayerData[data.Key]
+
 			-- Since defaults are pre-defined, we can replace nil with it
 			local callValue = value != nil and value or data.Default
 
@@ -47,13 +48,15 @@ function Register(key, data)
 				hook.Run(data.Hook, ply, data.Key, old, callValue)
 			end
 
-			if data.PostSet then
-				data.PostSet(ply, data.Key, old, callValue)
-			end
+			if not noSave then
+				if data.PostSet then
+					data.PostSet(ply, data.Key, old, callValue)
+				end
 
-			if data.Field and not noSave then
-				-- Write nil here to keep the database clean
-				SaveVar(ply, data.Field, value)
+				if data.Field then
+					-- Write nil here to keep the database clean
+					Save(ply, data.Field, value)
+				end
 			end
 		end
 	else
@@ -68,6 +71,7 @@ function Register(key, data)
 
 			meta["Set" .. data.Accessor] = function(ply, value, noSave)
 				local old = ply:GetNetVar(data.Key, data.Default)
+
 				-- Since defaults are pre-defined, we can replace nil with it
 				local callValue = value != nil and value or data.Default
 
@@ -77,13 +81,15 @@ function Register(key, data)
 					hook.Run(data.Hook, ply, data.Key, old, callValue)
 				end
 
-				if data.PostSet then
-					data.PostSet(ply, data.Key, old, callValue)
-				end
+				if not noSave then
+					if data.PostSet then
+						data.PostSet(ply, data.Key, old, callValue)
+					end
 
-				if data.Field and not noSave then
-					-- Write nil here to keep the database clean
-					SaveVar(ply, data.Field, value)
+					if data.Field then
+						-- Write nil here to keep the database clean
+						Save(ply, data.Field, value)
+					end
 				end
 			end
 		end

@@ -1,13 +1,13 @@
 module("Character", package.seeall)
 
-Vars = Vars or {}
-
 local meta = FindMetaTable("Player")
+
+Vars = Vars or {}
 
 function RegisterVar(key, data)
 	Vars[key] = data
 
-	data.Key = "Char" .. (data.Key or key:FirstToUpper())
+	data.Key = "c" .. (data.Key or key:FirstToUpper())
 	data.Accessor = data.Accessor or key:FirstToUpper()
 	data.Field = data.Field or key:lower()
 
@@ -34,6 +34,7 @@ function RegisterVar(key, data)
 			ply.CharacterData = ply.CharacterData or {}
 
 			local old = ply.CharacterData[data.Key]
+
 			-- Since defaults are pre-defined, we can replace nil with it
 			local callValue = value != nil and value or data.Default
 
@@ -43,12 +44,14 @@ function RegisterVar(key, data)
 				hook.Run(data.Hook, ply, data.Key, old, callValue)
 			end
 
-			if data.PostSet then
-				data.PostSet(ply, data.Key, old, callValue)
-			end
+			if not noSave then
+				if data.PostSet then
+					data.PostSet(ply, data.Key, old, callValue)
+				end
 
-			-- Write nil here to keep the database clean
-			SaveVar(ply:GetCharID(), data.Field, value)
+				-- Write nil here to keep the database clean
+				SaveVar(ply:GetCharID(), data.Field, value)
+			end
 		end
 	else
 		meta["Get" .. data.Accessor] = function(ply)
@@ -62,6 +65,7 @@ function RegisterVar(key, data)
 
 			meta["Set" .. data.Accessor] = function(ply, value, noSave)
 				local old = ply:GetNetVar(data.Key, data.Default)
+
 				-- Since defaults are pre-defined, we can replace nil with it
 				local callValue = value != nil and value or data.Default
 
@@ -71,12 +75,14 @@ function RegisterVar(key, data)
 					hook.Run(data.Hook, ply, data.Key, old, callValue)
 				end
 
-				if data.PostSet then
-					data.PostSet(ply, data.Key, old, callValue)
-				end
+				if not noSave then
+					if data.PostSet then
+						data.PostSet(ply, data.Key, old, callValue)
+					end
 
-				-- Write nil here to keep the database clean
-				SaveVar(ply:GetCharID(), data.Field, value)
+					-- Write nil here to keep the database clean
+					SaveVar(ply:GetCharID(), data.Field, value)
+				end
 			end
 		end
 
