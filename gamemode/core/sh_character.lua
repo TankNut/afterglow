@@ -160,9 +160,9 @@ if SERVER then
 		hook.Run("PostLoadCharacter", ply, old, id)
 	end)
 
-	function NoCharacter(ply)
+	function Unload(ply)
 		if ply:HasCharacter() then
-			Unload(ply)
+			OnUnload(ply)
 		end
 
 		ply:SetNetVar("CharID", -1)
