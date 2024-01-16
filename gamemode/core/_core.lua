@@ -3,6 +3,8 @@ AddCSLuaFile()
 IncludeFolder("core/hooks")
 IncludeFolder("core/net")
 
+IncludeFile("sh_config.lua")
+
 IncludeFile("sv_database.lua")
 IncludeFile("sh_playervars.lua")
 IncludeFile("sh_character.lua")
