@@ -56,13 +56,3 @@ function GM:PlayerLoadout(ply)
 
 	ply:SwitchToDefaultWeapon()
 end
-
-function GM:PlayerUserGroupChanged(ply, key, old, new)
-	ply:SetUserGroup(new)
-end
-
-function GM:PlayerAppearanceChanged(ply, key, old, new)
-	if not CHARACTER_LOADING then
-		ply:UpdateAppearance()
-	end
-end

@@ -8,8 +8,8 @@ Fields = Fields or {}
 function Register(key, data)
 	Vars[key] = data
 
-	data.Key = "p" .. (data.Key or key:FirstToUpper())
-	data.Accessor = data.Accessor or key:FirstToUpper()
+	data.Key = "Player" .. (data.Key or key:FirstToUpper())
+	data.Accessor = data.Accessor or "RP" .. key:FirstToUpper()
 
 	if data.Field then
 		Fields[data.Field] = data.Accessor
@@ -44,19 +44,13 @@ function Register(key, data)
 
 			ply.PlayerData[data.Key] = value
 
-			if data.Hook then
-				hook.Run(data.Hook, ply, data.Key, old, callValue)
+			if data.Callback then
+				data.Callback(ply, old, callValue)
 			end
 
-			if not noSave then
-				if data.PostSet then
-					data.PostSet(ply, data.Key, old, callValue)
-				end
-
-				if data.Field then
-					-- Write nil here to keep the database clean
-					Save(ply, data.Field, value)
-				end
+			if not noSave and data.Field then
+				-- Write nil here to keep the database clean
+				Save(ply, data.Field, value)
 			end
 		end
 	else
@@ -77,19 +71,13 @@ function Register(key, data)
 
 				ply[func](ply, data.Key, value)
 
-				if data.Hook then
-					hook.Run(data.Hook, ply, data.Key, old, callValue)
+				if data.Callback then
+					data.Callback(ply, old, callValue)
 				end
 
-				if not noSave then
-					if data.PostSet then
-						data.PostSet(ply, data.Key, old, callValue)
-					end
-
-					if data.Field then
-						-- Write nil here to keep the database clean
-						Save(ply, data.Field, value)
-					end
+				if not noSave and data.Field then
+					-- Write nil here to keep the database clean
+					Save(ply, data.Field, value)
 				end
 			end
 		end

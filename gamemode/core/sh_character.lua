@@ -7,8 +7,8 @@ Vars = Vars or {}
 function RegisterVar(key, data)
 	Vars[key] = data
 
-	data.Key = "c" .. (data.Key or key:FirstToUpper())
-	data.Accessor = data.Accessor or key:FirstToUpper()
+	data.Key = "Character" .. (data.Key or key:FirstToUpper())
+	data.Accessor = data.Accessor or "Character" .. key:FirstToUpper()
 	data.Field = data.Field or key:lower()
 
 	if data.ServerOnly then
@@ -40,15 +40,11 @@ function RegisterVar(key, data)
 
 			ply.CharacterData[data.Key] = value
 
-			if data.Hook then
-				hook.Run(data.Hook, ply, data.Key, old, callValue)
+			if data.Callback then
+				data.Callback(ply, old, callValue)
 			end
 
 			if not noSave then
-				if data.PostSet then
-					data.PostSet(ply, data.Key, old, callValue)
-				end
-
 				-- Write nil here to keep the database clean
 				SaveVar(ply:GetCharID(), data.Field, value)
 			end
@@ -71,15 +67,11 @@ function RegisterVar(key, data)
 
 				ply[func](ply, data.Key, value)
 
-				if data.Hook then
-					hook.Run(data.Hook, ply, data.Key, old, callValue)
+				if data.Callback then
+					data.Callback(ply, old, callValue)
 				end
 
 				if not noSave then
-					if data.PostSet then
-						data.PostSet(ply, data.Key, old, callValue)
-					end
-
 					-- Write nil here to keep the database clean
 					SaveVar(ply:GetCharID(), data.Field, value)
 				end
@@ -268,8 +260,7 @@ if SERVER then
 	end
 end
 
-RegisterVar("RPName", {
-	Field = "name",
+RegisterVar("Name", {
 	Default = "*INVALID*"
 })
 
@@ -277,14 +268,20 @@ RegisterVar("Description", {
 	Default = ""
 })
 
-RegisterVar("CharacterModel", {
-	Field = "model",
+RegisterVar("Model", {
 	Default = "models/player/skeleton.mdl",
-	Hook = SERVER and "PlayerAppearanceChanged"
+	Callback = function(ply)
+		if SERVER and not CHARACTER_LOADING then
+			ply:UpdateAppearance()
+		end
+	end
 })
 
-RegisterVar("CharacterSkin", {
-	Field = "skin",
+RegisterVar("Skin", {
 	Default = 0,
-	Hook = SERVER and "PlayerAppearanceChanged"
+	Callback = function(ply)
+		if SERVER and not CHARACTER_LOADING then
+			ply:UpdateAppearance()
+		end
+	end
 })

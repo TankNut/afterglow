@@ -1,8 +1,10 @@
-PlayerVars.Register("RPUserGroup", {
-	Default = "user",
+PlayerVars.Register("UserGroup", {
 	Field = "usergroup",
+	Default = "user",
 	ServerOnly = true,
-	Hook = "PlayerUserGroupChanged"
+	Callback = function(ply, _, new)
+		ply:SetUserGroup(new)
+	end
 })
 
 if SERVER then
