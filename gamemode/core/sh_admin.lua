@@ -2,9 +2,7 @@ PlayerVars.Register("RPUserGroup", {
 	Default = "user",
 	Field = "usergroup",
 	ServerOnly = true,
-	PostSet = function(ply, key, old, new)
-		ply:SetUserGroup(new)
-	end
+	Hook = "PlayerUserGroupChanged"
 })
 
 if SERVER then

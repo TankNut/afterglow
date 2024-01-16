@@ -56,3 +56,7 @@ function GM:PlayerLoadout(ply)
 
 	ply:SwitchToDefaultWeapon()
 end
+
+function GM:PlayerUserGroupChanged(ply, key, old, new)
+	ply:SetUserGroup(new)
+end
