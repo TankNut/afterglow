@@ -314,10 +314,10 @@ end
 function GM:GlobalNetVarChanged(key, old, value)
 	for identifier, callback in pairs(GlobalHooks[key]) do
 		if isstring(identifier) then
-			callback(key, old, value)
+			callback(old, value)
 		else
 			if IsValid(identifier) then
-				callback(key, old, value)
+				callback(old, value)
 			else
 				GlobalHooks[key][identifier] = nil
 			end
@@ -334,10 +334,10 @@ function GM:EntityNetVarChanged(ent, key, old, value)
 
 	for identifier, callback in pairs(EntityHooks[key]) do
 		if isstring(identifier) then
-			callback(ent, key, old, value)
+			callback(ent, old, value)
 		else
 			if IsValid(identifier) and ent == identifier then
-				callback(ent, key, old, value)
+				callback(ent, old, value)
 			else
 				EntityHooks[key][identifier] = nil
 			end
