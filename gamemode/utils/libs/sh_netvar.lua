@@ -272,10 +272,16 @@ else
 	netstream.Hook("NetVarEntity", SyncEntities)
 end
 
-hook.Add("EntityRemoved", "NetVar", function(ent)
+hook.Add("EntityRemoved", "NetVar", function(ent, fullUpdate)
+	if fullUpdate then
+		return
+	end
+
 	local index = ent:EntIndex()
 
-	if index > 0 then
+	if index > 0 and Entities[index] then
+		writeLog("%s removed", ent)
+
 		Entities[index] = nil
 
 		if CLIENT then
