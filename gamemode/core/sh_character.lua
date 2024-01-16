@@ -142,7 +142,7 @@ if SERVER then
 
 		if ply:HasCharacter() then
 			old = ply:GetCharID()
-			Unload(ply)
+			OnUnload(ply)
 		end
 
 		_G.CHARACTER_LOADING = true
@@ -263,7 +263,7 @@ if SERVER then
 		end
 	end
 
-	function Unload(ply)
+	function OnUnload(ply)
 		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end
 end
