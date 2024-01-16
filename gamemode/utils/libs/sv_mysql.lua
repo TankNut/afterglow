@@ -186,9 +186,9 @@ local function startQuery(query, suppress, callback)
 	if isfunction(callback) then
 		query.onSuccess = function(_, data)
 			if suppress then
-				callback(true, data, tonumber(query:lastInsert()))
+				callback(true, data, query.lastInsert and tonumber(query:lastInsert()))
 			else
-				callback(data, tonumber(query:lastInsert()))
+				callback(data, query.lastInsert and tonumber(query:lastInsert()))
 			end
 		end
 
@@ -204,9 +204,9 @@ local function startQuery(query, suppress, callback)
 	elseif cr and not callback then
 		query.onSuccess = function(_, data)
 			if suppress then
-				coroutine.Resume(cr, true, data, tonumber(query:lastInsert()))
+				coroutine.Resume(cr, true, data, query.lastInsert and tonumber(query:lastInsert()))
 			else
-				coroutine.Resume(cr, data, tonumber(query:lastInsert()))
+				coroutine.Resume(cr, data, query.lastInsert and tonumber(query:lastInsert()))
 			end
 		end
 
