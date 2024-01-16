@@ -177,7 +177,13 @@ if SERVER then
 			query:WhereEqual("id", id)
 		local data = query:Execute()
 
-		Load(ply, id, data)
+		local fields = {}
+
+		for _, v in pairs(data) do
+			fields[v.key] = pack.Decode(v.value)
+		end
+
+		Load(ply, id, fields)
 	end)
 
 	LoadList = coroutine.Bind(function(ply)
