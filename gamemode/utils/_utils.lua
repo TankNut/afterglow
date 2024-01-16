@@ -43,6 +43,7 @@ IncludeFolder("utils/extensions")
 IncludeFile("libs/sh_log.lua")
 IncludeFile("libs/sv_mysql.lua")
 
+IncludeFile("libs/sh_validate.lua")
 IncludeFile("libs/sh_pack.lua")
 IncludeFile("libs/sh_queue.lua")
 IncludeFile("libs/sh_netstream.lua")
