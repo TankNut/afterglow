@@ -8,7 +8,7 @@ function Category(name)
 		return Categories[name]
 	end
 
-	local convar = CreateConVar("log_" .. name, 0, FCVAR_ARCHIVE, "", 0, 1)
+	local convar = CreateConVar("rp_log_" .. name:lower(), 0, FCVAR_ARCHIVE, "", 0, 1)
 	local func = function(text, ...)
 		if not convar:GetBool() then
 			return
