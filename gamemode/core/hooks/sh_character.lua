@@ -1,6 +1,6 @@
 if CLIENT then
 	netvar.AddEntityHook("CharacterList", "Character", function(ply)
-		if not ply:HasCharacter() then
+		if not ply:HasCharacter() or IsValid(Interface.Get("CharacterSelect")[1]) then
 			Interface.OpenGroup("CharacterSelect", "F2")
 		end
 	end)

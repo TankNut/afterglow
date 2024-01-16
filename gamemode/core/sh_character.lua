@@ -110,9 +110,17 @@ function meta:IsTemporaryCharacter()
 	return self:GetCharID() == 0
 end
 
+function meta:GetCharacterList()
+	return self:GetNetVar("CharacterList", {})
+end
+
 if SERVER then
 	function meta:SetCharID(id)
 		self:SetNetVar("CharID", id)
+	end
+
+	function meta:SetCharacterList(characters)
+		self:SetPrivateNetVar("CharacterList", characters)
 	end
 
 	Load = coroutine.Bind(function(ply, id, fields)
@@ -157,7 +165,6 @@ if SERVER then
 	end
 
 	LoadExternal = coroutine.Bind(function(ply, id)
-		-- Todo: Sanity check whether a character with that ID actually exists (somewhere else? character list?)
 		local query = mysql:Select("rp_character_data")
 			query:Select("key")
 			query:Select("value")
@@ -190,7 +197,7 @@ if SERVER then
 			characters[v.id] = data
 		end
 
-		ply:SetPrivateNetVar("CharacterList", characters)
+		ply:SetCharacterList(characters)
 	end)
 
 	Create = coroutine.Bind(function(steamid, fields)
