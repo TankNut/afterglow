@@ -137,6 +137,8 @@ if SERVER then
 			Unload(ply)
 		end
 
+		_G.CHARACTER_LOADING = true
+
 		ply:SetNetVar("CharID", id)
 
 		for k, v in pairs(Vars) do
@@ -152,6 +154,8 @@ if SERVER then
 		if not ply:IsTemporaryCharacter() then
 			inventory:LoadItems()
 		end
+
+		_G.CHARACTER_LOADING = nil
 
 		hook.Run("PostLoadCharacter", ply, old, id)
 	end)
