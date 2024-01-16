@@ -1,5 +1,7 @@
 mysql = mysql or {}
 
+local writeLog = log.Category("MySQL")
+
 if not mysqloo then
 	require("mysqloo")
 end
@@ -178,6 +180,8 @@ function mysql:Alter(tableName) return QUERY:New(QUERY_ALTER, tableName) end
 
 function mysql:Begin()
 	self.Transaction = {}
+
+	writeLog("Transaction: START")
 end
 
 local function startQuery(query, suppress, callback)
@@ -233,6 +237,8 @@ local function startQuery(query, suppress, callback)
 end
 
 function mysql:Commit(callback)
+	writeLog("Transaction: COMMIT")
+
 	if not self.Transaction then
 		error("MySQL tried to commit a transaction that doesn't exist!")
 	elseif #self.Transaction < 1 then
@@ -267,8 +273,12 @@ function mysql:Query(query, callback)
 	if self.Transaction then
 		table.insert(self.Transaction, query)
 
+		writeLog("Transaction: %s", query)
+
 		return
 	end
+
+	writeLog("Query: %s", query)
 
 	local queryObject = self.Connection:query(query)
 	local yield = startQuery(queryObject, self.SuppressState, callback)
