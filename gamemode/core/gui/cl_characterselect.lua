@@ -13,7 +13,7 @@ function PANEL:Init()
 	self:SetDrawTopBar(true)
 	self:SetTitle("Character Selection")
 
-	--self:Populate()
+	self:Populate()
 
 	self:MakePopup()
 	self:Center()
@@ -22,12 +22,12 @@ end
 function PANEL:Populate()
 	self.Buttons = {}
 
-	for k, v in SortedPairs(LocalPlayer():GetCharList()) do
+	for k, v in SortedPairs(LocalPlayer():GetCharacterList()) do
 		local button = self:Add("DButton")
 
 		button:DockMargin(0, 0, 0, 5)
 		button:Dock(TOP)
-		button:SetText(v)
+		button:SetText(v.name)
 
 		button.DoClick = function(pnl)
 			if self.DeleteMode then
@@ -44,11 +44,10 @@ function PANEL:Populate()
 		table.insert(self.Buttons, button)
 	end
 
-	local num = #self.Buttons
-	local max = GAMEMODE:GetConfig("max_characters")
-	local perm, temp = LocalPlayer():GetCharacterTypeList()
+	local numCharacters = #self.Buttons
+	local max = Config.Get("MaxCharacters")
 
-	if num < max then
+	if numCharacters < max then
 		local button = self:Add("DButton")
 
 		button:DockMargin(0, 0, 0, 5)
@@ -63,13 +62,9 @@ function PANEL:Populate()
 	self.CreateNew:SetText("Create character")
 
 	self.CreateNew.DoClick = function(pnl)
-		coroutine.Call(function()
-			GAMEMODE:OpenGUI("CharClass", "Character type selection", perm)
-			GAMEMODE:OpenGUI("CharCreate", coroutine.yield())
-		end)
 	end
 
-	if #perm < 1 or num >= max then
+	if numCharacters >= max then
 		self.CreateNew:SetDisabled(true)
 	end
 
@@ -79,16 +74,9 @@ function PANEL:Populate()
 	self.TempCharacters:SetText("Temporary characters")
 
 	self.TempCharacters.DoClick = function(pnl)
-		coroutine.Call(function()
-			GAMEMODE:OpenGUI("CharClass", "Temporary character selection", temp)
-
-			netstream.Send("CreateTempCharacter", coroutine.yield())
-		end)
 	end
 
-	if #temp < 1 then
-		self.TempCharacters:SetDisabled(true)
-	end
+	self.TempCharacters:SetDisabled(true)
 
 	self.Delete = self:Add("DButton")
 	self.Delete:DockMargin(0, 5, 0, 0)
