@@ -9,10 +9,10 @@ else
 		ply:Spawn()
 	end
 
-	function GM:GetCharListFields(fields)
+	function GM:GetCharacterListFields(fields)
 		table.insert(fields, "name")
 	end
 
-	function GM:GetCharListName(id, fields)
+	function GM:GetChararacterListName(id, fields)
 	end
 end

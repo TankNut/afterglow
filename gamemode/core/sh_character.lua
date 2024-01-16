@@ -184,7 +184,7 @@ if SERVER then
 
 		local fields = {}
 
-		hook.Run("GetCharListFields", fields)
+		hook.Run("GetCharacterListFields", fields)
 
 		for _, v in pairs(ids) do
 			query = mysql:Select("rp_character_data")
@@ -192,7 +192,7 @@ if SERVER then
 				query:WhereIn("key", fields)
 			local data = query:Execute() or {}
 
-			data.name = hook.Run("GetCharListName", data) or data.name or "*UNNAMED CHARACTER*"
+			data.name = hook.Run("GetCharacterListName", data) or data.name or "*UNNAMED CHARACTER*"
 
 			characters[v.id] = data
 		end
