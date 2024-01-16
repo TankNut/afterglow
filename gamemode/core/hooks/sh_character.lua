@@ -4,6 +4,12 @@ if CLIENT then
 			Interface.OpenGroup("CharacterSelect", "F2")
 		end
 	end)
+
+	netvar.AddEntityHook("CharID", "Character", function(ply, _, new)
+		if ply == LocalPlayer() and new > -1 then
+			Interface.CloseGroup("F2")
+		end
+	end)
 else
 	function GM:PostLoadCharacter(ply, id)
 		ply:Spawn()

@@ -181,6 +181,8 @@ function PANEL:Submit()
 
 	if ok then
 		netstream.Send("CreateCharacter", payload)
+
+		self.Confirm:SetDisabled(true)
 	end
 end
 

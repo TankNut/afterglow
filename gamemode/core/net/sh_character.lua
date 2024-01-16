@@ -25,5 +25,7 @@ if SERVER then
 		coroutine.wrap(function()
 			Character.LoadExternal(ply, Character.Create(ply:SteamID(), fields))
 		end)()
+
+		Character.LoadList(ply)
 	end)
 end

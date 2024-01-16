@@ -35,8 +35,12 @@ function PANEL:Populate()
 			else
 				netstream.Send("SelectCharacter", k)
 
-				self:Remove()
+				button:SetDisabled(true)
 			end
+		end
+
+		if k == LocalPlayer():GetCharID() then
+			button:SetDisabled(true)
 		end
 
 		button.ID = k

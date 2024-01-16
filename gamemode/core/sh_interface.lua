@@ -33,6 +33,12 @@ if CLIENT then
 		table.Empty(Instances[name])
 	end
 
+	function CloseGroup(group)
+		if IsValid(Groups[group]) then
+			Groups[group]:Remove()
+		end
+	end
+
 	function OpenGroup(name, group, ...)
 		local existing = Groups[group]
 
