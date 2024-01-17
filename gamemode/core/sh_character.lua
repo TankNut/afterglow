@@ -280,6 +280,7 @@ RegisterVar("Description", {
 })
 
 RegisterVar("Model", {
+	ServerOnly = true,
 	Default = "models/player/skeleton.mdl",
 	Callback = function(ply)
 		if SERVER and not CHARACTER_LOADING then
@@ -289,6 +290,7 @@ RegisterVar("Model", {
 })
 
 RegisterVar("Skin", {
+	ServerOnly = true,
 	Default = 0,
 	Callback = function(ply)
 		if SERVER and not CHARACTER_LOADING then
