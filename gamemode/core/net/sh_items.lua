@@ -11,6 +11,14 @@ if CLIENT then
 		end
 	end)
 
+	netstream.Hook("ItemData", function(payload)
+		local item = item.Get(payload.ID)
+
+		if item then
+			item:SetProperty(payload.Key, payload.Value)
+		end
+	end)
+
 	netstream.Hook("InventoryCreated", function(payload)
 		local inventory = Inventory.New(payload.StoreType, payload.StoreID, payload.ID)
 

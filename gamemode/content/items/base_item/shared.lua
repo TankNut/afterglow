@@ -15,6 +15,27 @@ function ITEM:IsTempItem()
 	return self.ID < 0
 end
 
+function ITEM:GetProperty(key, default)
+	local val = self.CustomData[key]
+
+	return val != nil and val or default
+end
+
+function ITEM:SetProperty(key, val)
+	local old = self.CustomData[key]
+
+	self.CustomData[key] = val
+	self:PropertyUpdated(key, old, val)
+
+	if SERVER then
+		netstream.Send(self:GetReceivers(), "ItemData", {ID = self.ID, Key = key, Value = val})
+		self:SaveData()
+	end
+end
+
+function ITEM:PropertyUpdated(key, old, val)
+end
+
 if SERVER then
 	function ITEM:OnWorldUse(ply, ent)
 		if not ply:GetInventory() then
