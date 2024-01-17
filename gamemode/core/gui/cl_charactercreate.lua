@@ -158,12 +158,6 @@ function PANEL:RebuildSkins()
 	end
 end
 
-local map = {
-	RPName = "Name",
-	CharacterModel = "Model",
-	CharacterSkin = "Skin"
-}
-
 function PANEL:Validate()
 	local ok, key, err = validate.Multi(self.Fields, Character.GetRules())
 
@@ -172,7 +166,7 @@ function PANEL:Validate()
 	if ok then
 		self.Confirm:SetTooltip()
 	else
-		self.Confirm:SetTooltip(string.format("%s: %s", map[key], err))
+		self.Confirm:SetTooltip(string.format("%s: %s", key, err))
 	end
 end
 
