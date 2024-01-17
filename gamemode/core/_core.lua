@@ -16,6 +16,7 @@ IncludeFile("cl_skin.lua")
 
 IncludeFolder("core/vgui")
 IncludeFolder("core/gui")
+IncludeFolder("core/gui/playermenu")
 
 IncludeFolder("core/hooks")
 IncludeFolder("core/net")
