@@ -28,4 +28,17 @@ if SERVER then
 
 		Character.LoadList(ply)
 	end)
+
+	netstream.Hook("DeleteCharacter", function(ply, id)
+		if not ply:GetCharacterList()[id] then
+			return
+		end
+
+		if ply:GetCharID() == id then
+			Character.Unload(ply)
+		end
+
+		Character.Delete(id)
+		Character.LoadList(ply)
+	end)
 end

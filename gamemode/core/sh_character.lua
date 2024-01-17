@@ -157,6 +157,20 @@ if SERVER then
 		hook.Run("PostLoadCharacter", ply, id)
 	end)
 
+	function Delete(id)
+		mysql:Begin()
+
+		local query = mysql:Delete("rp_characters")
+			query:WhereEqual("id", id)
+		query:Execute()
+
+		query = mysql:Delete("rp_character_data")
+		query:WhereEqual("id", id)
+		query:Execute()
+
+		mysql:Commit()
+	end
+
 	function Unload(ply)
 		if ply:HasCharacter() then
 			OnUnload(ply)

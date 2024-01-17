@@ -154,5 +154,5 @@ function New(storeType, storeID, id)
 end
 
 if SERVER and not Null then
-	Null = New(ITEM_NULL)
+	Null = New(ITEM_NULL, 0)
 end

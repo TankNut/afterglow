@@ -94,6 +94,18 @@ function PANEL:Populate()
 		local override = self:GetSkin().Text.Primary
 
 		pnl:SetTextColor(self.DeleteMode and override or nil)
+
+		if self.DeleteMode then
+			for _, v in pairs(self.Buttons) do
+				v:SetDisabled(false)
+			end
+		else
+			local id = LocalPlayer():GetCharID()
+
+			for _, v in pairs(self.Buttons) do
+				v:SetDisabled(v.ID == id)
+			end
+		end
 	end
 
 	self:InvalidateLayout(true)
