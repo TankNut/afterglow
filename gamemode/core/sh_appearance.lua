@@ -1,6 +1,7 @@
 module("Appearance", package.seeall)
 
-local meta = FindMetaTable("Player")
+local meta = FindMetaTable("Entity")
+local plyMeta = FindMetaTable("Player")
 
 Default = {
 	Model = Model("models/player/skeleton.mdl"),
@@ -29,11 +30,23 @@ function Apply(ent, data)
 	end
 end
 
+function Copy(from, to)
+	if CLIENT then
+		Apply(to, from:GetAppearance())
+	else
+		to:SetAppearance(from:GetAppearance())
+	end
+end
+
 function meta:GetAppearance()
-	return self:GetNetVar("Appearance", table.Copy(Default))
+	return self:GetNetVar("Appearance", {})
 end
 
 if SERVER then
+	function meta:SetAppearance(data)
+		self:SetNetVar("Appearance", data)
+	end
+
 	function Update(ply)
 		local data = table.Copy(Default)
 
@@ -44,13 +57,13 @@ if SERVER then
 		ply.HandsAppearance = data.Hands
 		data.Hands = nil
 
-		ply:SetNetVar("Appearance", data)
+		ply:SetAppearance(data)
 		ply:SetupHands()
 
 		hook.Run("PostSetAppearance", ply, data)
 	end
 
-	function meta:UpdateAppearance()
+	function plyMeta:UpdateAppearance()
 		Update(self)
 	end
 end

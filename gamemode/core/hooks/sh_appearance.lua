@@ -20,10 +20,6 @@ if SERVER then
 	end
 end
 
-netvar.AddEntityHook("Appearance", "Appearance", function(ply, _, appearance)
-	if not ply:IsPlayer() then
-		return
-	end
-
-	Appearance.Apply(ply, appearance)
+netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
+	Appearance.Apply(ent, appearance)
 end)
