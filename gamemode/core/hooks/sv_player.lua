@@ -55,3 +55,7 @@ function GM:PlayerLoadout(ply)
 
 	ply:SwitchToDefaultWeapon()
 end
+
+function GM:PlayerDisconnected(ply)
+	Inventory.Remove(ply:GetNetVar("InventoryID"))
+end
