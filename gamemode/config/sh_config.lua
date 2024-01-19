@@ -1,5 +1,14 @@
 GM.Config.MaxCharacters = 10
 
+GM.Config.MinNameLength = 3
+GM.Config.MaxNameLength = 30
+
+GM.Config.MinDescriptionLength = 0
+GM.Config.MaxDescriptionLength = 2048
+
+GM.Config.NameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789'"
+GM.Config.DescriptionCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789',\n!?@#$%^&*(){}[]_=|\\\"><`~"
+
 GM.Config.CharacterModels = {
 	Model("models/player/group01/male_01.mdl"),
 	Model("models/player/group01/male_02.mdl"),

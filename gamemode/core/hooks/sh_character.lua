@@ -23,20 +23,29 @@ else
 	end
 end
 
+function GM:GetCharacterNameRules()
+	return {
+		validate.Required(),
+		validate.String(),
+		validate.Min(Config.Get("MinNameLength")),
+		validate.Max(Config.Get("MaxNameLength")),
+		validate.AllowedCharacters(Config.Get("NameCharacters"))
+	}
+end
+
+function GM:GetCharacterDescriptionRules()
+	return {
+		validate.String(),
+		validate.Min(Config.Get("MinDescriptionLength")),
+		validate.Max(Config.Get("MaxDescriptionLength")),
+		validate.AllowedCharacters(Config.Get("DescriptionCharacters"))
+	}
+end
+
 function GM:GetBaseCharacterRules()
 	return {
-		Name = {
-			validate.Required(),
-			validate.String(),
-			validate.Min(3),
-			validate.Max(30),
-			validate.AllowedCharacters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789'")
-		},
-		Description = {
-			validate.String(),
-			validate.Max(2048),
-			validate.AllowedCharacters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789'")
-		},
+		Name = hook.Run("GetCharacterNameRules"),
+		Description = hook.Run("GetCharacterDescriptionRules"),
 		Model = {
 			validate.Required(),
 			validate.String(),
@@ -54,4 +63,12 @@ function GM:GetBaseCharacterRules()
 end
 
 function GM:ModifyCharacterRules(rules)
+end
+
+function GM:CanChangeCharacterName(ply)
+	return true
+end
+
+function GM:CanChangeCharacterDescription(ply)
+	return true
 end
