@@ -90,7 +90,7 @@ function SKIN:PaintFrame(panel, w, h)
 	surface.SetDrawColor(self.Colors.Border)
 	surface.DrawOutlinedRect(0, 0, w, h)
 
-	if panel._DrawTopbar then
+	if panel.bDrawTopbar then
 		surface.DrawRect(0, 0, w, 25)
 	end
 end

@@ -1,22 +1,22 @@
 local PANEL = {}
 DEFINE_BASECLASS("EditablePanel")
 
-AccessorFunc(PANEL, "_AllowEscape", "AllowEscape")
-AccessorFunc(PANEL, "_ToggleKey", "ToggleKey")
-AccessorFunc(PANEL, "_DrawTopbar", "DrawTopbar")
-AccessorFunc(PANEL, "_Draggable", "Draggable")
+AccessorFunc(PANEL, "bAllowEscape", "AllowEscape")
+AccessorFunc(PANEL, "sToggleKey", "ToggleKey")
+AccessorFunc(PANEL, "bDrawTopbar", "DrawTopbar")
+AccessorFunc(PANEL, "bDraggable", "Draggable")
 
 function PANEL:Init()
 	self:SetSkin("Afterglow")
 
-	self._DrawTopbar = false
+	self.bDrawTopbar = false
 
 	self:DockPadding(1, 1, 1, 1)
 	self.Armed = false
 end
 
 function PANEL:SetDrawTopBar(bool)
-	if bool == self._DrawTopbar then
+	if bool == self.bDrawTopbar then
 		return
 	end
 
@@ -26,7 +26,7 @@ function PANEL:SetDrawTopBar(bool)
 		self:SetTall(self:GetTall() + 24)
 		self:DockPadding(padding, padding + 24, padding, padding)
 
-		if self._AllowEscape then
+		if self.bAllowEscape then
 			self.ButtonClose = self:Add("DButton")
 			self.ButtonClose:SetSize(24, 24)
 			self.ButtonClose:SetFont("marlett")
@@ -52,13 +52,13 @@ function PANEL:SetDrawTopBar(bool)
 		end
 	end
 
-	self._DrawTopbar = bool
+	self.bDrawTopbar = bool
 
 	self:PerformLayout()
 end
 
 function PANEL:Think()
-	if self._AllowEscape and gui.IsGameUIVisible() and (not IsValid(vgui.GetKeyboardFocus()) or vgui.FocusedHasParent(self)) then
+	if self.bAllowEscape and gui.IsGameUIVisible() and (not IsValid(vgui.GetKeyboardFocus()) or vgui.FocusedHasParent(self)) then
 		self:Remove()
 		gui.HideGameUI()
 	end
@@ -81,7 +81,7 @@ function PANEL:SetTitle(title)
 end
 
 function PANEL:SetSize(w, h)
-	if self._DrawTopbar then
+	if self.bDrawTopbar then
 		h = h + 24
 	end
 
@@ -89,7 +89,7 @@ function PANEL:SetSize(w, h)
 end
 
 function PANEL:OnKeyCodePressed(key)
-	if self._ToggleKey and input.LookupKeyBinding(key) == self._ToggleKey then
+	if self.sToggleKey and input.LookupKeyBinding(key) == self.sToggleKey then
 		self:Remove()
 	end
 end
@@ -97,7 +97,7 @@ end
 function PANEL:OnMousePressed()
 	local x, y = self:ScreenToLocal(gui.MousePos())
 
-	if self._Draggable and math.InRange(x, 0, self:GetWide()) and math.InRange(y, 0, 24) then
+	if self.bDraggable and math.InRange(x, 0, self:GetWide()) and math.InRange(y, 0, 24) then
 		self.Dragging = {x, y}
 		self:MouseCapture(true)
 	end

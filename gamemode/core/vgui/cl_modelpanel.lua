@@ -1,11 +1,12 @@
 local PANEL = {}
 DEFINE_BASECLASS("DModelPanel")
 
-AccessorFunc(PANEL, "_AllowManipulation", "AllowManipulation")
+AccessorFunc(PANEL, "bAllowManipulation", "AllowManipulation")
+AccessorFunc(PANEL, "bUseCustomLighting", "UseCustomLighting")
 
-AccessorFunc(PANEL, "_CamPosRange", "CamPosRange")
-AccessorFunc(PANEL, "_LookAtRange", "LookAtRange")
-AccessorFunc(PANEL, "_FOVRange", "FOVRange")
+AccessorFunc(PANEL, "vCamPosRange", "CamPosRange")
+AccessorFunc(PANEL, "vLookAtRange", "LookAtRange")
+AccessorFunc(PANEL, "fFOVRange", "FOVRange")
 
 function PANEL:Init()
 	self.Zoom = 0
@@ -59,7 +60,7 @@ function PANEL:LayoutEntity(ent)
 		ent:SetAngles(Angle(0, 20, 0))
 	end
 
-	if not self._AllowManipulation then
+	if not self.bAllowManipulation then
 		return
 	end
 
@@ -88,9 +89,9 @@ function PANEL:LayoutEntity(ent)
 end
 
 function PANEL:GetCameraTarget()
-	local pos = LerpVector(self.Zoom, unpack(self._CamPosRange))
-	local look = LerpVector(self.Zoom, unpack(self._LookAtRange))
-	local fov = Lerp(self.Zoom, unpack(self._FOVRange))
+	local pos = LerpVector(self.Zoom, unpack(self.vCamPosRange))
+	local look = LerpVector(self.Zoom, unpack(self.vLookAtRange))
+	local fov = Lerp(self.Zoom, unpack(self.fFOVRange))
 
 	return self.Entity:GetPos() + pos, self.Entity:GetPos() + look, fov
 end
@@ -104,7 +105,7 @@ function PANEL:OnMouseWheeled(delta)
 end
 
 function PANEL:OnMousePressed(mouse)
-	if self._AllowManipulation then
+	if self.bAllowManipulation then
 		self:MouseCapture(true)
 
 		self.Dragging = true
