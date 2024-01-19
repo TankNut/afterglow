@@ -36,6 +36,8 @@ function IncludeFolder(dir, baseDir)
 	end
 end
 
+IncludeFile("sh_memoize.lua")
+
 -- Extensions
 IncludeFolder("utils/extensions")
 
@@ -48,6 +50,7 @@ IncludeFile("libs/sh_pack.lua")
 IncludeFile("libs/sh_queue.lua")
 IncludeFile("libs/sh_netstream.lua")
 IncludeFile("libs/sh_netvar.lua")
+IncludeFile("libs/cl_scribe.lua")
 
 IncludeFile("sh_player_ready.lua")
 IncludeFile("sh_ref.lua")
