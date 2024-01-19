@@ -53,7 +53,11 @@ if SERVER then
 	end
 
 	addCharacterHook("SetCharacterDescription", function(ply, new)
-		local ok = validate.Value(new, hook.Run("GetCharacterNameRules"))
+		if ply:GetCharacterDescription() == new then
+			return
+		end
+
+		local ok = validate.Value(new, hook.Run("GetCharacterDescriptionRules"))
 
 		if not ok then
 			return
@@ -63,7 +67,11 @@ if SERVER then
 	end)
 
 	addCharacterHook("SetCharacterName", function(ply, new)
-		local ok = validate.Value(new, hook.Run("GetCharacterDescriptionRules"))
+		if ply:GetCharacterName() == new then
+			return
+		end
+
+		local ok = validate.Value(new, hook.Run("GetCharacterNameRules"))
 
 		if not ok then
 			return
