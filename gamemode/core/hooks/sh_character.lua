@@ -35,6 +35,7 @@ end
 
 function GM:GetCharacterDescriptionRules()
 	return {
+		validate.Required(),
 		validate.String(),
 		validate.Min(Config.Get("MinDescriptionLength")),
 		validate.Max(Config.Get("MaxDescriptionLength")),
