@@ -1,9 +1,99 @@
+local function updateDescription(self)
+	local color = self:GetSkin().Text.Normal
+	local desc = LocalPlayer():GetCharacterDescription():Escape()
+
+	self.Description:SetText(string.format("<f=afterglow.labelsmall><c=%s>%s", color, desc))
+	self.Description:SizeToContentsY()
+
+	self.Scroll:AutoSize()
+end
+
 local function func(self)
 	self.Preview = self:Add("afterglow_playerview")
 	self.Preview:DockMargin(0, 0, 5, 0)
 	self.Preview:Dock(LEFT)
 	self.Preview:SetWide(200)
 	self.Preview:SetPlayer(LocalPlayer())
+
+	local bottom = self:Add("DPanel")
+
+	bottom:DockMargin(0, 5, 0, 0)
+	bottom:Dock(BOTTOM)
+	bottom:SetTall(22)
+	bottom:SetPaintBackground(false)
+
+	self.CharacterName = self:Add("DLabel")
+	self.CharacterName:DockMargin(0, 0, 0, 5)
+	self.CharacterName:Dock(TOP)
+	self.CharacterName:SetTall(22)
+	self.CharacterName:SetFont("afterglow.labelgiant")
+	self.CharacterName:SetText(LocalPlayer():GetCharacterName())
+
+	self.Scroll = self:Add("afterglow_scrollpanel")
+	self.Scroll:DockMargin(0, 0, 0, 0)
+	self.Scroll:Dock(FILL)
+	self.Scroll:InvalidateParent(true)
+	self.Scroll:UpdateLayout()
+
+	self.Description = self.Scroll:Add("scribe_label")
+	self.Description:SetWide(self.Scroll:GetWide() - 15)
+
+	self.Scroll:AddItem(self.Description)
+
+	updateDescription(self)
+
+	self.ChangeDescription = bottom:Add("DButton")
+	self.ChangeDescription:DockMargin(5, 0, 0, 0)
+	self.ChangeDescription:Dock(RIGHT)
+	self.ChangeDescription:SetText("Change Description")
+	self.ChangeDescription:SetDisabled(not hook.Run("CanChangeCharacterDescription", LocalPlayer()))
+	self.ChangeDescription:SizeToContents()
+
+	self.ChangeDescription.DoClick = function()
+		coroutine.wrap(function()
+			local new = Interface.Open("Input", "string", "Change Description", {
+				Min = Config.Get("MinDescriptionLength"),
+				Max = Config.Get("MaxDescriptionLength"),
+				AllowedCharacters = Config.Get("DescriptionCharacters"),
+				Multiline = true,
+				Default = LocalPlayer():GetCharacterDescription()
+			})
+
+			netstream.Send("SetCharacterDescription", new)
+		end)()
+	end
+
+	self.ChangeName = bottom:Add("DButton")
+	self.ChangeName:DockMargin(5, 0, 0, 0)
+	self.ChangeName:Dock(RIGHT)
+	self.ChangeName:SetText("Change Name")
+	self.ChangeName:SetDisabled(not hook.Run("CanChangeCharacterName", LocalPlayer()))
+	self.ChangeName:SizeToContents()
+
+	self.ChangeName.DoClick = function()
+		coroutine.wrap(function()
+			local new = Interface.Open("Input", "string", "Change Description", {
+				Min = Config.Get("MinNameLength"),
+				Max = Config.Get("MaxNameLength"),
+				AllowedCharacters = Config.Get("NameCharacters"),
+				Default = LocalPlayer():GetCharacterName()
+			})
+
+			netstream.Send("SetCharacterName", new)
+		end)()
+	end
+
+	hook.Add("CharacterNameChanged", self.CharacterName, function(_, ply, _, new)
+		if ply == LocalPlayer() then
+			self.CharacterName:SetText(new)
+		end
+	end)
+
+	hook.Add("CharacterDescriptionChanged", self.Description, function(_, ply)
+		if ply == LocalPlayer() then
+			updateDescription(self)
+		end
+	end)
 end
 
 hook.Add("PopulatePlayerMenu", "Description", function(pnl)

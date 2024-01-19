@@ -272,11 +272,17 @@ if SERVER then
 end
 
 RegisterVar("Name", {
-	Default = "*INVALID*"
+	Default = "*INVALID*",
+	Callback = function(ply, old, new)
+		hook.Run("CharacterNameChanged", ply, old, new)
+	end
 })
 
 RegisterVar("Description", {
-	Default = ""
+	Default = "",
+	Callback = function(ply, old, new)
+		hook.Run("CharacterDescriptionChanged", ply, old, new)
+	end
 })
 
 RegisterVar("Model", {

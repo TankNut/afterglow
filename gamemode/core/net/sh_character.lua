@@ -41,4 +41,34 @@ if SERVER then
 		Character.Delete(id)
 		Character.LoadList(ply)
 	end)
+
+	local function addCharacterHook(name, callback)
+		netstream.Hook(name, function(ply, ...)
+			if not ply:HasCharacter() then
+				return
+			end
+
+			callback(ply, ...)
+		end)
+	end
+
+	addCharacterHook("SetCharacterDescription", function(ply, new)
+		local ok = validate.Value(new, hook.Run("GetCharacterNameRules"))
+
+		if not ok then
+			return
+		end
+
+		ply:SetCharacterDescription(new)
+	end)
+
+	addCharacterHook("SetCharacterName", function(ply, new)
+		local ok = validate.Value(new, hook.Run("GetCharacterDescriptionRules"))
+
+		if not ok then
+			return
+		end
+
+		ply:SetCharacterName(new)
+	end)
 end
