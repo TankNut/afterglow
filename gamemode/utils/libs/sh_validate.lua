@@ -18,7 +18,7 @@ function AddRule(name, callback, checkNil)
 	validate[name] = Rules[name]
 end
 
-function Value(val, rules, name)
+function Value(val, rules)
 	if rules.Name then
 		rules = {rules}
 	end

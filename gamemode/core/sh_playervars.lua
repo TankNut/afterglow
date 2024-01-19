@@ -82,11 +82,11 @@ function Register(key, data)
 			end
 		end
 
-		if CLIENT and data.Hook then
+		if CLIENT and data.Callback then
 			netvar.AddEntityHook(data.Key, "PlayerVars", function(ply, old, value)
 				local callValue = value != nil and value or data.Default
 
-				hook.Run(data.Hook, ply, data.Key, old, callValue)
+				data.Callback(ply, old, callValue)
 			end)
 		end
 	end
