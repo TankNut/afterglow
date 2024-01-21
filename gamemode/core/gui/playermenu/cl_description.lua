@@ -29,11 +29,10 @@ local function func(self)
 	self.CharacterName:SetFont("afterglow.labelgiant")
 	self.CharacterName:SetText(LocalPlayer():GetCharacterName())
 
-	self.Scroll = self:Add("afterglow_scrollpanel")
+	self.Scroll = self:Add("DScrollPanel")
 	self.Scroll:DockMargin(0, 0, 0, 0)
 	self.Scroll:Dock(FILL)
 	self.Scroll:InvalidateParent(true)
-	self.Scroll:UpdateLayout()
 
 	self.Description = self.Scroll:Add("scribe_label")
 	self.Description:SetWide(self.Scroll:GetWide() - 15)

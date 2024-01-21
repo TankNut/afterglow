@@ -139,6 +139,15 @@ function SKIN:PaintTextEntry(panel, w, h)
 	panel:DrawTextEntryText(self.Text.Normal, self.Text.Highlight, self.Text.Normal)
 end
 
+function SKIN:PaintVScrollBar(panel, w, h)
+	surface.SetDrawColor(self.Colors.FillDark)
+	surface.DrawRect(0, 0, w, h)
+end
+
+function SKIN:PaintScrollBarGrip( panel, w, h )
+	self:DrawButton(panel:GetDisabled(), w, h)
+end
+
 function SKIN:PaintButtonDown(panel, w, h)
 	if not panel.m_bBackground then
 		return
