@@ -6,7 +6,7 @@ SKIN.DermaVersion 	= 1
 
 SKIN.Colors = {}
 
-SKIN.Colors.Primary = HSVToColor(0, 1, 1)
+SKIN.Colors.Primary = HSVToColor(0, 1, 0.8)
 
 SKIN.Colors.Border = Color(20, 20, 20)
 SKIN.Colors.TextEntry = Color(35, 35, 35)
