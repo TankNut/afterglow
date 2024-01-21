@@ -203,7 +203,24 @@ end
 
 -- Drawing
 
-function CORE:Draw(x, y, alpha)
+function CORE:Draw(x, y, alpha, xAlign, yAlign)
+	xAlign = xAlign or TEXT_ALIGN_LEFT
+	yAlign = yAlign or TEXT_ALIGN_TOP
+
+	local w, h = self:GetSize()
+
+	if xAlign == TEXT_ALIGN_CENTER then
+		x = x - (w * 0.5)
+	elseif xALign == TEXT_ALIGN_RIGHT then
+		x = x - w
+	end
+
+	if yAlign == TEXT_ALIGN_CENTER then
+		y = y - (h * 0.5)
+	elseif yAlign == TEXT_ALIGN_BOTTOM then
+		y = y - h
+	end
+
 	self.Alpha = alpha or 1
 
 	self.Pos.x = x
@@ -252,6 +269,14 @@ end
 
 function CORE:GetSize()
 	return self.Size.x, self.Size.y
+end
+
+function CORE:GetWide()
+	return self.Size.x
+end
+
+function CORE:GetTall()
+	return self.Size.y
 end
 
 Core = CORE
