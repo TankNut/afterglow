@@ -2,7 +2,6 @@ local PANEL = {}
 DEFINE_BASECLASS("DModelPanel")
 
 AccessorFunc(PANEL, "bAllowManipulation", "AllowManipulation")
-AccessorFunc(PANEL, "bUseCustomLighting", "UseCustomLighting")
 
 AccessorFunc(PANEL, "vCamPosRange", "CamPosRange")
 AccessorFunc(PANEL, "vLookAtRange", "LookAtRange")

@@ -11,7 +11,7 @@ function PANEL:Init()
 	self.MenuButtons = {}
 
 	self.Content = self:Add("DPanel")
-	self.Content:DockPadding(10, 10, 10, 10)
+	self.Content:DockPadding(5, 5, 5, 5)
 	self.Content:Dock(FILL)
 	self.Content:SetPaintBackground(false)
 end
