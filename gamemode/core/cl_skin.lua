@@ -130,7 +130,7 @@ function SKIN:PaintTextEntry(panel, w, h)
 		str = language.GetPhrase(str)
 
 		panel:SetText(str)
-		panel:DrawTextEntryText(panel:GetPlaceholderColor(), panel:GetHighlightColor(), panel:GetCursorColor())
+		panel:DrawTextEntryText(self.Text.Disabled, self.Text.Disabled, self.Text.Disabled)
 		panel:SetText(oldText)
 
 		return
@@ -210,6 +210,18 @@ function SKIN:PaintButtonRight(panel, w, h)
 
 	surface.SetTextPos(math.floor(w * 0.5 - tw * 0.5), math.ceil(h * 0.5 - th * 0.5))
 	surface.DrawText("4")
+end
+
+function SKIN:PaintProgressBar(panel, w, h)
+	surface.SetDrawColor(self.Colors.FillDark)
+	surface.DrawRect(0, 0, w, h)
+
+	local width = w - 2
+
+	surface.SetDrawColor(self.Colors.Primary)
+	surface.DrawRect(1, 1, width * panel:GetProgress(), h - 2)
+
+	draw.SimpleText(panel:GetText(), "afterglow.labelsmall", w * 0.5, h * 0.5, self.Text.Normal, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
 derma.DefineSkin("Afterglow", "Default Afterglow UI skin", SKIN)

@@ -4,16 +4,14 @@ local function updateDescription(self)
 
 	self.Description:SetText(string.format("<f=afterglow.labelsmall><c=%s>%s", color, desc))
 	self.Description:SizeToContentsY()
-
-	self.Scroll:AutoSize()
 end
 
 local function func(self)
-	self.Preview = self:Add("afterglow_playerview")
+	self.Preview = self:Add("afterglow_liveview")
 	self.Preview:DockMargin(0, 0, 5, 0)
 	self.Preview:Dock(LEFT)
 	self.Preview:SetWide(200)
-	self.Preview:SetPlayer(LocalPlayer())
+	self.Preview:SetEntity(LocalPlayer())
 
 	local bottom = self:Add("DPanel")
 
