@@ -16,10 +16,14 @@ function ITEM:IsTempItem()
 	return self.ID < 0
 end
 
-function ITEM:GetProperty(key, default)
+function ITEM:GetParent()
+	return self:GetInventory()
+end
+
+function ITEM:GetProperty(key)
 	local val = self.CustomData[key]
 
-	return val != nil and val or default
+	return val != nil and val or self[key]
 end
 
 function ITEM:SetProperty(key, val)
