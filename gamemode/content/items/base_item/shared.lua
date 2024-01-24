@@ -3,15 +3,29 @@ ITEM.__Item = true
 ITEM.Name = "NULL Item"
 ITEM.Description = "God help you if you ever see this"
 
+ITEM.Category = "Misc"
+ITEM.Tags = {}
+
 ITEM.Model = Model("models/props_junk/PopCan01a.mdl")
 ITEM.Skin = 0
 
 ITEM.Bodygroups = {}
 
+ITEM.InspectAngle = Angle(11, 175)
+ITEM.InspectFOV = 14
+
+ITEM.Weight = 0
+
 ITEM.Internal = true
 
+-- Used for item displays
+ITEM.Amount = 1
+ITEM.Equipped = false
+
+IncludeFile("sh_actions.lua")
 IncludeFile("sh_cache.lua")
 IncludeFile("sh_event.lua")
+IncludeFile("sh_getters.lua")
 IncludeFile("sh_inventory.lua")
 IncludeFile("sv_db.lua")
 
@@ -42,9 +56,22 @@ function ITEM:SetProperty(key, val)
 end
 
 function ITEM:PropertyUpdated(key, old, val)
+	if key == "Weight" then
+		self:FireEvent("WeightChanged", self)
+	elseif key == "Category" or key == "Tags" then
+		self:InvalidateCache("Tags")
+	end
 end
 
 if SERVER then
+	function ITEM:GetReceivers()
+		local inventory = self:GetInventory()
+
+		if inventory then
+			return inventory:GetReceivers()
+		end
+	end
+
 	function ITEM:OnWorldUse(ply, ent)
 		if not ply:GetInventory() then
 			return

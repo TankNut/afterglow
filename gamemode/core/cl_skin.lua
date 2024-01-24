@@ -235,4 +235,35 @@ function SKIN:PaintProgressBar(panel, w, h)
 	draw.SimpleText(panel:GetText(), "afterglow.labelsmall", w * 0.5, h * 0.5, self.Text.Normal, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
+function SKIN:PaintHighlight(x, y, w, h)
+	surface.SetDrawColor(ColorAlpha(self.Colors.Primary, 25))
+	surface.DrawRect(x, y, w, h)
+
+	surface.SetDrawColor(ColorAlpha(self.Colors.Primary, 100))
+	surface.DrawOutlinedRect(x, y, w, h)
+end
+
+function SKIN:PaintItemHover(x, y, w, h)
+	self:PaintHighlight(x, y, w, h)
+end
+
+function SKIN:PaintMenu(panel, w, h)
+	surface.SetDrawColor(self.Colors.FillMedium)
+	surface.DrawRect(0, 0, w, h)
+
+	surface.SetDrawColor(self.Colors.FillDark)
+	surface.DrawOutlinedRect(0, 0, w, h, 1)
+end
+
+function SKIN:PaintMenuOption(panel, w, h)
+	if panel.m_bBackground and not panel:IsEnabled() then
+		surface.SetDrawColor(self.Colors.FillDark)
+		surface.DrawRect(0, 0, w, h)
+	end
+
+	if panel.m_bBackground and (panel.Hovered or panel.Highlight) then
+		self:PaintHighlight(1, 1, w - 2, h - 2)
+	end
+end
+
 derma.DefineSkin("Afterglow", "Default Afterglow UI skin", SKIN)

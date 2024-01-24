@@ -28,4 +28,19 @@ if CLIENT then
 	end)
 
 	netstream.Hook("InventoryRemoved", Inventory.Remove)
+else
+	netstream.Hook("ItemAction", function(ply, payload)
+		local item = Item.Get(payload.ID)
+
+		if not item or not item:CanInteract(ply) then
+			return
+		end
+
+		for _, v in pairs(item:GetActions(ply)) do
+			if v.Name == payload.Name then
+				v.Callback(item, ply, payload.Value)
+				break
+			end
+		end
+	end)
 end
