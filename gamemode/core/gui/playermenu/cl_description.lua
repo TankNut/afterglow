@@ -1,8 +1,7 @@
 local function updateDescription(self)
-	local color = self:GetSkin().Text.Normal
 	local desc = LocalPlayer():GetCharacterDescription():Escape()
 
-	self.Description:SetText(string.format("<f=afterglow.labelsmall><c=%s>%s", color, desc))
+	self.Description:SetText(string.format("<iset=2><small><cnormal>%s", desc))
 	self.Description:SizeToContentsY()
 end
 
