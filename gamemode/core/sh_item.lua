@@ -174,7 +174,7 @@ function LoadItems()
 end
 
 if SERVER then
-	Create = coroutine.Bind(function(name, data, callback)
+	Create = coroutine.Bind(function(name, data)
 		local query = mysql:Insert("rp_items")
 			query:Insert("class", name)
 			query:Insert("customdata", pack.Encode(data))
