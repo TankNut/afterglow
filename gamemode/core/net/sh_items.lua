@@ -12,7 +12,7 @@ if CLIENT then
 	end)
 
 	netstream.Hook("ItemData", function(payload)
-		local item = item.Get(payload.ID)
+		local item = Item.Get(payload.ID)
 
 		if item then
 			item:SetProperty(payload.Key, payload.Value)
