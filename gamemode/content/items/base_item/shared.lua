@@ -1,3 +1,5 @@
+ITEM.__Item = true
+
 ITEM.Name = "NULL Item"
 ITEM.Description = "God help you if you ever see this"
 
@@ -9,6 +11,7 @@ ITEM.Bodygroups = {}
 ITEM.Internal = true
 
 IncludeFile("sh_cache.lua")
+IncludeFile("sh_event.lua")
 IncludeFile("sh_inventory.lua")
 IncludeFile("sv_db.lua")
 
