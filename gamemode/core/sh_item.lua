@@ -105,6 +105,7 @@ function Instance(name, id, data)
 
 	item.ID = id
 	item.CustomData = data or {}
+	item.Cache = {}
 
 	All[id] = item
 

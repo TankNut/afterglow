@@ -8,6 +8,7 @@ ITEM.Bodygroups = {}
 
 ITEM.Internal = true
 
+IncludeFile("sh_cache.lua")
 IncludeFile("sh_inventory.lua")
 IncludeFile("sv_db.lua")
 
