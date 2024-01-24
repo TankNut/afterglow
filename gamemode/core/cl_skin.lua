@@ -24,6 +24,17 @@ SKIN.Text.Disabled = Color(150, 150, 150)
 SKIN.Text.Highlight = Color(40, 40, 40)
 SKIN.Text.Bad = Color(200, 0, 0)
 
+for k, v in pairs(SKIN.Text) do
+	local COMPONENT = {
+		Name = {"c" .. k:lower()}
+	}
+
+	function COMPONENT:Push() self.Context:PushColor(v) end
+	function COMPONENT:Pop() self.Context:PopColor() end
+
+	scribe.Register(COMPONENT)
+end
+
 -- Overrides for hardcoded values
 
 SKIN.Colours = {}
