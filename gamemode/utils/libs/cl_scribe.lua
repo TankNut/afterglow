@@ -564,6 +564,11 @@ Register(COMPONENT)
 
 local PANEL = {}
 
+function PANEL:SetAlignment(x, y)
+	self.AlignmentX = x
+	self.AlignmentY = y
+end
+
 function PANEL:SetText(text)
 	self.Text = text
 	self:Rebuild()
@@ -595,7 +600,22 @@ end
 
 function PANEL:Paint(w, h)
 	if self.Scribe then
-		self.Scribe:Draw(0, 0)
+		local x = 0
+		local y = 0
+
+		if self.AlignmentX == TEXT_ALIGN_CENTER then
+			x = w * 0.5
+		elseif self.AlignmentX == TEXT_ALIGN_RIGHT then
+			x = w
+		end
+
+		if self.AlignmentY == TEXT_ALIGN_CENTER then
+			y = h * 0.5
+		elseif self.AlignmentY == TEXT_ALIGN_BOTTOM then
+			y = h
+		end
+
+		self.Scribe:Draw(x, y, self:GetAlpha(), self.AlignmentX, self.AlignmentY)
 	end
 end
 
