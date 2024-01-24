@@ -2,7 +2,7 @@ local PANEL = {}
 
 function PANEL:Init()
 	self:SetSize(700, 400)
-	self:DockPadding(10, 10, 10, 10)
+	self:DockPadding(5, 5, 5, 5)
 
 	if LocalPlayer():HasCharacter() then
 		self:SetToggleKey("gm_showteam")
@@ -13,7 +13,7 @@ function PANEL:Init()
 	self:SetTitle("Character Creation")
 
 	self.Left = self:Add("DPanel")
-	self.Left:DockMargin(0, 0, 10, 0)
+	self.Left:DockMargin(0, 0, 5, 0)
 	self.Left:Dock(LEFT)
 	self.Left:SetWide(480)
 	self.Left:SetPaintBackground(false)
@@ -32,7 +32,7 @@ function PANEL:Init()
 	end
 
 	self.Confirm = self.Right:Add("DButton")
-	self.Confirm:DockMargin(0, 10, 0, 0)
+	self.Confirm:DockMargin(0, 5, 0, 0)
 	self.Confirm:Dock(BOTTOM)
 	self.Confirm:SetText("Confirm")
 
