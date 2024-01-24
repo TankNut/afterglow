@@ -1,5 +1,5 @@
 function ITEM:GetInventory()
-	return inventories.Get(self.InventoryID)
+	return Inventory.Get(self.InventoryID)
 end
 
 function ITEM:SetInventory(inventory, loaded)
