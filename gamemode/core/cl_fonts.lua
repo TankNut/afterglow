@@ -7,7 +7,7 @@ function surface.FontExists(font)
 end
 
 surface.CreateFont("DefaultBold", {
-	font = "Tahoma",
+	font = GM.MainFont,
 	size = 13,
 	weight = 1000
 })
@@ -18,57 +18,32 @@ surface.CreateFont("afterglow.labelworld", {
 	weight = 21
 })
 
-surface.CreateFont("afterglow.labelmassive", {
-	font = GM.MainFont,
-	size = 30,
-	weight = 500
-})
+for k, v in pairs({massive = 30, giant = 22, big = 18, medium = 16, small = 14, tiny = 12}) do
+	surface.CreateFont("afterglow.label" .. k, {
+		font = GM.MainFont,
+		size = v,
+		weight = 500
+	})
 
-surface.CreateFont("afterglow.labelgiant", {
-	font = GM.MainFont,
-	size = 22,
-	weight = 500
-})
+	surface.CreateFont("afterglow.label" .. k .. "bold", {
+		font = GM.MainFont,
+		size = v,
+		weight = 1600
+	})
 
-surface.CreateFont("afterglow.labelbig", {
-	font = GM.MainFont,
-	size = 18,
-	weight = 500
-})
+	surface.CreateFont("afterglow.label" .. k .. "italic", {
+		font = GM.MainFont,
+		size = v,
+		weight = 500,
+		italic = true
+	})
 
-surface.CreateFont("afterglow.labelmedium", {
-	font = GM.MainFont,
-	size = 16,
-	weight = 500
-})
+	local COMPONENT = {
+		Name = {k}
+	}
 
-surface.CreateFont("afterglow.labelmediumbold", {
-	font = GM.MainFont,
-	size = 16,
-	weight = 1600
-})
+	function COMPONENT:Push() self.Context:PushFont("afterglow.label" .. k) end
+	function COMPONENT:Pop() self.Context:PopFont() end
 
-surface.CreateFont("afterglow.labelsmall", {
-	font = GM.MainFont,
-	size = 14,
-	Weight = 500
-})
-
-surface.CreateFont("afterglow.labelsmallbold", {
-	font = GM.MainFont,
-	size = 14,
-	weight = 1600
-})
-
-surface.CreateFont("afterglow.labelsmallitalic", {
-	font = GM.MainFont,
-	size = 14,
-	Weight = 500,
-	italic = true
-})
-
-surface.CreateFont("afterglow.labeltiny", {
-	font = GM.MainFont,
-	size = 12,
-	Weight = 500
-})
+	scribe.Register(COMPONENT)
+end
