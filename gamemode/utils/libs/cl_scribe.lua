@@ -2,7 +2,7 @@ module("scribe", package.seeall)
 
 Components = Components or {}
 
-local defaultFont = "DebugFixed"
+local defaultFont = "afterglow.labelbig"
 local defaultColor = color_white
 
 local CORE = {}
@@ -50,6 +50,12 @@ function CORE:New(str, maxWidth)
 	self.MaxWidth = maxWidth or math.huge
 
 	self.Blocks = {}
+	self:Reset()
+
+	self:Parse(str)
+end
+
+function CORE:Reset()
 	self.Stack = {}
 
 	self.Complex = false
@@ -57,7 +63,6 @@ function CORE:New(str, maxWidth)
 	self.Color = defaultColor
 
 	self.CharModifiers = {}
-	self:Parse(str)
 end
 
 function CORE:ProcessMatch(stack, str)
@@ -511,6 +516,19 @@ function COMPONENT:Pop() self.Context:PopColor() end
 Register(COMPONENT)
 
 COMPONENT = {
+	Name = {"alpha", "a"}
+}
+
+function COMPONENT:New(ctx, alpha)
+	self.Color = ColorAlpha(ctx.Color, tonumber(alpha))
+end
+
+function COMPONENT:Push() self.Context:PushColor(self.Color) end
+function COMPONENT:Pop() self.Context:PopColor() end
+
+Register(COMPONENT)
+
+COMPONENT = {
 	Name = {"iset", "inset"}
 }
 
@@ -527,6 +545,19 @@ function COMPONENT:PreCharModify(part, data)
 		data.x = data.x + self.Inset
 		data.w = data.w + self.Inset
 	end
+end
+
+Register(COMPONENT)
+
+COMPONENT = {
+	Name = {"reset"}
+}
+
+function COMPONENT:Push()
+	self.Context:Reset()
+
+	self.Context:SetFont(self.Context.Font)
+	self.Context:SetColor(self.Context.Color)
 end
 
 Register(COMPONENT)
