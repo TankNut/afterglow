@@ -73,7 +73,7 @@ function CORE:ProcessMatch(stack, str)
 			local unset = tag[1] == "/"
 
 			if unset then
-				tag = tag:utf8sub(2)
+				tag = tag:sub(2)
 			end
 
 			if not Components[tag] then
@@ -211,7 +211,7 @@ function CORE:Draw(x, y, alpha, xAlign, yAlign)
 
 	if xAlign == TEXT_ALIGN_CENTER then
 		x = x - (w * 0.5)
-	elseif xALign == TEXT_ALIGN_RIGHT then
+	elseif xAlign == TEXT_ALIGN_RIGHT then
 		x = x - w
 	end
 
@@ -382,7 +382,7 @@ function COMPONENT:Draw()
 		end
 
 		self.Buffer[#self.Buffer + 1] = char
-		self.BufferWidth = self.BufferWidth + 1
+		self.BufferWidth = self.BufferWidth + w
 	end
 
 	self:FlushBuffer()
