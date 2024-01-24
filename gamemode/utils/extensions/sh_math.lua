@@ -3,3 +3,7 @@ function math.ApproachSpeed(start, dest, speed)
 
 	return math.Approach(start, dest, dist / speed)
 end
+
+function math.InRange(val, min, max)
+	return val >= min and val <= max
+end
