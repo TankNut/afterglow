@@ -4,7 +4,7 @@ end
 
 function string.LastSpace(str)
 	for i = #str, 1, -1 do
-		if str:sub(i, i) == " " then
+		if str[i] == " " then
 			return i
 		end
 	end
