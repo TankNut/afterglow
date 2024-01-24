@@ -204,4 +204,18 @@ if SERVER then
 			end
 		end
 	end)
+
+	PlayerCreate = coroutine.Bind(function(ply, name)
+		local item = Create(name, {})
+
+		item:SetWorldPos(hook.Run("GetItemDropLocation", ply))
+	end)
+
+	concommand.Add("rp_dev_createitem", function(ply, _, args)
+		if not IsValid(ply) then
+			return
+		end
+
+		PlayerCreate(ply, args[1])
+	end)
 end
