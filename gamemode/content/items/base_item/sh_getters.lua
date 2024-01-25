@@ -1,3 +1,15 @@
+function ITEM:GetFormattedItemName()
+	local color = self:GetProperty("ItemColor")
+
+	if IsColor(color) then
+		return string.format("<c=%s>%s", color, self:GetName())
+	elseif isstring(color) then
+		return color .. self:GetName()
+	end
+
+	return self:GetName()
+end
+
 function ITEM:GetName()
 	return self:GetProperty("Name")
 end

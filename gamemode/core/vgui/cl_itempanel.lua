@@ -11,6 +11,7 @@ end
 
 function PANEL:Setup(item)
 	self.Item = item
+	self.Scribe = scribe.Parse(item:GetFormattedItemName())
 end
 
 function PANEL:OnDepressed()
@@ -56,12 +57,11 @@ function PANEL:Paint(w, h)
 	end
 
 	local y = (h * 0.5) - 1
-	local x = 5
-
 	local item = self.Item
 
-	x = x + draw.SimpleText(item:GetProperty("Name"), "afterglow.labelbig", x, y, self.Item:GetProperty("ItemColor"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	self.Scribe:Draw(5, y, 1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
+	local x = self.Scribe:GetWide()
 	local amount = item:GetProperty("Amount")
 
 	if amount > 1 then

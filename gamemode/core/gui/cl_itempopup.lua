@@ -82,7 +82,7 @@ function PANEL:Populate(item)
 
 	self:InvalidateLayout(true)
 
-	self.TitleScribe:SetText(string.format("<giant>%s", item:GetName()))
+	self.TitleScribe:SetText("<giant>" .. item:GetFormattedItemName())
 	self.TitleScribe:SizeToContentsY()
 
 	self.Scroll:InvalidateLayout(true)
