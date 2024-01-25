@@ -33,6 +33,14 @@ function ITEM:SetInventory(inventory, loaded)
 	end
 end
 
+function ITEM:GetAppearance()
+	return {
+		Model = self:GetProperty("Model"),
+		Skin = self:GetProperty("Skin"),
+		Bodygroups = self:GetProperty("Bodygroups")
+	}
+end
+
 if SERVER then
 	function ITEM:SetWorldPos(pos, ang, loaded)
 		if not loaded then
@@ -51,16 +59,7 @@ if SERVER then
 			ent = self.Entity
 			ent.Item = self
 
-			ent:SetModel(self:GetProperty("Model"))
-			ent:SetSkin(self:GetProperty("Skin"))
-
-			for _, v in pairs(ent:GetBodyGroups()) do
-				if v.num <= 1 or not self.Bodygroups[v.name] then
-					continue
-				end
-
-				ent:SetBodygroup(v.id, self.Bodygroups[v.name])
-			end
+			Appearance.Apply(self.Entity, self:GetAppearance())
 
 			ent:SetRenderMode(RENDERMODE_TRANSALPHA)
 

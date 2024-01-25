@@ -73,7 +73,8 @@ function PANEL:Populate(item)
 
 	self:SetTitle(item:GetName())
 
-	self.ModelPanel:SetModel(item:GetProperty("Model"))
+	Appearance.Apply(self.ModelPanel, item:GetAppearance())
+
 	self.ModelPanel:SetOrbitDistance(self.ModelPanel.Entity:GetModelRadius() + 75)
 
 	self.ModelPanel:SetLookAng(item:GetProperty("InspectAngle"))
