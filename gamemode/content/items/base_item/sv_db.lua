@@ -35,10 +35,7 @@ function ITEM:SaveLocation()
 end
 
 function ITEM:Destroy()
-	if IsValid(self.Entity) then
-		self.Entity.Item = nil
-		self.Entity:Remove()
-	end
+	self:SetInventory(nil, true)
 
 	local query = mysql:Delete("rp_items")
 		query:WhereEqual("id", self.ID)
