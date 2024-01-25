@@ -36,11 +36,6 @@ else
 			return
 		end
 
-		for _, v in pairs(item:GetActions(ply)) do
-			if v.Name == payload.Name then
-				v.Callback(item, ply, payload.Value)
-				break
-			end
-		end
+		item:FireAction(ply, payload.Name, payload.Value)
 	end)
 end

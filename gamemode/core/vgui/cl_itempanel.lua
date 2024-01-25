@@ -18,7 +18,7 @@ function PANEL:OnDepressed()
 end
 
 function PANEL:DoDoubleClick()
-	Interface.Open("ItemPopup", self.Item)
+	self.Item:FireAction(LocalPlayer(), "Examine")
 end
 
 function PANEL:DoRightClick()
@@ -26,23 +26,7 @@ function PANEL:DoRightClick()
 
 	for _, action in pairs(self.Item:GetActions(LocalPlayer())) do
 		panel:AddOption(action.Name, function()
-			if action.Callback then
-				coroutine.wrap(function()
-					local val
-
-					if action.Client then
-						val = action.Client(self.Item, LocalPlayer())
-					end
-
-					netstream.Send("ItemAction", {
-						ID = self.Item.ID,
-						Name = action.Name,
-						Value = val
-					})
-				end)()
-			elseif action.Client then
-				action.Client(self.Item, LocalPlayer())
-			end
+			self.Item:FireAction(LocalPlayer(), action.Name)
 		end)
 	end
 
