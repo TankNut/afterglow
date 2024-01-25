@@ -90,8 +90,12 @@ end
 
 function PANEL:Paint(w, h)
 	if developer:GetBool() then
-		local _, y = draw.SimpleText(self.aLookAngle, "BudgetLabel")
-		draw.SimpleText(self.fFOV, "BudgetLabel", 0, y)
+		local ang = Angle(self.aLookAngle)
+
+		ang:Normalize()
+
+		local _, y = draw.SimpleText(ang, "BudgetLabel", 2)
+		draw.SimpleText(self.fFOV, "BudgetLabel", 2, y)
 	end
 
 	surface.SetDrawColor(0, 0, 0, 70)
