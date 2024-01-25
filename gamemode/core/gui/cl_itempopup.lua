@@ -28,16 +28,27 @@ function PANEL:Init()
 	self.DestroyButton:Dock(BOTTOM)
 	self.DestroyButton:DockMargin(0, 5, 0, 0)
 	self.DestroyButton:SetText("Destroy")
+	self.DestroyButton.DoClick = function()
+		self.Item:FireAction(LocalPlayer(), "Destroy")
+		self:Remove()
+	end
 
 	self.DropButton = self.RightPanel:Add("DButton")
 	self.DropButton:Dock(BOTTOM)
 	self.DropButton:DockMargin(0, 5, 0, 0)
 	self.DropButton:SetText("Drop")
+	self.DropButton.DoClick = function()
+		self.Item:FireAction(LocalPlayer(), "Drop")
+		self:Remove()
+	end
 
 	self.ActionButton = self.RightPanel:Add("DButton")
 	self.ActionButton:Dock(BOTTOM)
 	self.ActionButton:DockMargin(0, 5, 0, 0)
 	self.ActionButton:SetText("Actions")
+	self.ActionButton.DoClick = function()
+		self:OpenActionMenu()
+	end
 
 	self.TitleScribe = self:Add("scribe_label")
 	self.TitleScribe:DockMargin(5, 2, 5, 0)
@@ -80,6 +91,42 @@ function PANEL:Populate(item)
 	self.Scribe:SizeToContentsY()
 
 	self.DataScribe:SetText(string.format("<cdisabled><tiny>Weight: %s kg\nTags: %s", item:GetWeight(), table.concat(item:GetTags(), ", ")))
+
+	self.ActionButton:SetDisabled(not self:HasValidActions())
+end
+
+local invalidNames = {
+	Examine = true,
+	Drop = true,
+	Destroy = true
+}
+
+function PANEL:HasValidActions()
+	for _, action in pairs(self.Item:GetActions(LocalPlayer())) do
+		if invalidNames[action.Name] then
+			continue
+		end
+
+		return true
+	end
+
+	return false
+end
+
+function PANEL:OpenActionMenu()
+	local panel = DermaMenu(false, self)
+
+	for _, action in pairs(self.Item:GetActions(LocalPlayer())) do
+		if invalidNames[action.Name] then
+			continue
+		end
+
+		panel:AddOption(action.Name, function()
+			self.Item:FireAction(LocalPlayer(), action.Name)
+		end)
+	end
+
+	panel:Open()
 end
 
 vgui.Register("afterglow_itempopup", PANEL, "afterglow_basepanel")
