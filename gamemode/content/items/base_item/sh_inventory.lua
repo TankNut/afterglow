@@ -51,8 +51,8 @@ if SERVER then
 			ent = self.Entity
 			ent.Item = self
 
-			ent:SetModel(self.Model)
-			ent:SetSkin(self.Skin)
+			ent:SetModel(self:GetProperty("Model"))
+			ent:SetSkin(self:GetProperty("Skin"))
 
 			for _, v in pairs(ent:GetBodyGroups()) do
 				if v.num <= 1 or not self.Bodygroups[v.name] then
