@@ -93,6 +93,8 @@ function PANEL:Populate(item)
 	self.DataScribe:SetText(string.format("<cdisabled><tiny>Weight: %s kg\nTags: %s", item:GetWeight(), table.concat(item:GetTags(), ", ")))
 
 	self.ActionButton:SetDisabled(not self:HasValidActions())
+	self.DropButton:SetDisabled(not self.Item:CanDrop(ply))
+	self.DestroyButton:SetDisabled(not self.Item:CanDestroy(ply))
 end
 
 local invalidNames = {
