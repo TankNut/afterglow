@@ -12,7 +12,7 @@ function ITEM:CanDestroy(ply)
 	return true
 end
 
-function ITEM:FireAction(ply, name, arg)
+function ITEM:FireAction(ply, name, val)
 	for _, action in pairs(self:GetActions(ply)) do
 		if action.Name != name then
 			continue
@@ -21,8 +21,6 @@ function ITEM:FireAction(ply, name, arg)
 		if CLIENT then
 			if action.Callback then
 				coroutine.wrap(function()
-					local val
-
 					if action.Client then
 						val = action.Client(self, ply)
 					end
@@ -37,7 +35,7 @@ function ITEM:FireAction(ply, name, arg)
 				action.Client(self, ply)
 			end
 		else
-			action.Callback(self, ply, arg)
+			action.Callback(self, ply, val)
 		end
 
 		break
