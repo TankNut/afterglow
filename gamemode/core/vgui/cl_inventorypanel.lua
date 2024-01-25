@@ -120,6 +120,8 @@ function PANEL:HandleEvent(event, ...)
 	elseif event == "WeightChanged" then
 		self:UpdateWeight()
 	end
+
+	self:Sort()
 end
 
 function PANEL:UpdateWeight()
@@ -181,8 +183,8 @@ end
 -- Sorting
 
 local function sortEquipped(a, b)
-	a = a.Equipped and 1 or 0
-	b = b.Equipped and 1 or 0
+	a = a.Item:GetProperty("Equipped") and 1 or 0
+	b = b.Item:GetProperty("Equipped") and 1 or 0
 
 	if a == b then
 		return
@@ -236,7 +238,7 @@ function PANEL:Sort()
 			end
 		end
 
-		return a:GetZPos() < b:GetZPos()
+		return a.Item.ID < b.Item.ID
 	end)
 
 	for k, v in pairs(panels) do
