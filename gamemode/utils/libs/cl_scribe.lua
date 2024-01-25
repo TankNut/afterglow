@@ -505,7 +505,7 @@ COMPONENT = {
 function COMPONENT:New(ctx, color)
 	BaseClass.New(self, ctx)
 
-	local args = string.Explode("[, ]", color, true)
+	local args = string.Explode("[%p%s]", color, true)
 
 	self.Color = Color(args[1], args[2], args[3], args[4])
 end
@@ -558,6 +558,73 @@ function COMPONENT:Push()
 
 	self.Context:SetFont(self.Context.Font)
 	self.Context:SetColor(self.Context.Color)
+end
+
+Register(COMPONENT)
+
+COMPONENT = {
+	Name = {"rgb", "rainbow"}
+}
+
+function COMPONENT:New(ctx, args)
+	BaseClass.New(self, ctx)
+	args = string.Explode("[%p%s]", args, true)
+
+	self.Complex = tobool(args[1])
+
+	if self.Complex then
+		self.Frequency = tonumber(args[2])
+		self.Speed = tonumber(args[3]) or 0
+	else
+		self.Speed = tonumber(args[2]) or 0
+	end
+end
+
+function COMPONENT:Push()
+	self.SavedColor = self.Context.Color
+	self.Counter = 0
+
+	if self.Complex then
+		self.Context:PushComplex()
+	end
+
+	self:AddCharHandler()
+end
+
+function COMPONENT:Pop()
+	self:RemoveCharHandler()
+
+	if self.Complex then
+		self.Context:PopComplex()
+	end
+
+	self.Context:SetColor(self.SavedColor)
+end
+
+function COMPONENT:PreCharModify(part, data)
+	-- Something else has overwritten us
+	if self.Context.Color != self.SavedColor then
+		return
+	end
+
+	self.Color = self.Context.Color
+
+	if self.Complex then
+		local frequency = self.Frequency or 360 / #part.Text
+
+		self.Context:SetColor(HSVToColor(self.Counter * frequency + (CurTime() * self.Speed) % 360, 1, 1))
+	else
+		self.Context:SetColor(HSVToColor(CurTime() * self.Speed % 360, 1, 1))
+	end
+end
+
+function COMPONENT:PostCharModify(part, data)
+	self.Counter = self.Counter + 1
+
+	if self.Color then
+		self.Context:SetColor(self.Color)
+		self.Color = nil
+	end
 end
 
 Register(COMPONENT)
