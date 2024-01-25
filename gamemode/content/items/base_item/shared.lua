@@ -13,6 +13,8 @@ ITEM.Skin = 0
 
 ITEM.Bodygroups = {}
 
+ITEM.Equipment = {}
+
 ITEM.InspectAngle = Angle(11, 175)
 ITEM.InspectFOV = 14
 
@@ -26,6 +28,7 @@ ITEM.Equipped = false
 
 IncludeFile("sh_actions.lua")
 IncludeFile("sh_cache.lua")
+IncludeFile("sh_equipment.lua")
 IncludeFile("sh_event.lua")
 IncludeFile("sh_getters.lua")
 IncludeFile("sh_inventory.lua")
@@ -58,7 +61,15 @@ function ITEM:SetProperty(key, val)
 end
 
 function ITEM:PropertyUpdated(key, old, val)
-	if key == "Weight" then
+	if key == "Equipped" then
+		self:FireEvent("EquipmentChanged", self)
+
+		if val then
+			self:OnEquip()
+		else
+			self:OnUnequip()
+		end
+	elseif key == "Weight" then
 		self:FireEvent("WeightChanged", self)
 	elseif key == "Category" or key == "Tags" then
 		self:InvalidateCache("Tags")

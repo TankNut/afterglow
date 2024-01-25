@@ -52,6 +52,32 @@ function ITEM:GetActions(ply)
 		end
 	})
 
+	if self:IsEquipped() then
+		table.insert(tab, {
+			Name = "Unequip",
+			Callback = self.TryUnequip
+		})
+	elseif self:IsEquipment() then
+		local options = {}
+		local equipment = ply:GetEquipment()
+
+		for _, v in pairs(self:GetProperty("Equipment")) do
+			if equipment[v] and equipment[v] == self then
+				continue
+			end
+
+			table.insert(options, {equipment[v] and string.format("As %s (Replace %s)", v, equipment[v]:GetName()) or "As " .. v, v})
+		end
+
+		if #options > 0 then
+			table.insert(tab, {
+				Name = "Equip...",
+				Choices = options,
+				Callback = self.TryEquip
+			})
+		end
+	end
+
 	if self:CanDrop(ply) then
 		table.insert(tab, {
 			Name = "Drop",

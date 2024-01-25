@@ -11,11 +11,20 @@ function ITEM:SetInventory(inventory, loaded)
 	local old = self:GetInventory()
 
 	if old then
+		if self:IsEquipped() then
+			self:OnUnequip()
+			self:SetProperty("Equipped", nil)
+		end
+
 		old:RemoveItem(self)
 	end
 
 	if inventory then
 		inventory:AddItem(self)
+
+		if self:IsEquipped() then
+			self:OnEquip(loaded)
+		end
 	end
 
 	if SERVER then
