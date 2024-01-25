@@ -39,11 +39,19 @@ function CLASS:AddItem(item)
 	item.StoreType = self.StoreType
 	item.StoreID = self.StoreID
 
+	if self.StoreID == ITEM_PLAYER then
+		item.Player = self.Player
+	end
+
 	self:FireEvent("ItemAdded", item)
 end
 
 function CLASS:RemoveItem(item)
 	self.Items[item.ID] = nil
+
+	if self.StoreID == ITEM_PLAYER then
+		item.Player = nil
+	end
 
 	item.InventoryID = nil
 	item.StoreType = ITEM_NONE
