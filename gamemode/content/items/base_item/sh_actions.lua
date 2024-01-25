@@ -8,6 +8,10 @@ function ITEM:CanDrop(ply)
 	return true
 end
 
+function ITEM:CanDestroy(ply)
+	return true
+end
+
 function ITEM:FireAction(ply, name, arg)
 	for _, action in pairs(self:GetActions(ply)) do
 		if action.Name != name then
@@ -55,6 +59,15 @@ function ITEM:GetActions(ply)
 			Name = "Drop",
 			Callback = function()
 				self:SetWorldPos(hook.Run("GetItemDropLocation", ply))
+			end
+		})
+	end
+
+	if self:CanDestroy(ply) then
+		table.insert(tab, {
+			Name = "Destroy",
+			Callback = function()
+				self:Destroy()
 			end
 		})
 	end
