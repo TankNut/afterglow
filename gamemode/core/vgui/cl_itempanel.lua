@@ -60,7 +60,7 @@ function PANEL:Paint(w, h)
 
 	local item = self.Item
 
-	x = x + draw.SimpleText(item:GetProperty("Name"), "afterglow.labelbig", x, y, self:GetSkin().Text.Normal, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	x = x + draw.SimpleText(item:GetProperty("Name"), "afterglow.labelbig", x, y, self.Item:GetProperty("ItemColor"), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 	local amount = item:GetProperty("Amount")
 
