@@ -39,9 +39,17 @@ function PANEL:Init()
 	self.ActionButton:DockMargin(0, 5, 0, 0)
 	self.ActionButton:SetText("Actions")
 
-	self.Scribe = self:Add("scribe_label")
-	self.Scribe:Dock(FILL)
-	self.Scribe:DockMargin(5, 2, 0, 5)
+	self.TitleScribe = self:Add("scribe_label")
+	self.TitleScribe:DockMargin(5, 2, 5, 0)
+	self.TitleScribe:Dock(TOP)
+
+	self.Scroll = self:Add("DScrollPanel")
+	self.Scroll:DockMargin(5, 0, 5, 0)
+	self.Scroll:Dock(FILL)
+
+	self.Scribe = self.Scroll:Add("scribe_label")
+
+	self.Scroll:AddItem(self.Scribe)
 
 	self.DataScribe = self.ButtonPanel:Add("scribe_label")
 	self.DataScribe:Dock(FILL)
@@ -60,7 +68,17 @@ function PANEL:Populate(item)
 	self.ModelPanel:SetLookAng(item:GetProperty("InspectAngle"))
 	self.ModelPanel:SetFOV(item:GetProperty("InspectFOV"))
 
-	self.Scribe:SetText(string.format("<giant>%s<reset>\n\n<cnormal>%s", item:GetName(), item:GetDescription()))
+	self:InvalidateLayout(true)
+
+	self.TitleScribe:SetText(string.format("<giant>%s", item:GetName()))
+	self.TitleScribe:SizeToContentsY()
+
+	self.Scroll:InvalidateLayout(true)
+
+	self.Scribe:SetWide(self.Scroll:GetWide() - 15)
+	self.Scribe:SetText(string.format("\n<cnormal>%s", item:GetDescription()))
+	self.Scribe:SizeToContentsY()
+
 	self.DataScribe:SetText(string.format("<cdisabled><tiny>Weight: %s kg\nTags: %s", item:GetWeight(), table.concat(item:GetTags(), ", ")))
 end
 
