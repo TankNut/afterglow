@@ -28,6 +28,14 @@ function Apply(ent, data)
 
 		ent:SetBodygroup(v.id, bodygroups[v.name] or 0)
 	end
+
+	ent:SetSubMaterial()
+
+	local materials = data.Materials or {}
+
+	for k, v in pairs(materials) do
+		ent:SetSubMaterial(k - 1, v)
+	end
 end
 
 function Copy(from, to)
