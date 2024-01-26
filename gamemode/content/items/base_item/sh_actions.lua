@@ -12,6 +12,36 @@ function ITEM:CanDestroy(ply)
 	return true
 end
 
+if CLIENT then
+	function ITEM:OpenActionMenu(parent, exclude)
+		local panel = DermaMenu(false, parent)
+
+		for _, action in pairs(self:GetActions(LocalPlayer())) do
+			if exclude[action.Name] then
+				continue
+			end
+
+			if action.Choices then
+				local sub = panel:AddSubMenu(action.Name)
+
+				for _, choice in pairs(action.Choices) do
+					sub:AddOption(choice[1], function()
+						self:FireAction(LocalPlayer(), action.Name, choice[2])
+					end)
+				end
+			else
+				panel:AddOption(action.Name, function()
+					self:FireAction(LocalPlayer(), action.Name)
+				end)
+			end
+		end
+
+		panel:Open()
+
+		return panel
+	end
+end
+
 function ITEM:FireAction(ply, name, val)
 	for _, action in pairs(self:GetActions(ply)) do
 		if action.Name != name then
@@ -55,13 +85,13 @@ function ITEM:GetActions(ply)
 	if self:IsEquipped() then
 		table.insert(tab, {
 			Name = "Unequip",
-			Callback = self.TryUnequip
+			Callback = CLIENT and true or self.TryUnequip
 		})
 	elseif self:IsEquipment() then
 		local options = {}
 		local equipment = ply:GetEquipment()
 
-		for _, v in pairs(self:GetProperty("Equipment")) do
+		for _, v in ipairs(self:GetProperty("Equipment")) do
 			if equipment[v] and equipment[v] == self then
 				continue
 			end
@@ -73,7 +103,7 @@ function ITEM:GetActions(ply)
 			table.insert(tab, {
 				Name = "Equip...",
 				Choices = options,
-				Callback = self.TryEquip
+				Callback = CLIENT and true or self.TryEquip
 			})
 		end
 	end

@@ -23,25 +23,7 @@ function PANEL:DoDoubleClick()
 end
 
 function PANEL:DoRightClick()
-	local panel = DermaMenu(false, self)
-
-	for _, action in pairs(self.Item:GetActions(LocalPlayer())) do
-		if action.Choices then
-			local sub = panel:AddSubMenu(action.Name)
-
-			for _, choice in pairs(action.Choices) do
-				sub:AddOption(choice[1], function()
-					self.Item:FireAction(LocalPlayer(), action.Name, choice[2])
-				end)
-			end
-		else
-			panel:AddOption(action.Name, function()
-				self.Item:FireAction(LocalPlayer(), action.Name)
-			end)
-		end
-	end
-
-	panel:Open()
+	self.Item:OpenActionMenu(self, {})
 end
 
 function PANEL:PaintAt(x, y, w, h)

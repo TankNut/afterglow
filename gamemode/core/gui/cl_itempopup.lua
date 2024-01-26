@@ -1,6 +1,12 @@
 local PANEL = {}
 DEFINE_BASECLASS("afterglow_basepanel")
 
+local skipActionNames = {
+	Examine = true,
+	Drop = true,
+	Destroy = true
+}
+
 function PANEL:Init()
 	self:SetSize(400, 450)
 
@@ -47,7 +53,7 @@ function PANEL:Init()
 	self.ActionButton:DockMargin(0, 5, 0, 0)
 	self.ActionButton:SetText("Actions")
 	self.ActionButton.DoClick = function()
-		self:OpenActionMenu()
+		self.Item:OpenActionMenu(self, skipActionNames)
 	end
 
 	self.TitleScribe = self:Add("scribe_label")
@@ -98,15 +104,9 @@ function PANEL:Populate(item)
 	self.DestroyButton:SetDisabled(not self.Item:CanDestroy(ply))
 end
 
-local invalidNames = {
-	Examine = true,
-	Drop = true,
-	Destroy = true
-}
-
 function PANEL:HasValidActions()
 	for _, action in pairs(self.Item:GetActions(LocalPlayer())) do
-		if invalidNames[action.Name] then
+		if skipActionNames[action.Name] then
 			continue
 		end
 
@@ -114,32 +114,6 @@ function PANEL:HasValidActions()
 	end
 
 	return false
-end
-
-function PANEL:OpenActionMenu()
-	local panel = DermaMenu(false, self)
-
-	for _, action in pairs(self.Item:GetActions(LocalPlayer())) do
-		if invalidNames[action.Name] then
-			continue
-		end
-
-		if action.Choices then
-			local sub = panel:AddSubMenu(action.Name)
-
-			for _, choice in pairs(action.Choices) do
-				sub:AddOption(choice[1], function()
-					self.Item:FireAction(LocalPlayer(), action.Name, choice[2])
-				end)
-			end
-		else
-			panel:AddOption(action.Name, function()
-				self.Item:FireAction(LocalPlayer(), action.Name)
-			end)
-		end
-	end
-
-	panel:Open()
 end
 
 vgui.Register("afterglow_itempopup", PANEL, "afterglow_basepanel")
