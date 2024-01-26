@@ -59,17 +59,7 @@ function Register(name, data)
 	data.ClassName = name
 	data.Internal = tobool(data.Internal)
 
-	local old = List[name]
-
 	List[name] = data
-
-	if old then
-		for _, item in pairs(All) do
-			if IsBasedOn(item.ClassName, name) then
-				table.Merge(item, GetTable(name))
-			end
-		end
-	end
 end
 
 function GetTable(name)
@@ -170,6 +160,10 @@ function LoadItems()
 
 	for name in pairs(List) do
 		baseclass.Set(name, GetTable(name))
+	end
+
+	for _, item in pairs(All) do
+		table.Merge(item, GetTable(item.ClassName))
 	end
 end
 
