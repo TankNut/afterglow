@@ -5,9 +5,7 @@ local plyMeta = FindMetaTable("Player")
 
 Default = {
 	Model = Model("models/player/skeleton.mdl"),
-	Hands = {
-		Model = Model("models/weapons/c_arms_hev.mdl")
-	}
+	Hands = {}
 }
 
 function Apply(ent, data)
