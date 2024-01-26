@@ -6,15 +6,13 @@ function ITEM:IsEquipped()
 	return self:GetProperty("Equipped")
 end
 
--- Using true as an indicator that we don't modify data
 function ITEM:GetModelData(ply, data)
-	return true
 end
 
 function ITEM:OnEquip(loaded)
 	self:FireEvent("EquipmentChanged")
 
-	if SERVER and not loaded and self:GetModelData(self.Player, {}) != true then
+	if SERVER then
 		self.Player:UpdateAppearance()
 	end
 end
@@ -22,12 +20,11 @@ end
 function ITEM:OnUnequip()
 	self:FireEvent("EquipmentChanged")
 
-	if SERVER and self:GetModelData(self.Player, {}) != true then
+	if SERVER then
 		self.Player:UpdateAppearance()
 	end
 end
 
--- Has to be shared defined for actions to work... lol
 if SERVER then
 	function ITEM:TryEquip(ply, slot)
 		if table.HasValue(self:GetProperty("Equipment"), slot) then
