@@ -26,13 +26,19 @@ function ITEM:OnUnequip()
 end
 
 if SERVER then
-	function ITEM:TryEquip(ply, slot)
-		if table.HasValue(self:GetProperty("Equipment"), slot) then
+	ITEM.TryEquip = coroutine.Bind(function(self, ply, slot)
+		if not table.HasValue(self:GetProperty("Equipment"), slot) then
+			return
+		end
+
+		if ply:WaitFor(2, "Equipping...", {self}) then
 			self:SetProperty("Equipped", slot)
 		end
-	end
+	end)
 
-	function ITEM:TryUnequip(ply)
-		self:SetProperty("Equipped", nil)
-	end
+	ITEM.TryUnequip = coroutine.Bind(function(self, ply)
+		if ply:WaitFor(2, "Unequipping...", {self}) then
+			self:SetProperty("Equipped", nil)
+		end
+	end)
 end
