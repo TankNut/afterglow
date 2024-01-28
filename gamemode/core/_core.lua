@@ -28,3 +28,13 @@ function GM:Initialize()
 		Database.Initialize()
 	end
 end
+
+function GM:OnReloaded()
+	if SERVER then
+		for _, v in pairs(player.GetAll()) do
+			if v:HasCharacter() then
+				v:UpdateAttributes()
+			end
+		end
+	end
+end
