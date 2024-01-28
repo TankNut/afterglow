@@ -18,3 +18,4 @@ IncludeFile("core/_core.lua")
 -- Load plugin folder
 -- Load content folder
 Item.LoadItems()
+CharacterFlags.LoadFlags()

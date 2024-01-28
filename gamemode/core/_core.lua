@@ -12,6 +12,7 @@ IncludeFile("sh_inventory.lua")
 IncludeFile("sh_equipment.lua")
 IncludeFile("sh_interface.lua")
 IncludeFile("sh_progress.lua")
+IncludeFile("sh_characterflags.lua")
 
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")

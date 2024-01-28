@@ -1,12 +1,6 @@
 if SERVER then
 	function GM:GetAppearance(ply, data)
-		data.Model = ply:GetCharacterModel()
-		data.Skin = ply:GetCharacterSkin()
-
-		-- Todo: Some kind of sorting?
-		for _, item in pairs(ply:GetEquipment()) do
-			item:GetModelData(ply, data)
-		end
+		ply:GetCharacterFlagTable():GetAppearance(ply, data)
 	end
 
 	function GM:PostSetAppearance(ply, data)
