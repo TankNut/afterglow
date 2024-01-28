@@ -14,6 +14,10 @@ Character.RegisterVar("Flag", {
 })
 
 function Register(name, data)
+	if name != "default" then
+		setmetatable(data, {__index = List.default})
+	end
+
 	List[name] = data
 end
 
@@ -30,13 +34,17 @@ function LoadFromFile(path, name)
 end
 
 function LoadFlags()
+	local basePath = engine.ActiveGamemode() .. "/gamemode/content/characterflags"
+
+	LoadFromFile(basePath .. "/default.lua")
+
 	local recursive
 
 	recursive = function(path)
 		local files, folders = file.Find(path .. "/*", "LUA")
 
 		for _, v in pairs(files) do
-			if v:GetExtensionFromFilename() != "lua" then
+			if v == "default.lua" or v:GetExtensionFromFilename() != "lua" then
 				continue
 			end
 
@@ -48,7 +56,7 @@ function LoadFlags()
 		end
 	end
 
-	recursive(engine.ActiveGamemode() .. "/gamemode/content/characterflags")
+	recursive(basePath)
 end
 
 function meta:GetCharacterFlagTable()
