@@ -2,6 +2,8 @@ FLAG.Name = "Citizen"
 
 FLAG.Weapons = {}
 
+FLAG.MaxWeight = 20
+
 -- Overwrite if you want to keep equipment logic
 function FLAG:GetBaseAppearance(ply, data)
 	data.Model = ply:GetCharacterModel()

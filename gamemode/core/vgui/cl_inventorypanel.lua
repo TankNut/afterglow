@@ -125,12 +125,9 @@ function PANEL:HandleEvent(event, ...)
 end
 
 function PANEL:UpdateWeight()
-	local weight = 0
-	local maxWeight = 10
-
-	for _, v in pairs(self:GetInventory().Items) do
-		weight = weight + v:GetWeight()
-	end
+	-- UPDATE THESE
+	local weight = LocalPlayer():InventoryWeight()
+	local maxWeight = LocalPlayer():InventoryMaxWeight()
 
 	self.Weight:SetProgress(math.Clamp(weight / maxWeight, 0, 1))
 	self.Weight:SetText(string.format("%.1f / %.1f kg", weight, maxWeight))

@@ -29,6 +29,22 @@ function meta:GetItems()
 	return inventory and inventory.Items or {}
 end
 
+function meta:InventoryWeight()
+	local weight = 0
+
+	for _, item in pairs(self:GetItems()) do
+		weight = weight + item:GetWeight()
+	end
+
+	return weight
+end
+
+function meta:InventoryMaxWeight()
+	local weight = self:GetCharacterFlagAttribute("MaxWeight")
+
+	return weight
+end
+
 if SERVER then
 	function meta:SetInventory(inventory)
 		self:SetNetVar("InventoryID", inventory.ID)
