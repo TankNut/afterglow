@@ -1,7 +1,6 @@
-ITEM.Name = "Combine Overwatch Uniform"
-ITEM.Description = "God help you if you ever see this"
+ITEM.Base = "base_clothing"
 
-ITEM.Category = "Clothing"
+ITEM.Name = "Combine Overwatch Uniform"
 
 ITEM.Model = Model("models/items/item_item_crate.mdl")
 
@@ -9,6 +8,8 @@ ITEM.Equipment = {"Uniform"}
 
 ITEM.InspectAngle = Angle(20, -130)
 ITEM.InspectFOV = 55
+
+ITEM.Armor = 15
 
 function ITEM:GetModelData(ply, data)
 	data.Model = Model("models/player/combine_soldier.mdl")
