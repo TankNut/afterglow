@@ -18,7 +18,7 @@ function ITEM:GetModelData(ply, data)
 end
 
 if SERVER then
-	ITEM.TryEquip = coroutine.Bind(function(self, ply, slot)
+	function ITEM.TryEquip(self, ply, slot)
 		if not table.HasValue(self:GetProperty("Equipment"), slot) then
 			return
 		end
@@ -26,11 +26,11 @@ if SERVER then
 		if ply:WaitFor(2, "Equipping...", {self}) and self:CanEquip() then
 			self:SetProperty("Equipped", slot)
 		end
-	end)
+	end
 
-	ITEM.TryUnequip = coroutine.Bind(function(self, ply)
+	function ITEM.TryUnequip(self, ply)
 		if ply:WaitFor(2, "Unequipping...", {self}) and self:CanUnequip() then
 			self:SetProperty("Equipped", nil)
 		end
-	end)
+	end
 end

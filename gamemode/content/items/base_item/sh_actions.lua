@@ -62,10 +62,10 @@ function ITEM:FireAction(ply, name, val)
 					})
 				end)()
 			elseif action.Client then
-				action.Client(self, ply)
+				coroutine.wrap(action.Client)(self, ply)
 			end
 		else
-			action.Callback(self, ply, val)
+			coroutine.wrap(action.Callback)(self, ply, val)
 		end
 
 		break
@@ -114,7 +114,9 @@ function ITEM:GetActions(ply)
 		table.insert(tab, {
 			Name = "Drop",
 			Callback = function()
-				self:SetWorldPos(hook.Run("GetItemDropLocation", ply))
+				if not self:IsEquipped() or ply:WaitFor(2, "Unequipping...", {self}) then
+					self:SetWorldPos(hook.Run("GetItemDropLocation", ply))
+				end
 			end
 		})
 	end
