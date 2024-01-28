@@ -275,6 +275,10 @@ RegisterVar("Name", {
 	Default = "*INVALID*",
 	Callback = function(ply, old, new)
 		hook.Run("CharacterNameChanged", ply, old, new)
+
+		if SERVER and not CHARACTER_LOADING then
+			LoadList(ply)
+		end
 	end
 })
 
