@@ -15,6 +15,12 @@ if SERVER then
 	end
 
 	function plyMeta:UpdateArmor()
+		if not self:HasCharacter() then
+			self:SetArmor(nil)
+
+			return
+		end
+
 		local armor = 0
 
 		for _, v in pairs(self:GetEquipment()) do
