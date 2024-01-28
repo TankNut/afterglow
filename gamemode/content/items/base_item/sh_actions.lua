@@ -83,11 +83,13 @@ function ITEM:GetActions(ply)
 	})
 
 	if self:IsEquipped() then
-		table.insert(tab, {
-			Name = "Unequip",
-			Callback = CLIENT and true or self.TryUnequip
-		})
-	elseif self:IsEquipment() then
+		if self:CanUnequip() then
+			table.insert(tab, {
+				Name = "Unequip",
+				Callback = CLIENT and true or self.TryUnequip
+			})
+		end
+	elseif self:IsEquipment() and self:CanEquip() then
 		local options = {}
 		local equipment = ply:GetEquipment()
 
