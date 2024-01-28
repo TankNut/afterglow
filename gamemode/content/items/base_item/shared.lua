@@ -38,6 +38,10 @@ function ITEM:IsTempItem()
 	return self.ID < 0
 end
 
+function ITEM:IsBasedOn(name)
+	return Item.IsBasedOn(self.ClassName, name)
+end
+
 function ITEM:GetParent()
 	return self:GetInventory()
 end
