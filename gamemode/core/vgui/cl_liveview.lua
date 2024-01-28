@@ -85,6 +85,8 @@ hook.Add("DrawOverlay", "What the Fuck", function()
 	end
 
 	cam.Start3D()
+		render.SetBlend(0)
 		ply:DrawModel()
+		render.SetBlend(1)
 	cam.End3D()
 end)
