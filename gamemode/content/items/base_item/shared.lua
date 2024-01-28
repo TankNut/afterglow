@@ -1,7 +1,7 @@
 ITEM.__Item = true
 
 ITEM.Name = "NULL Item"
-ITEM.Description = "God help you if you ever see this"
+ITEM.Description = "Whoever made this item didn't add a description!"
 
 ITEM.ItemColor = color_white
 
