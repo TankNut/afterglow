@@ -71,6 +71,8 @@ function PANEL:Populate()
 	for _, v in pairs(self:GetInventory().Items) do
 		self:AddItem(v)
 	end
+
+	self:UpdateWeight()
 end
 
 function PANEL:PerformLayout()
@@ -98,8 +100,6 @@ function PANEL:AddItem(item)
 	local panel = self.ItemList:Add("afterglow_itempanel")
 
 	panel:Setup(item)
-
-	self:UpdateWeight()
 end
 
 function PANEL:RemoveItem(item)
@@ -108,15 +108,15 @@ function PANEL:RemoveItem(item)
 			v:Remove()
 		end
 	end
-
-	self:UpdateWeight()
 end
 
 function PANEL:HandleEvent(event, ...)
 	if event == "ItemAdded" then
 		self:AddItem(...)
+		self:UpdateWeight()
 	elseif event == "ItemRemoved" then
 		self:RemoveItem(...)
+		self:UpdateWeight()
 	elseif event == "WeightChanged" then
 		self:UpdateWeight()
 	end
