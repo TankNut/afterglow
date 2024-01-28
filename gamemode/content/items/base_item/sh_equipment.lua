@@ -9,22 +9,6 @@ end
 function ITEM:GetModelData(ply, data)
 end
 
-function ITEM:OnEquip(loaded)
-	self:FireEvent("EquipmentChanged")
-
-	if SERVER then
-		self.Player:UpdateAppearance()
-	end
-end
-
-function ITEM:OnUnequip()
-	self:FireEvent("EquipmentChanged")
-
-	if SERVER then
-		self.Player:UpdateAppearance()
-	end
-end
-
 if SERVER then
 	ITEM.TryEquip = coroutine.Bind(function(self, ply, slot)
 		if not table.HasValue(self:GetProperty("Equipment"), slot) then

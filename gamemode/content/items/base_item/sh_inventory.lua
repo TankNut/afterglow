@@ -12,7 +12,7 @@ function ITEM:SetInventory(inventory, loaded)
 
 	if old then
 		if self:IsEquipped() then
-			self:OnUnequip()
+			hook.Run("ItemUnequipped", self.Player, self)
 			self:SetProperty("Equipped", nil)
 		end
 
@@ -23,7 +23,7 @@ function ITEM:SetInventory(inventory, loaded)
 		inventory:AddItem(self)
 
 		if self:IsEquipped() then
-			self:OnEquip(loaded)
+			hook.Run("ItemEquipped", self.Player, self, loaded)
 		end
 	end
 

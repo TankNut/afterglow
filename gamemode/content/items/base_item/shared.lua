@@ -65,9 +65,9 @@ function ITEM:PropertyUpdated(key, old, val)
 		self:FireEvent("EquipmentChanged", self)
 
 		if val then
-			self:OnEquip()
+			hook.Run("ItemEquipped", self.Player, self)
 		else
-			self:OnUnequip()
+			hook.Run("ItemUnequipped", self.Player, self)
 		end
 	elseif key == "Weight" then
 		self:FireEvent("WeightChanged", self)
