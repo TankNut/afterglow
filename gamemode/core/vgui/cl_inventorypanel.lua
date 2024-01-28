@@ -126,7 +126,7 @@ end
 
 function PANEL:UpdateWeight()
 	-- UPDATE THESE
-	local weight = LocalPlayer():InventoryWeight()
+	local weight = self:GetInventory():GetWeight()
 	local maxWeight = LocalPlayer():InventoryMaxWeight()
 
 	self.Weight:SetProgress(math.Clamp(weight / maxWeight, 0, 1))

@@ -60,6 +60,16 @@ function CLASS:RemoveItem(item)
 	self:FireEvent("ItemRemoved", item)
 end
 
+function CLASS:GetWeight()
+	local weight = 0
+
+	for _, item in pairs(self.Items) do
+		weight = weight + item:GetWeight()
+	end
+
+	return weight
+end
+
 if CLIENT then
 	function CLASS:AddPanel(pnl)
 		table.insert(self.Panels, pnl)

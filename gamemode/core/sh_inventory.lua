@@ -30,13 +30,9 @@ function meta:GetItems()
 end
 
 function meta:InventoryWeight()
-	local weight = 0
+	local inventory = self:GetInventory()
 
-	for _, item in pairs(self:GetItems()) do
-		weight = weight + item:GetWeight()
-	end
-
-	return weight
+	return inventory and inventory:GetWeight() or 0
 end
 
 function meta:InventoryMaxWeight()
