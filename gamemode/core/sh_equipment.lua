@@ -21,3 +21,19 @@ function meta:GetEquipment(slot)
 		return equipment
 	end
 end
+
+function meta:EquipmentHook(name)
+	for _, item in pairs(self:GetEquipment()) do
+		local val
+
+		if item["Get" .. name] then
+			val = {item["Get" .. name](item)}
+		else
+			val = {item:GetProperty(name)}
+		end
+
+		if not table.IsEmpty(val) then
+			return unpack(val)
+		end
+	end
+end
