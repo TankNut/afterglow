@@ -7,23 +7,13 @@ if SERVER then
 		for _, item in pairs(ply:GetEquipment()) do
 			item:GetModelData(ply, data)
 		end
-
-		if table.IsEmpty(data.Hands) then
-			local name = player_manager.TranslateToPlayerModelName(data.Model)
-			local hands = player_manager.TranslatePlayerHands(name)
-
-			data.Hands.Model = hands.model
-			data.Hands.Skin = hands.matchBodySkin and data.Skin or hands.skin
-		end
 	end
 
 	function GM:PostSetAppearance(ply, data)
 	end
 
 	function GM:PlayerSetHandsModel(ply, ent)
-		Appearance.Apply(ent, ply.HandsAppearance or {
-			Model = Model("models/weapons/c_arms_hev.mdl")
-		})
+		Appearance.Apply(ent, ply.HandsAppearance)
 	end
 end
 

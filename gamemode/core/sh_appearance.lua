@@ -60,6 +60,14 @@ if SERVER then
 			hook.Run("GetAppearance", ply, data)
 		end
 
+		if table.IsEmpty(data.Hands) then
+			local name = player_manager.TranslateToPlayerModelName(data.Model)
+			local hands = player_manager.TranslatePlayerHands(name)
+
+			data.Hands.Model = hands.model
+			data.Hands.Skin = hands.matchBodySkin and data.Skin or hands.skin
+		end
+
 		ply.HandsAppearance = data.Hands
 		data.Hands = nil
 
