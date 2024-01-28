@@ -2,7 +2,7 @@ local meta = FindMetaTable("Player")
 
 function meta:GetEquipment(slot)
 	if slot then
-		for _, item in pairs(self:GetInventory().Items) do
+		for _, item in pairs(self:GetItems()) do
 			if item:GetProperty("Equipped") == slot then
 				return item
 			end
@@ -10,7 +10,7 @@ function meta:GetEquipment(slot)
 	else
 		local equipment = {}
 
-		for _, item in pairs(self:GetInventory().Items) do
+		for _, item in pairs(self:GetItems()) do
 			local usedSlot = item:GetProperty("Equipped")
 
 			if usedSlot then

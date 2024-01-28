@@ -23,6 +23,12 @@ function meta:GetInventory()
 	return Get(self:GetNetVar("InventoryID"))
 end
 
+function meta:GetItems()
+	local inventory = self:GetInventory()
+
+	return inventory and inventory.Items or {}
+end
+
 if SERVER then
 	function meta:SetInventory(inventory)
 		self:SetNetVar("InventoryID", inventory.ID)
