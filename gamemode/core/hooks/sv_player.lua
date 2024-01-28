@@ -8,6 +8,9 @@ function GM:PlayerInitialSpawn(ply)
 	ply:SetTeam(TEAM_UNASSIGNED)
 	ply:SetUserGroup("user")
 
+	-- We don't use source armor
+	ply:SetMaxArmor(0)
+
 	coroutine.wrap(function()
 		PlayerVars.Load(ply)
 		Character.LoadList(ply)
@@ -30,6 +33,7 @@ end
 
 function GM:UpdatePlayerAttributes(ply)
 	ply:UpdateAppearance()
+	ply:UpdateArmor()
 end
 
 function GM:PlayerLoadout(ply)

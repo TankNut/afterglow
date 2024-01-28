@@ -26,3 +26,12 @@ GM.Config.CharacterModels = {
 	Model("models/player/group01/female_05.mdl"),
 	Model("models/player/group01/female_06.mdl")
 }
+
+GM.Config.DamageScale = {
+	[HITGROUP_HEAD] = 1.5,
+	[HITGROUP_LEFTLEG] = 0.75,
+	[HITGROUP_RIGHTLEG] = 0.75
+}
+
+-- Anything at or above this damage threshold will penetrate armor no questions asked
+GM.Config.PenetrationCap = 75
