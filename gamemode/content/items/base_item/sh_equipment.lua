@@ -26,6 +26,9 @@ function ITEM:OnEquip()
 end
 
 function ITEM:OnUnequip()
+	if SERVER and self.GetModelData != stub then
+		self.Player:UpdateAppearance()
+	end
 end
 
 if SERVER then
