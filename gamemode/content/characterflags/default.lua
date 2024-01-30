@@ -7,6 +7,8 @@ FLAG.Armor = 0
 
 FLAG.MaxWeight = 20
 
+FLAG.AllowClothing = true
+
 if SERVER then
 	-- Overwrite if you want to keep equipment logic
 	function FLAG:GetBaseAppearance(ply, data)
