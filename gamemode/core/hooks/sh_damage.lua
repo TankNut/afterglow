@@ -15,21 +15,21 @@ if SERVER then
 	end
 
 	function plyMeta:UpdateArmor()
-		if not self:HasCharacter() then
-			self:SetArmor(nil)
+		local armor = 0
 
-			return
-		end
+		if self:HasCharacter() then
+			armor = self:GetCharacterFlagAttribute("Armor")
 
-		local armor = self:GetCharacterFlagAttribute("Armor")
-
-		for _, v in pairs(self:GetEquipment()) do
-			if v:IsBasedOn("base_clothing") then
-				armor = math.max(armor, v:GetArmor())
+			for _, v in pairs(self:GetEquipment()) do
+				if v:IsBasedOn("base_clothing") then
+					armor = math.max(armor, v:GetArmor())
+				end
 			end
 		end
 
-		self:SetArmor(armor > 0 and armor or nil)
+		if self:Armor() != armor then
+			self:SetArmor(armor > 0 and armor or nil)
+		end
 	end
 end
 
