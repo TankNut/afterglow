@@ -67,10 +67,10 @@ else
 	local meta = FindMetaTable("Player")
 
 	function meta:OpenInterface(name, ...)
-		netstream.Send(ply, "OpenInterface", {Name = name, Args = {...}})
+		netstream.Send(self, "OpenInterface", {Name = name, Args = {...}})
 	end
 
 	function meta:OpenGroupedInterface(name, group, ...)
-		netstream.Send(ply, "OpenInterface", {Name = name, Group = group, Args = {...}})
+		netstream.Send(self, "OpenInterface", {Name = name, Group = group, Args = {...}})
 	end
 end
