@@ -21,7 +21,7 @@ if SERVER then
 			return
 		end
 
-		local armor = 0
+		local armor = self:GetCharacterFlagAttribute("Armor")
 
 		for _, v in pairs(self:GetEquipment()) do
 			if v:IsBasedOn("base_clothing") then
