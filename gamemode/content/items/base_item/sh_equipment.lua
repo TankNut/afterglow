@@ -32,19 +32,35 @@ function ITEM:OnUnequip()
 end
 
 if SERVER then
-	function ITEM.TryEquip(self, ply, slot)
+	function ITEM:Equip(slot)
+		local existing = self.Player:GetEquipment(slot)
+
+		if existing then
+			existing:Unequip()
+		end
+
+		self:SetProperty("Equipped", slot)
+	end
+
+	function ITEM:Unequip()
+		self:SetProperty("Equipped", nil)
+	end
+
+	function ITEM:TryEquip(ply, slot)
 		if not table.HasValue(self:GetProperty("Equipment"), slot) then
 			return
 		end
 
-		if ply:WaitFor(2, "Equipping...", {self}) and self:CanEquip() then
-			self:SetProperty("Equipped", slot)
+		local existing = ply:GetEquipment(slot)
+
+		if ply:WaitFor(existing and 4 or 2, "Equipping...", {self}) and self:CanEquip() then
+			self:Equip(slot)
 		end
 	end
 
-	function ITEM.TryUnequip(self, ply)
+	function ITEM:TryUnequip(ply)
 		if ply:WaitFor(2, "Unequipping...", {self}) and self:CanUnequip() then
-			self:SetProperty("Equipped", nil)
+			self:Unequip()
 		end
 	end
 end
