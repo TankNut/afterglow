@@ -14,17 +14,11 @@ function GM:GetItemDropLocation(ply)
 end
 
 function GM:ItemEquipped(ply, item, loaded)
+	item:OnEquip()
 	item:FireEvent("EquipmentChanged")
-
-	if SERVER and not loaded then
-		ply:UpdateAttributes()
-	end
 end
 
 function GM:ItemUnequipped(ply, item)
+	item:OnUnequip()
 	item:FireEvent("EquipmentChanged")
-
-	if SERVER then
-		ply:UpdateAttributes()
-	end
 end

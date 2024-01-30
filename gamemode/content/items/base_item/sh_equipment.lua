@@ -17,6 +17,17 @@ end
 function ITEM:GetModelData(ply, data)
 end
 
+local stub = ITEM.GetModelData
+
+function ITEM:OnEquip()
+	if SERVER and self.GetModelData != stub then
+		self.Player:UpdateAppearance()
+	end
+end
+
+function ITEM:OnUnequip()
+end
+
 if SERVER then
 	function ITEM.TryEquip(self, ply, slot)
 		if not table.HasValue(self:GetProperty("Equipment"), slot) then

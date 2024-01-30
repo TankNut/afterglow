@@ -66,8 +66,6 @@ end
 
 function ITEM:PropertyUpdated(key, old, val)
 	if key == "Equipped" then
-		self:FireEvent("EquipmentChanged", self)
-
 		if val then
 			hook.Run("ItemEquipped", self.Player, self)
 		else
