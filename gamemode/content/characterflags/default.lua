@@ -2,6 +2,7 @@ FLAG.Name = "Citizen"
 
 FLAG.Weapons = {}
 
+FLAG.Health = 100
 FLAG.MaxWeight = 20
 
 if SERVER then

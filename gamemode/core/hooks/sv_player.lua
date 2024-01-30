@@ -14,6 +14,11 @@ end
 function GM:PlayerSpawn(ply)
 	ply:Freeze(not ply:HasCharacter())
 
+	local health = ply:GetCharacterFlagAttribute("Health")
+
+	ply:SetMaxHealth(health)
+	ply:SetHealth(health)
+
 	ply:UpdateAppearance()
 	ply:UpdateArmor()
 
