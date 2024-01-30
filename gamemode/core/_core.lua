@@ -13,6 +13,8 @@ IncludeFile("sh_equipment.lua")
 IncludeFile("sh_interface.lua")
 IncludeFile("sh_progress.lua")
 IncludeFile("sh_characterflags.lua")
+IncludeFile("sh_damage.lua")
+IncludeFile("sv_player.lua")
 
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")
@@ -21,7 +23,6 @@ IncludeFolder("core/vgui")
 IncludeFolder("core/gui")
 IncludeFolder("core/gui/playermenu")
 
-IncludeFolder("core/hooks")
 IncludeFolder("core/net")
 
 function GM:Initialize()
