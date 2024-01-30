@@ -59,12 +59,7 @@ end
 function PANEL:FirstPersonControls()
 	local x, y = self:CaptureMouse()
 
-	local scale = self:GetFOV() / 180
-
-	x = x * -0.5 * scale
-	y = y * 0.5 * scale
-
-	self.aLookAngle = self.aLookAngle + Angle(y * 4, x * 4, 0)
+	self.aLookAngle = self.aLookAngle + Angle(y * 0.5, x * -0.5, 0)
 
 	return
 end
