@@ -32,9 +32,10 @@ end
 
 function GM:OnReloaded()
 	if SERVER then
-		for _, v in pairs(player.GetAll()) do
-			if v:HasCharacter() then
-				v:UpdateAttributes()
+		for _, ply in pairs(player.GetAll()) do
+			if ply:HasCharacter() then
+				ply:UpdateAppearance()
+				ply:UpdateArmor()
 			end
 		end
 	end

@@ -1,9 +1,3 @@
-local meta = FindMetaTable("Player")
-
-function meta:UpdateAttributes()
-	hook.Run("UpdatePlayerAttributes", self)
-end
-
 function GM:PlayerInitialSpawn(ply)
 	ply:SetTeam(TEAM_UNASSIGNED)
 	ply:SetUserGroup("user")
@@ -20,7 +14,8 @@ end
 function GM:PlayerSpawn(ply)
 	ply:Freeze(not ply:HasCharacter())
 
-	ply:UpdateAttributes()
+	ply:UpdateAppearance()
+	ply:UpdateArmor()
 
 	if not ply:HasCharacter() then
 		ply:KillSilent()
@@ -29,11 +24,6 @@ function GM:PlayerSpawn(ply)
 	end
 
 	hook.Run("PlayerLoadout", ply)
-end
-
-function GM:UpdatePlayerAttributes(ply)
-	ply:UpdateAppearance()
-	ply:UpdateArmor()
 end
 
 function GM:PlayerLoadout(ply)
