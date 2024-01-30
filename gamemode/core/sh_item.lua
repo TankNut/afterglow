@@ -188,6 +188,10 @@ if SERVER then
 		local data = query:Execute()
 
 		for _, v in pairs(data) do
+			if not List[v.class] then
+				continue
+			end
+
 			local item = items.Instance(v.class, v.id, pack.Decode(v.customdata))
 			local worldPos = pack.Decode(v.worldpos)
 

@@ -91,6 +91,10 @@ else
 		local data = query:Execute()
 
 		for _, v in pairs(data) do
+			if not Item.List[v.class] then
+				continue
+			end
+
 			local item = Item.Instance(v.class, v.id, pack.Decode(v.customdata))
 
 			item:SetInventory(self, true)
