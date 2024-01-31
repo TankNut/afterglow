@@ -28,6 +28,10 @@ function GM:PlayerSpawn(ply)
 		return
 	end
 
+	local flag = ply:GetCharacterFlagTable()
+
+	ply:SetBloodColor(flag:GetAttribute("BloodColor"))
+
 	ply:StripWeapons()
 	ply:RemoveAllAmmo()
 
@@ -35,7 +39,6 @@ function GM:PlayerSpawn(ply)
 	ply:Give("gmod_camera")
 	ply:Give("weapon_physgun")
 
-	local flag = ply:GetCharacterFlagTable()
 	local weaponList = flag:GetAttribute("Weapons", ply)
 
 	for _, class in pairs(weaponList) do

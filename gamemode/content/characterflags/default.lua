@@ -9,6 +9,7 @@ FLAG.MaxWeight = 20
 
 FLAG.NoFallDamage = false
 
+FLAG.BloodColor = BLOOD_COLOR_RED
 FLAG.AllowClothing = true
 
 function FLAG:GetAttribute(name, ply)
