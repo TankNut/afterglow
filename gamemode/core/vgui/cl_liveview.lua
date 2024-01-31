@@ -61,6 +61,12 @@ function PANEL:Paint(w, h)
 	cam.Start3D(self.vCamPos, ang, self.fFOV, x, y, w, h, 5, self.FarZ)
 		self.IsDrawing = true
 
+		render.SuppressEngineLighting(true)
+		render.ResetModelLighting(0.3, 0.3, 0.3)
+
+		render.SetModelLighting(BOX_FRONT, 1, 1, 1)
+		render.SetModelLighting(BOX_TOP, 1, 1, 1)
+
 		self.Entity:DrawModel()
 
 		local weapon = self.Entity:GetActiveWeapon()
@@ -68,6 +74,8 @@ function PANEL:Paint(w, h)
 		if IsValid(weapon) then
 			weapon:DrawModel()
 		end
+
+		render.SuppressEngineLighting(false)
 
 		self.IsDrawing = nil
 	cam.End3D()
