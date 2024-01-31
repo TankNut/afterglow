@@ -1,4 +1,3 @@
--- Armor
 local entMeta = FindMetaTable("Entity")
 local plyMeta = FindMetaTable("Player")
 
@@ -33,7 +32,6 @@ if SERVER then
 	end
 end
 
--- Damage scaling
 function GM:ScalePlayerDamage(ply, hitgroup, dmg)
 	local scale = Config.Get("DamageScale")[hitgroup]
 
@@ -46,7 +44,7 @@ if SERVER then
 	function GM:EntityTakeDamage(ent, dmg)
 		local armor = ent:Armor()
 
-		if armor > 0 and dmg:IsDamageType(DMG_GENERIC + DMG_BULLET + DMG_SLASH + DMG_BLAST + DMG_CLUB) then
+		if armor > 0 and not dmg:IsDamageType(DMG_FALL + DMG_DROWN + DMG_POISON + DMG_RADIATION) then
 			local damage = dmg:GetDamage()
 			local cap = Config.Get("PenetrationCap")
 
