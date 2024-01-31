@@ -28,42 +28,27 @@ function GM:PlayerSpawn(ply)
 		return
 	end
 
-	hook.Run("PlayerLoadout", ply)
-end
-
-function GM:PlayerLoadout(ply)
 	ply:StripWeapons()
 	ply:RemoveAllAmmo()
-
-	if not ply:HasCharacter() then
-		return
-	end
-
-	ply:GiveAmmo(256, "Pistol", true)
-	ply:GiveAmmo(256, "SMG1", true)
-	ply:GiveAmmo(5, "grenade", true)
-	ply:GiveAmmo(64, "Buckshot", true)
-	ply:GiveAmmo(32, "357", true)
-	ply:GiveAmmo(32, "XBowBolt", true)
-	ply:GiveAmmo(6, "AR2AltFire", true)
-	ply:GiveAmmo(100, "AR2", true)
-
-	ply:Give("weapon_crowbar")
-	ply:Give("weapon_pistol")
-	ply:Give("weapon_smg1")
-	ply:Give("weapon_frag")
-	ply:Give("weapon_physcannon")
-	ply:Give("weapon_crossbow")
-	ply:Give("weapon_shotgun")
-	ply:Give("weapon_357")
-	ply:Give("weapon_rpg")
-	ply:Give("weapon_ar2")
 
 	ply:Give("gmod_tool")
 	ply:Give("gmod_camera")
 	ply:Give("weapon_physgun")
 
-	ply:SwitchToDefaultWeapon()
+	local flag = ply:GetCharacterFlagTable()
+	local weaponList = flag:GetAttribute("Weapons", ply)
+
+	for _, class in pairs(weaponList) do
+		ply:Give(class)
+	end
+
+	ply:SelectWeapon(weaponList[1] or "weapon_physgun")
+
+	for _, item in pairs(ply:GetEquipment()) do
+		item:OnSpawn()
+	end
+
+	flag:OnSpawn(ply)
 end
 
 function GM:PlayerDisconnected(ply)

@@ -31,4 +31,7 @@ if SERVER then
 			item:GetModelData(ply, data)
 		end
 	end
+
+	function FLAG:OnSpawn(ply)
+	end
 end

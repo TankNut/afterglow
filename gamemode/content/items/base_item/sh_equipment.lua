@@ -32,6 +32,9 @@ function ITEM:OnUnequip()
 end
 
 if SERVER then
+	function ITEM:OnSpawn()
+	end
+
 	function ITEM:Equip(slot)
 		local existing = self.Player:GetEquipment(slot)
 
