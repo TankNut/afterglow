@@ -64,8 +64,7 @@ function meta:GetCharacterFlagTable()
 end
 
 function meta:GetCharacterFlagAttribute(name)
-	local flag = List[self:GetCharacterFlag()] or List.default
-	local func = flag["Get" .. name]
+	local flag = self:GetCharacterFlagTable()
 
-	return func and func(flag, ply) or flag[name]
+	return flag:GetAttribute(name, self)
 end
