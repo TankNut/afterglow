@@ -68,4 +68,12 @@ if SERVER then
 			dmg:ScaleDamage(scale)
 		end
 	end
+
+	function GM:GetFallDamage(ply, speed)
+		if ply:GetCharacterFlagAttribute("NoFallDamage") then
+			return 0
+		end
+
+		return self.BaseClass:GetFallDamage(ply, speed)
+	end
 end

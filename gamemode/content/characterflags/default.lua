@@ -7,6 +7,8 @@ FLAG.Armor = 0
 
 FLAG.MaxWeight = 20
 
+FLAG.NoFallDamage = false
+
 FLAG.AllowClothing = true
 
 function FLAG:GetAttribute(name, ply)
