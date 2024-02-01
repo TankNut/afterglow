@@ -14,21 +14,26 @@ end
 function GM:PlayerSpawn(ply)
 	ply:Freeze(not ply:HasCharacter())
 
-	local health = ply:GetCharacterFlagAttribute("Health")
-
-	ply:SetMaxHealth(health)
-	ply:SetHealth(health)
-
-	ply:UpdateAppearance()
-	ply:UpdateArmor()
-
 	if not ply:HasCharacter() then
 		ply:KillSilent()
 
 		return
 	end
 
+	hook.Run("PlayerSetup", ply)
+end
+
+function GM:PlayerSetup(ply)
 	local flag = ply:GetCharacterFlagTable()
+
+	local healthFraction = ply:Health() / ply:GetMaxHealth()
+	local health = flag:GetAttribute("Health")
+
+	ply:SetMaxHealth(health)
+	ply:SetHealth(math.ceil(healthFraction * health))
+
+	ply:UpdateAppearance()
+	ply:UpdateArmor()
 
 	ply:SetBloodColor(flag:GetAttribute("BloodColor"))
 

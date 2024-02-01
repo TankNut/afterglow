@@ -8,7 +8,7 @@ Character.RegisterVar("Flag", {
 	Default = "default",
 	Callback = function(ply, old, new)
 		if SERVER and not CHARACTER_LOADING then
-			ply:UpdateAttributes()
+			hook.Run("PlayerSetup", ply)
 		end
 	end
 })
