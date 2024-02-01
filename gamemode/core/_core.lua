@@ -15,6 +15,7 @@ IncludeFile("sh_progress.lua")
 IncludeFile("sh_characterflags.lua")
 IncludeFile("sh_damage.lua")
 IncludeFile("sv_player.lua")
+IncludeFile("sh_animtable.lua")
 
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")
