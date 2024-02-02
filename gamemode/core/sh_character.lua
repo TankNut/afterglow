@@ -323,6 +323,7 @@ if CLIENT then
 	end)
 else
 	function GM:PostLoadCharacter(ply, id)
+		ply:SetPlayerScale(nil)
 		ply:Spawn()
 	end
 

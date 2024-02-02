@@ -112,6 +112,10 @@ function GM:HandleNonPlayerModel(ply, vel)
 end
 
 function GM:UpdateAnimation(ply, vel, max)
+	if CLIENT then
+		max = max * ply:GetPlayerScale()
+	end
+
 	self.BaseClass:UpdateAnimation(ply, vel, max)
 
 	if CLIENT then
