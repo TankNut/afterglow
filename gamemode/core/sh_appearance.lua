@@ -73,8 +73,6 @@ if SERVER then
 
 		ply:SetAppearance(data)
 		ply:SetupHands()
-
-		hook.Run("PostSetAppearance", ply, data)
 	end
 
 	function plyMeta:UpdateAppearance()
@@ -85,9 +83,6 @@ end
 if SERVER then
 	function GM:GetAppearance(ply, data)
 		ply:GetCharacterFlagTable():GetAppearance(ply, data)
-	end
-
-	function GM:PostSetAppearance(ply, data)
 	end
 
 	function GM:PlayerSetHandsModel(ply, ent)
