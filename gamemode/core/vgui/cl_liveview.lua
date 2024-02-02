@@ -67,6 +67,8 @@ function PANEL:Paint(w, h)
 		render.SetModelLighting(BOX_FRONT, 1, 1, 1)
 		render.SetModelLighting(BOX_TOP, 1, 1, 1)
 
+		render.SetColorModulation(1, 1, 1)
+
 		self.Entity:DrawModel()
 
 		local weapon = self.Entity:GetActiveWeapon()
