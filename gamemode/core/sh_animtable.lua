@@ -59,18 +59,14 @@ function GM:CalcMainActivity(ply, vel)
 
 	self:HandlePlayerLanding(ply, vel, ply.m_bWasOnGround)
 
-	if self:HandlePlayerNoClipping(ply, vel) or
-		self:HandlePlayerDriving(ply) or
-		self:HandlePlayerVaulting(ply, vel) or
-		self:HandlePlayerJumping(ply, vel) or
-		self:HandlePlayerDucking(ply, vel) or
-		self:HandlePlayerSwimming(ply, vel) then
-	else
+	local bool = self:HandlePlayerNoClipping(ply, vel) or self:HandlePlayerDriving(ply) or self:HandlePlayerVaulting(ply, vel) or self:HandlePlayerJumping(ply, vel) or self:HandlePlayerDucking(ply, vel) or self:HandlePlayerSwimming(ply, vel)
+
+	if not bool then
 		local len2d = vel:Length2D()
 
-		if len2d > ply:GetRunSpeed() / math.sqrt(2) - 8 then
+		if len2d > Lerp(0.5, ply:GetWalkSpeed(), ply:GetRunSpeed()) then
 			ply.CalcIdeal = ACT_MP_RUN
-		elseif len2d > 25 then
+		elseif len2d > 0.5 then
 			ply.CalcIdeal = ACT_MP_WALK
 		end
 	end
@@ -94,6 +90,12 @@ function GM:HandleNonPlayerModel(ply, vel)
 
 	if not tab then
 		return
+	end
+
+	local len2d = vel:Length2D()
+
+	if len2d <= 25 then
+		ply.CalcIdeal = ACT_MP_STAND_IDLE
 	end
 
 	-- if self:UseUnholsteredAnims(tab, ply:GetActiveWeapon()) then
