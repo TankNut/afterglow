@@ -54,10 +54,6 @@ netvar.AddEntityHook("Scale", "Hull", function(ply)
 	ply:RefreshHull()
 end)
 
-netvar.AddEntityHook("Appearance", "Hull", function(ply)
-	ply:RefreshHull()
-end)
-
 function meta:RefreshHull()
 	local data = Models[self:GetModel():lower()] or Default
 	local scale = self:GetPlayerScale()

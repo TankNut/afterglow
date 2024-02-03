@@ -80,6 +80,12 @@ if SERVER then
 	end
 end
 
+function GM:PostSetAppearance(ent)
+	if ent:IsPlayer() then
+		ent:RefreshHull()
+	end
+end
+
 if SERVER then
 	function GM:GetAppearance(ply, data)
 		ply:GetCharacterFlagTable():GetAppearance(ply, data)
@@ -92,4 +98,6 @@ end
 
 netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
 	Appearance.Apply(ent, appearance)
+
+	hook.Run("PostSetAppearance", ent)
 end)
