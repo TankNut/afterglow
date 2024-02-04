@@ -124,19 +124,19 @@ function GM:UpdateAnimation(ply, vel, max)
 		else
 			ply:SetIK(true)
 		end
-
-		local moveang = Vector(vel.x, vel.y, 0):Angle()
-		local eyeang = Vector(ply:GetAimVector().x, ply:GetAimVector().y, 0):Angle()
-
-		local diff = moveang.y - eyeang.y
-
-		if diff > 180 then diff = diff - 360 end
-		if diff < -180 then diff = diff + 360 end
-
-		ply:SetPoseParameter("move_yaw", diff)
-
-		self:RadioAnimation(ply)
 	end
+
+	local moveang = Vector(vel.x, vel.y, 0):Angle()
+	local eyeang = Vector(ply:GetAimVector().x, ply:GetAimVector().y, 0):Angle()
+
+	local diff = moveang.y - eyeang.y
+
+	if diff > 180 then diff = diff - 360 end
+	if diff < -180 then diff = diff + 360 end
+
+	ply:SetPoseParameter("move_yaw", diff)
+
+	self:RadioAnimation(ply)
 end
 
 function GM:RadioAnimation(ply)
