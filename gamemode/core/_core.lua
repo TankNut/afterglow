@@ -17,6 +17,7 @@ IncludeFile("sh_damage.lua")
 IncludeFile("sv_player.lua")
 IncludeFile("sh_animtable.lua")
 IncludeFile("sh_hull.lua")
+IncludeFile("sh_player.lua")
 
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")
