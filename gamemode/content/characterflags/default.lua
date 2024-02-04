@@ -5,6 +5,12 @@ FLAG.Weapons = {}
 FLAG.Health = 100
 FLAG.Armor = 0
 
+FLAG.SlowWalkSpeed = 80
+FLAG.WalkSpeed = 90
+FLAG.RunSpeed = 220
+FLAG.JumpPower = 210
+FLAG.CrouchSpeed = 60
+
 FLAG.MaxWeight = 20
 
 FLAG.NoFallDamage = false
