@@ -26,7 +26,7 @@ function ITEM:OnEquip()
 end
 
 function ITEM:OnUnequip()
-	if SERVER and self.GetModelData != stub and not self.BlockAppearance then
+	if SERVER and self.GetModelData != stub then
 		self.Player:UpdateAppearance()
 	end
 end
@@ -39,9 +39,7 @@ if SERVER then
 		local existing = self.Player:GetEquipment(slot)
 
 		if existing then
-			existing.BlockAppearance = true
 			existing:Unequip()
-			existing.BlockAppearance = nil
 		end
 
 		self:SetProperty("Equipped", slot)

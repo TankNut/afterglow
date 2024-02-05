@@ -8,6 +8,8 @@ Default = {
 	Hands = {}
 }
 
+UpdateList = UpdateList or {}
+
 function Apply(ent, data)
 	ent:SetModel(data.Model)
 
@@ -76,8 +78,16 @@ if SERVER then
 	end
 
 	function plyMeta:UpdateAppearance()
-		Update(self)
+		UpdateList[self] = true
 	end
+
+	hook.Add("Think", "Appearance", function()
+		for ply in pairs(UpdateList) do
+			Update(ply)
+		end
+
+		table.Empty(UpdateList)
+	end)
 end
 
 function GM:PostSetAppearance(ent)
