@@ -74,6 +74,6 @@ if SERVER then
 			return 0
 		end
 
-		return self.BaseClass:GetFallDamage(ply, speed)
+		return (speed - 526.5) * (100 / 396)
 	end
 end
