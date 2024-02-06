@@ -51,6 +51,7 @@ IncludeFile("libs/sh_queue.lua")
 IncludeFile("libs/sh_netstream.lua")
 IncludeFile("libs/sh_netvar.lua")
 IncludeFile("libs/cl_scribe.lua")
+IncludeFile("libs/sh_console.lua")
 
 IncludeFile("sh_player_ready.lua")
 IncludeFile("sh_ref.lua")

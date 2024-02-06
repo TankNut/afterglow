@@ -19,3 +19,4 @@ IncludeFile("core/_core.lua")
 -- Load content folder
 Item.LoadItems()
 CharacterFlags.LoadFlags()
+Command.Load()
