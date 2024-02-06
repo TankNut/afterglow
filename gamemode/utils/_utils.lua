@@ -54,3 +54,4 @@ IncludeFile("libs/cl_scribe.lua")
 
 IncludeFile("sh_player_ready.lua")
 IncludeFile("sh_ref.lua")
+IncludeFile("sh_duration.lua")
