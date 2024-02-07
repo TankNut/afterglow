@@ -117,11 +117,6 @@ else
 	function GetTargets(targets)
 		local result = targets
 
-		if isstring(targets) then
-			-- Way too common of a mistake, smh
-			error("netstream.Send missing targets arg, found name instead?")
-		end
-
 		if not targets then
 			result = player.GetAll()
 		elseif TypeID(targets) == TYPE_RECIPIENTFILTER then
@@ -151,10 +146,10 @@ else
 	end
 
 	function Broadcast(name, data)
-		Send(nil, name, data)
+		Send(name, nil, data)
 	end
 
-	function Send(targets, name, data)
+	function Send(name, targets, data)
 		targets = GetTargets(targets)
 
 		if #targets < 1 then

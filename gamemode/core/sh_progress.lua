@@ -60,14 +60,14 @@ else
 			Pos = ply:GetPos()
 		}
 
-		netstream.Send(ply, "StartProgress", {
+		netstream.Send("StartProgress", ply, {
 			Time = data.EndTime,
 			Text = text,
 			Player = ply
 		})
 
 		if notify then
-			netstream.Send(notify, "StartProgress", {
+			netstream.Send("StartProgress", notify, {
 				Time = data.EndTime,
 				Text = notifyText,
 				Player = ply
@@ -89,10 +89,10 @@ else
 		end
 
 		if not silent then
-			netstream.Send(ply, "StopProgress", ply)
+			netstream.Send("StopProgress", ply, ply)
 
 			if data.Notify then
-				netstream.Send(data.Notify, "StopProgress", ply)
+				netstream.Send("StopProgress", data.Notify, ply)
 			end
 		end
 

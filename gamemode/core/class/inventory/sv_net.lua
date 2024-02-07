@@ -31,7 +31,7 @@ function CLASS:SendFullUpdate(targets)
 		table.insert(payload, {Name = v.ClassName, ID = v.ID, Data = v.CustomData})
 	end
 
-	netstream.Send(targets, "InventoryCreated", {ID = self.ID, StoreType = self.StoreType, StoreID = self.StoreID, Items = payload})
+	netstream.Send("InventoryCreated", targets, {ID = self.ID, StoreType = self.StoreType, StoreID = self.StoreID, Items = payload})
 end
 
 function CLASS:AddReceiver(ply)
@@ -51,5 +51,5 @@ function CLASS:RemoveReceiver(ply)
 
 	self.Receivers[ply] = nil
 
-	netstream.Send(ply, "InventoryRemoved", self.ID)
+	netstream.Send("InventoryRemoved", ply, self.ID)
 end

@@ -53,7 +53,7 @@ function Remove(id)
 	end
 
 	if SERVER then
-		netstream.Send(Get(id):GetReceivers(), "InventoryRemoved", id)
+		netstream.Send("InventoryRemoved", Get(id):GetReceivers(), id)
 	end
 
 	All[id] = nil

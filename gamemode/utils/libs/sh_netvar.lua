@@ -85,7 +85,7 @@ else
 		writeLog("Global Sync Request from %s", ply)
 
 		if table.Count(Globals) > 0 then
-			netstream.Send(ply, "NetVar", Globals)
+			netstream.Send("NetVar", ply, Globals)
 		end
 	end)
 end
@@ -244,7 +244,7 @@ else
 		end
 
 		if table.Count(payload) > 0 then
-			netstream.Send(ply, "NetVarEntity", payload)
+			netstream.Send("NetVarEntity", ply, payload)
 		end
 	end
 
@@ -266,7 +266,7 @@ else
 			entry.Clients[v:UserID()] = entry.ChangeNumber
 		end
 
-		netstream.Send(receivers, "NetVarEntity", {[index] = writePayload({}, key, entry.Value)})
+		netstream.Send("NetVarEntity", receivers, {[index] = writePayload({}, key, entry.Value)})
 	end
 
 	netstream.Hook("NetVarEntity", SyncEntities)

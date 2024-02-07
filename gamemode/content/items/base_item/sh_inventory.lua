@@ -29,11 +29,11 @@ function ITEM:SetInventory(inventory, loaded)
 
 	if SERVER then
 		if old then
-			netstream.Send(inventory and inventory:DiffReceivers(old) or old:GetReceivers(), "ItemRemove", self.ID)
+			netstream.Send("ItemRemove", inventory and inventory:DiffReceivers(old) or old:GetReceivers(), self.ID)
 		end
 
 		if inventory then
-			netstream.Send(inventory:GetReceivers(), "ItemAdd", {Inventory = inventory.ID, Name = self.ClassName, ID = self.ID, Data = self.CustomData})
+			netstream.Send("ItemAdd", inventory:GetReceivers(), {Inventory = inventory.ID, Name = self.ClassName, ID = self.ID, Data = self.CustomData})
 		end
 
 		if inventory and not loaded then
