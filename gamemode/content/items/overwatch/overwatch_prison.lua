@@ -9,7 +9,7 @@ ITEM.Equipment = {"Uniform"}
 ITEM.InspectAngle = Angle(20, -130)
 ITEM.InspectFOV = 55
 
-ITEM.Armor = 15
+ITEM.Armor = 5
 
 function ITEM:GetModelData(ply, data)
 	data.Model = Model("models/player/combine_soldier.mdl")
