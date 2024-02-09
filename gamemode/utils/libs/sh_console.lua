@@ -1,6 +1,6 @@
 module("console", package.seeall)
 
-List = List or {}
+Commands = Commands or {}
 
 Command = Command or {}
 
@@ -19,14 +19,14 @@ function AddCommand(commands, callback)
 	end
 
 	for _, v in pairs(commands) do
-		List[v] = command
+		Commands[v] = command
 	end
 
 	return command
 end
 
 function Rebuild()
-	for command in pairs(List) do
+	for command in pairs(Commands) do
 		concommand.Add(command, function(ply, _, _, args)
 			Invoke(ply, command, args)
 		end, AutoComplete)
@@ -82,7 +82,7 @@ function Split(str)
 end
 
 function Invoke(ply, name, args)
-	local command = List[name]
+	local command = Commands[name]
 
 	if not command then
 		return
@@ -107,7 +107,7 @@ function Invoke(ply, name, args)
 end
 
 function AutoComplete(name, args)
-	local command = List[name]
+	local command = Commands[name]
 
 	return table.Add({name .. args}, command:AutoComplete())
 end
