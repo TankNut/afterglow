@@ -21,3 +21,11 @@ function ITEM:OnEquip()
 		self.Player:UpdateArmor()
 	end
 end
+
+function ITEM:OnUnequip()
+	BaseClass.OnUnequip(self)
+
+	if SERVER and self:GetArmor() > 0 then
+		self.Player:UpdateArmor()
+	end
+end
