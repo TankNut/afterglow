@@ -38,6 +38,10 @@ function table.Filter(tab, func)
 	return res
 end
 
+function table.Unique(tab)
+	return table.GetKeys(table.Lookup(tab))
+end
+
 function table.DBKeyValues(tab)
 	local res = {}
 
