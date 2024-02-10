@@ -14,6 +14,10 @@ if CLIENT then
 		return table.Filter(Instances[name], function(_, v) return IsValid(v) end)
 	end
 
+	function GetGroup(group)
+		return Groups[group]
+	end
+
 	function Open(name, ...)
 		local ui = Types[name]
 		local panel = ui(...)
@@ -60,7 +64,7 @@ if CLIENT then
 		if payload.Group then
 			OpenGroup(payload.Name, payload.Group, unpack(payload.Args))
 		else
-			Open(payload.Name, payload.Group, unpack(payload.Args))
+			Open(payload.Name, unpack(payload.Args))
 		end
 	end)
 else
