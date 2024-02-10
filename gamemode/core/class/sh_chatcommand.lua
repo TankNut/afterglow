@@ -49,7 +49,7 @@ if SERVER then
 
 		local data = self:Parse(ply, lang, cmd, text)
 
-		if not data then
+		if data == nil then
 			return
 		end
 
