@@ -123,4 +123,4 @@ function PANEL:Paint(w, h)
 	derma.SkinHook("Paint", "Frame", self, w, h)
 end
 
-vgui.Register("afterglow_basepanel", PANEL, "EditablePanel")
+derma.DefineControl("RPBasePanel", "Base EditablePanel meant to replace DFrame", PANEL, "EditablePanel")

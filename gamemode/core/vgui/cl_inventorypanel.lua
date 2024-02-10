@@ -26,11 +26,11 @@ function PANEL:Init()
 	self.Scroll = self:Add("DScrollPanel")
 	self.Scroll:Dock(FILL)
 
-	self.ItemList = self.Scroll:Add("afterglow_inventorylist")
+	self.ItemList = self.Scroll:Add("RPInventoryList")
 	self.ItemList:Dock(FILL)
 	self.ItemList:SetInventoryPanel(self)
 
-	self.Weight = self:Add("afterglow_progress")
+	self.Weight = self:Add("RPProgressBar")
 	self.Weight:DockMargin(0, 5, 0, 0)
 	self.Weight:Dock(BOTTOM)
 	self.Weight:SetTall(20)
@@ -97,7 +97,7 @@ function PANEL:Setup(inventory)
 end
 
 function PANEL:AddItem(item)
-	local panel = self.ItemList:Add("afterglow_itempanel")
+	local panel = self.ItemList:Add("RPItemPanel")
 
 	panel:Setup(item)
 end
@@ -242,4 +242,4 @@ function PANEL:Sort()
 	end
 end
 
-vgui.Register("afterglow_inventorypanel", PANEL, "DPanel")
+derma.DefineControl("RPInventoryPanel", "A panel that contains the standard inventory display", PANEL, "DPanel")

@@ -1,5 +1,5 @@
 local PANEL = {}
-DEFINE_BASECLASS("afterglow_basepanel")
+DEFINE_BASECLASS("RPBasePanel")
 
 function PANEL:Init()
 	self.Topbar = self:Add("DPanel")
@@ -88,4 +88,4 @@ function PANEL:AddMenu(order, name, func, default)
 	end
 end
 
-vgui.Register("afterglow_basemenu", PANEL, "afterglow_basepanel")
+derma.DefineControl("RPBaseMenu", "Base panel for F3/F4-style tabbed menus", PANEL, "RPBasePanel")

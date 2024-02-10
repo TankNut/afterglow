@@ -112,8 +112,8 @@ function PANEL:Populate()
 	self:SizeToChildren(false, true)
 end
 
-vgui.Register("afterglow_characterselect", PANEL, "afterglow_basepanel")
+derma.DefineControl("RPCharacterSelect", "Character selection gui", PANEL, "RPBasePanel")
 
 Interface.Register("CharacterSelect", function()
-	return vgui.Create("afterglow_characterselect")
+	return vgui.Create("RPCharacterSelect")
 end)

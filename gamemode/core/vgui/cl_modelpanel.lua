@@ -124,4 +124,4 @@ function PANEL:OnMouseReleased()
 	self.Entity:SetAngles(ang)
 end
 
-vgui.Register("afterglow_modelpanel", PANEL, "DModelPanel")
+derma.DefineControl("RPModelPanel", "Custom model panel for displaying player models with custom manipulation controls", PANEL, "DModelPanel")

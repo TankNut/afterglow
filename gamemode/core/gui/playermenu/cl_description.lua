@@ -6,7 +6,7 @@ local function updateDescription(self)
 end
 
 local function func(self)
-	self.Preview = self:Add("afterglow_liveview")
+	self.Preview = self:Add("RPLiveView")
 	self.Preview:DockMargin(0, 0, 5, 0)
 	self.Preview:Dock(LEFT)
 	self.Preview:SetWide(200)

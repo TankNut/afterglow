@@ -68,4 +68,4 @@ function PANEL:PreDrawModel()
 	return false
 end
 
-vgui.Register("afterglow_playerview", PANEL, "afterglow_modelpanel")
+derma.DefineControl("RPPlayerView", "Deprecated?", PANEL, "RPModelPanel")

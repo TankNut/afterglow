@@ -12,4 +12,4 @@ function PANEL:Paint(w, h)
 	return true
 end
 
-vgui.Register("afterglow_progress", PANEL, "DLabel")
+derma.DefineControl("RPProgressBar", "A progress bar", PANEL, "DLabel")

@@ -42,7 +42,7 @@ function PANEL:Init()
 		self:Submit()
 	end
 
-	self.ModelPanel = self.Right:Add("afterglow_modelpanel")
+	self.ModelPanel = self.Right:Add("RPModelPanel")
 	self.ModelPanel:Dock(FILL)
 	self.ModelPanel:SetFOV(20)
 	self.ModelPanel:SetAnimated(true)
@@ -62,7 +62,7 @@ function PANEL:Init()
 end
 
 function PANEL:BuildFields()
-	local name = self.Left:Add("afterglow_charactercreate_entry")
+	local name = self.Left:Add("RPCharCreateEntry")
 	name:SetTitle("Name")
 	name:SetTall(22)
 
@@ -74,7 +74,7 @@ function PANEL:BuildFields()
 		self:SetCharacterName(val)
 	end
 
-	local description = self.Left:Add("afterglow_charactercreate_entry")
+	local description = self.Left:Add("RPCharCreateEntry")
 	description:SetTitle("Description")
 	description:SetTall(150)
 
@@ -83,7 +83,7 @@ function PANEL:BuildFields()
 	self.DescEntry:SetMultiline(true)
 	self.DescEntry:SetUpdateOnType(true)
 
-	local model = self.Left:Add("afterglow_charactercreate_entry")
+	local model = self.Left:Add("RPCharCreateEntry")
 	model:SetTitle("Model")
 	model:SetTall(56)
 
@@ -106,7 +106,7 @@ function PANEL:BuildFields()
 		self.ModelScroll:AddPanel(icon)
 	end
 
-	local modelSkin = self.Left:Add("afterglow_charactercreate_entry")
+	local modelSkin = self.Left:Add("RPCharCreateEntry")
 	modelSkin:SetTitle("Skin")
 	modelSkin:SetTall(56)
 
@@ -180,8 +180,8 @@ function PANEL:Submit()
 	end
 end
 
-vgui.Register("afterglow_charactercreate", PANEL, "afterglow_basepanel")
+derma.DefineControl("RPCharacterCreate", "Character Creation Panel", PANEL, "RPBasePanel")
 
 Interface.Register("CharacterCreate", function()
-	return vgui.Create("afterglow_charactercreate")
+	return vgui.Create("RPCharacterCreate")
 end)

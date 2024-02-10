@@ -72,4 +72,4 @@ function PANEL:Paint(w, h)
 	return true
 end
 
-vgui.Register("afterglow_itempanel", PANEL, "DLabel")
+derma.DefineControl("RPItemPanel", "Item panel belonging in RPInventoryList", PANEL, "DLabel")

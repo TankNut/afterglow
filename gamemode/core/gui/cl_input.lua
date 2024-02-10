@@ -116,10 +116,10 @@ function PANEL:DoSubmit()
 	coroutine.Resume(self.Coroutine, val)
 end
 
-vgui.Register("afterglow_input", PANEL, "afterglow_basepanel")
+derma.DefineControl("RPInput", "Generic input request popup", PANEL, "RPBasePanel")
 
 Interface.Register("Input", function(subtype, title, data)
-	local panel = vgui.Create("afterglow_input")
+	local panel = vgui.Create("RPInput")
 
 	panel:Setup(subtype, title, data)
 	panel:MakePopup()

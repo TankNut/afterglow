@@ -85,4 +85,4 @@ function PANEL:Paint(w, h)
 	self.LastPaint = RealTime()
 end
 
-vgui.Register("afterglow_liveview", PANEL, "DModelPanel")
+derma.DefineControl("RPLiveView", "Panel for drawing players themselves into a DModelPanel", PANEL, "DModelPanel")

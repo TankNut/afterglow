@@ -1,5 +1,5 @@
 local PANEL = {}
-DEFINE_BASECLASS("afterglow_basepanel")
+DEFINE_BASECLASS("RPBasePanel")
 
 local skipActionNames = {
 	Examine = true,
@@ -14,7 +14,7 @@ function PANEL:Init()
 	self:SetDrawTopBar(true)
 	self:SetDraggable(true)
 
-	self.ModelPanel = self:Add("afterglow_itemmodelpanel")
+	self.ModelPanel = self:Add("RPItemModelPanel")
 	self.ModelPanel:Dock(TOP)
 	self.ModelPanel:SetTall(200)
 
@@ -116,10 +116,10 @@ function PANEL:HasValidActions()
 	return false
 end
 
-vgui.Register("afterglow_itempopup", PANEL, "afterglow_basepanel")
+derma.DefineControl("RPItemPopup", "Popup/examine display for items", PANEL, "RPBasePanel")
 
 Interface.Register("ItemPopup", function(item)
-	local panel = vgui.Create("afterglow_itempopup")
+	local panel = vgui.Create("RPItemPopup")
 
 	panel:Populate(item)
 	panel:MakePopup()

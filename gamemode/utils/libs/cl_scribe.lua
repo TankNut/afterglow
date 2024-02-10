@@ -780,4 +780,4 @@ function PANEL:Paint(w, h)
 	end
 end
 
-vgui.Register("scribe_label", PANEL, "DPanel")
+derma.DefineControl("ScribeLabel", "DLabel-esque panel specifically meant for scribe", PANEL, "DPanel")

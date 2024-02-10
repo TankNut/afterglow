@@ -27,4 +27,4 @@ function PANEL:SetTitle(title)
 	self.Label:SetText(title)
 end
 
-vgui.Register("afterglow_charactercreate_entry", PANEL, "DPanel")
+derma.DefineControl("RPCharCreateEntry", "A simple layout panel for character creation options", PANEL, "DPanel")

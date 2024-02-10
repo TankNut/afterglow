@@ -40,4 +40,4 @@ function PANEL:PerformLayout()
 	self:SizeToChildren(false, true)
 end
 
-vgui.Register("afterglow_inventorylist", PANEL, "DPanel")
+derma.DefineControl("RPInventoryList", "The list part of RPInventoryPanel", PANEL, "DPanel")

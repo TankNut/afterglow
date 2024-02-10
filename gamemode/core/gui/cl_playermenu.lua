@@ -12,10 +12,10 @@ function PANEL:Init()
 	self:Center()
 end
 
-vgui.Register("afterglow_playermenu", PANEL, "afterglow_basemenu")
+derma.DefineControl("RPPlayerMenu", "Main F3 menu", PANEL, "RPBaseMenu")
 
 Interface.Register("PlayerMenu", function()
-	local instance = vgui.Create("afterglow_playermenu")
+	local instance = vgui.Create("RPPlayerMenu")
 
 	hook.Run("PopulatePlayerMenu", instance)
 

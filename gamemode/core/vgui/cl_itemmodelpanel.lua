@@ -106,4 +106,4 @@ function PANEL:PostDrawModel(ent)
 	cam.IgnoreZ(false)
 end
 
-vgui.Register("afterglow_itemmodelpanel", PANEL, "DModelPanel")
+derma.DefineControl("RPItemModelPanel", "Model display for item panels", PANEL, "DModelPanel")
