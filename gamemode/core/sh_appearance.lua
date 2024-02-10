@@ -11,7 +11,9 @@ Default = {
 UpdateList = UpdateList or {}
 
 function Apply(ent, data)
-	ent:SetModel(data.Model)
+	if ent:GetModel() != data.Model then
+		ent:SetModel(data.Model)
+	end
 
 	if ispanel(ent) then
 		ent = ent.Entity
