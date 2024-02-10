@@ -76,4 +76,8 @@ if SERVER then
 
 		return (speed - 526.5) * (100 / 396)
 	end
+
+	function GM:DoPlayerDeath(ply, attacker, dmg)
+		ply:CreateRagdoll()
+	end
 end
