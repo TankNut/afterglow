@@ -28,7 +28,7 @@ end
 function Rebuild()
 	for command in pairs(Commands) do
 		concommand.Add(command, function(ply, _, _, args)
-			Invoke(ply, command, args)
+			Parse(ply, command, args)
 		end, AutoComplete)
 	end
 end
@@ -81,7 +81,7 @@ function Split(str)
 	return args
 end
 
-function Invoke(ply, name, args)
+function Parse(ply, name, args)
 	local command = Commands[name]
 
 	if not command then
@@ -263,7 +263,7 @@ end)
 
 if SERVER then
 	netstream.Hook("Console", function(ply, payload)
-		Invoke(ply, payload.Name, payload.Args)
+		Parse(ply, payload.Name, payload.Args)
 	end)
 end
 
