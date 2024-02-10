@@ -218,6 +218,12 @@ if SERVER then
 	end)
 end
 
+hook.Add("OnReloaded", "Item", function()
+	for _, item in pairs(Item.All) do
+		item:InvalidateCache()
+	end
+end)
+
 function GM:GetItemDropLocation(ply)
 	local tr = util.TraceLine({
 		start = ply:GetShootPos(),

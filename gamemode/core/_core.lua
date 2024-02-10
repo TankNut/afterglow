@@ -45,8 +45,4 @@ function GM:OnReloaded()
 			end
 		end
 	end
-
-	for _, item in pairs(Item.All) do
-		item:InvalidateCache()
-	end
 end
