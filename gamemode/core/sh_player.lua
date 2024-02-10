@@ -8,4 +8,8 @@ if CLIENT then
 	function GM:CreateClientsideRagdoll(ent, ragdoll)
 		Appearance.Copy(ent, ragdoll)
 	end
+else
+	function GM:CreateEntityRagdoll(ent, ragdoll)
+		Appearance.Copy(ent, ragdoll)
+	end
 end
