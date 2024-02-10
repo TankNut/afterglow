@@ -35,3 +35,5 @@ GM.Config.DamageScale = {
 
 -- Anything at or above this damage threshold will penetrate armor no questions asked
 GM.Config.PenetrationCap = 75
+
+GM.Config.ChatLimit = 500

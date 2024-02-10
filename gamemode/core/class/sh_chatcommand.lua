@@ -41,7 +41,7 @@ if SERVER then
 	end
 
 	function CLASS:Handle(ply, lang, cmd, text)
-		text = string.sub(text, 1, 500):Escape()
+		text = string.sub(text, 1, Config.Get("ChatLimit")):Escape()
 
 		if self.UseLanguage then
 			-- Check languages
