@@ -170,7 +170,7 @@ else
 			data = {Text = data}
 		end
 
-		data.__Type = name:lower()
+		data.__Type = name
 
 		netstream.Send("SendChat", targets, data)
 	end
