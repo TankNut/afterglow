@@ -115,7 +115,7 @@ function GetTargets(pos, range, muffledRange, withEntities)
 		local dist = ent:GetPos():DistToSqr(pos)
 
 		if ent:CanHear(pos) then
-			if dist < max * max then
+			if dist < maxRange * maxRange then
 				table.insert(targets, ent)
 			end
 		elseif dist <= muffledRange then
