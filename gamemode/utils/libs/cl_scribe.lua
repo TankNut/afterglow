@@ -492,7 +492,7 @@ end
 
 do -- Font component
 	local COMPONENT = {
-		Name = {"font", "f"}
+		Name = {"f", "font"}
 	}
 
 	function COMPONENT:New(ctx, font)
@@ -508,7 +508,7 @@ end
 
 do -- Color component
 	local COMPONENT = {
-		Name = {"color", "c"}
+		Name = {"c", "col", "color"}
 	}
 
 	function COMPONENT:New(ctx, color)
@@ -527,7 +527,7 @@ end
 
 do -- Alpha component
 	local COMPONENT = {
-		Name = {"alpha", "a"}
+		Name = {"a", "alpha"}
 	}
 
 	function COMPONENT:New(ctx, alpha)
@@ -723,61 +723,63 @@ do -- Compound component
 	Register(COMPONENT)
 end
 
-local PANEL = {}
+do -- ScribeLabel panel
+	local PANEL = {}
 
-function PANEL:SetAlignment(x, y)
-	self.AlignmentX = x
-	self.AlignmentY = y
-end
-
-function PANEL:SetText(text)
-	self.Text = text
-	self:Rebuild()
-end
-
-function PANEL:GetText()
-	return self.Text or ""
-end
-
-function PANEL:Rebuild()
-	local text = self:GetText()
-
-	if text and #text > 0 then
-		self.Scribe = scribe.Parse(text, self:GetWide())
+	function PANEL:SetAlignment(x, y)
+		self.AlignmentX = x
+		self.AlignmentY = y
 	end
-end
 
-function PANEL:PerformLayout()
-	self:Rebuild()
-end
-
-function PANEL:GetContentSize()
-	if self.Scribe then
-		return self.Scribe:GetSize()
-	else
-		return 0, 0
+	function PANEL:SetText(text)
+		self.Text = text
+		self:Rebuild()
 	end
-end
 
-function PANEL:Paint(w, h)
-	if self.Scribe then
-		local x = 0
-		local y = 0
+	function PANEL:GetText()
+		return self.Text or ""
+	end
 
-		if self.AlignmentX == TEXT_ALIGN_CENTER then
-			x = w * 0.5
-		elseif self.AlignmentX == TEXT_ALIGN_RIGHT then
-			x = w
+	function PANEL:Rebuild()
+		local text = self:GetText()
+
+		if text and #text > 0 then
+			self.Scribe = scribe.Parse(text, self:GetWide())
 		end
-
-		if self.AlignmentY == TEXT_ALIGN_CENTER then
-			y = h * 0.5
-		elseif self.AlignmentY == TEXT_ALIGN_BOTTOM then
-			y = h
-		end
-
-		self.Scribe:Draw(x, y, self:GetAlpha(), self.AlignmentX, self.AlignmentY)
 	end
-end
 
-derma.DefineControl("ScribeLabel", "DLabel-esque panel specifically meant for scribe", PANEL, "DPanel")
+	function PANEL:PerformLayout()
+		self:Rebuild()
+	end
+
+	function PANEL:GetContentSize()
+		if self.Scribe then
+			return self.Scribe:GetSize()
+		else
+			return 0, 0
+		end
+	end
+
+	function PANEL:Paint(w, h)
+		if self.Scribe then
+			local x = 0
+			local y = 0
+
+			if self.AlignmentX == TEXT_ALIGN_CENTER then
+				x = w * 0.5
+			elseif self.AlignmentX == TEXT_ALIGN_RIGHT then
+				x = w
+			end
+
+			if self.AlignmentY == TEXT_ALIGN_CENTER then
+				y = h * 0.5
+			elseif self.AlignmentY == TEXT_ALIGN_BOTTOM then
+				y = h
+			end
+
+			self.Scribe:Draw(x, y, self:GetAlpha(), self.AlignmentX, self.AlignmentY)
+		end
+	end
+
+	derma.DefineControl("ScribeLabel", "DLabel-esque panel specifically meant for scribe", PANEL, "DPanel")
+end
