@@ -47,3 +47,13 @@ for k, v in pairs({massive = 30, giant = 22, big = 18, medium = 16, small = 14, 
 
 	scribe.Register(COMPONENT)
 end
+
+do -- Chat component
+	scribe.Register({
+		Name = {"chat"},
+		Components = {
+			{"big"},
+			{"outline"}
+		}
+	}, "compound")
+end

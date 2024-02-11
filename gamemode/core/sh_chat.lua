@@ -1,6 +1,15 @@
+TAB_LOOC 	= 2^1
+TAB_OOC 	= 2^2
+TAB_IC 		= 2^3
+TAB_ADMIN 	= 2^4
+TAB_PM 		= 2^5
+TAB_RADIO 	= 2^6
+
 module("Chat", package.seeall)
 
 Class = Class or {}
+
+List = List or {}
 
 ConsoleCommands = ConsoleCommands or {}
 Commands = Commands or {}
@@ -12,10 +21,12 @@ IncludeFile("class/sh_chatcommand.lua")
 
 _G.CLASS = nil
 
-function Register(name, data)
+function Register(data)
 	setmetatable(data, {
 		__index = Class
 	})
+
+	List[data.Name] = data
 
 	for _, v in pairs(data.Commands) do
 		Commands[v] = data
@@ -36,14 +47,12 @@ function AddConsoleCommand(names, command)
 	end
 end
 
-function LoadFromFile(path, name)
-	name = name or path:GetFileFromFilename():sub(1, -5)
-
+function LoadFromFile(path)
 	_G.CLASS = {}
 
 	IncludeFile(path)
 
-	Register(name, CLASS)
+	Register(CLASS)
 
 	_G.CLASS = nil
 end
@@ -71,7 +80,7 @@ function LoadCommands()
 	recursive(basePath)
 end
 
-function Parse(str)
+function Process(str)
 	for k, v in pairs(Aliases) do
 		if string.find(str, k, 1, true) == 1 then
 			str = string.format("/%s %s", v, string.sub(str, #k + 1))
@@ -115,12 +124,12 @@ function GetTargets(pos, range, muffledRange, withEntities)
 	end
 end
 
-function Invoke(ply, str)
-	local lang, cmd, args = Parse(str)
+function Parse(ply, str)
+	local lang, cmd, args = Process(str)
 
 	if CLIENT then
 		if ConsoleCommands[cmd] then
-			console.Invoke(LocalPlayer(), ConsoleCommands[cmd], args)
+			console.Parse(LocalPlayer(), ConsoleCommands[cmd], args)
 		else
 			netstream.Send("ParseChat", str)
 		end
@@ -138,13 +147,30 @@ function Invoke(ply, str)
 	return ""
 end
 
-if SERVER then
+if CLIENT then
+	function Show()
+		Interface.GetGroup("Chat"):Show()
+	end
+
+	function Hide()
+		Interface.GetGroup("Chat"):Hide()
+	end
+
+	function Add(name, data)
+		local command = List[name]
+		local message, consoleMessage = command:OnReceive(data)
+
+		if isstring(message) then
+			Interface.GetGroup("Chat"):AddMessage(message, consoleMessage, command.Tabs)
+		end
+	end
+else
 	function Send(name, data, targets)
 		if isstring(data) then
 			data = {Text = data}
 		end
 
-		data.__Type = name
+		data.__Type = name:lower()
 
 		netstream.Send("SendChat", targets, data)
 	end
@@ -161,19 +187,44 @@ function meta:CanHear(pos)
 	}).Fraction == 1
 end
 
+local plyMeta = FindMetaTable("Player")
+
 if CLIENT then
 	netstream.Hook("SendChat", function(payload)
-		print("SendChat:")
-		PrintTable(payload)
+		Add(payload.__Type, payload)
 	end)
-else
-	local plyMeta = FindMetaTable("Player")
 
+	hook.Add("InitPostEntity", "Chat", function()
+		Interface.OpenGroup("Chat", "Chat")
+	end)
+
+	hook.Add("OnReloaded", "Chat", function()
+		local buffer = Interface.GetGroup("Chat"):ExportBuffer()
+
+		Interface.OpenGroup("Chat", "Chat"):ImportBuffer(buffer)
+	end)
+
+	hook.Add("PlayerBindPress", "Chat", function(ply, bind, down)
+		if down and string.find(bind, "messagemode") then
+			Show()
+
+			return true
+		end
+	end)
+
+	function plyMeta:SendChat(name, data)
+		if self != LocalPlayer() then
+			error("Attempt to SendChat to another player")
+		end
+
+		Add(name, data)
+	end
+else
 	function plyMeta:SendChat(name, data)
 		Send(name, data, self)
 	end
 
-	netstream.Hook("ParseChat", Invoke)
+	netstream.Hook("ParseChat", Parse)
 
-	hook.Add("PlayerSay", "Chat", Invoke)
+	hook.Add("PlayerSay", "Chat", Parse)
 end

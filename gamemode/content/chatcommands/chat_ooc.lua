@@ -4,11 +4,20 @@ CLASS.Description = "Global out-of-character chat."
 CLASS.Commands = {"ooc"}
 CLASS.Aliases = {"//"}
 
-if SERVER then
-    function CLASS:Parse(ply, lang, cmd, text)
-        return {
-            Name = ply:GetCharacterName(),
-            Text = text
-        }
-    end
+CLASS.Tabs = TAB_OOC
+
+CLASS.Color = Color(200, 0, 0)
+
+if CLIENT then
+	function CLASS:OnReceive(data)
+		return string.format("<c=%s>[OOC]</c> <c=%s>%s</c>: %s", self.Color, data.Color, data.Name, data.Text)
+	end
+else
+	function CLASS:Parse(ply, lang, cmd, text)
+		return {
+			Name = ply:GetCharacterName(),
+			Color = team.GetColor(ply:Team()),
+			Text = text
+		}
+	end
 end
