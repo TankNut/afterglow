@@ -147,7 +147,10 @@ function PANEL:ExportBuffer()
 		self.Scroll.Buffer,
 		self.Scroll.BufferSize,
 		self.IsOpen,
-		self.Scroll.VBar:GetScroll()
+		self.Scroll.VBar:GetScroll(),
+		self.Input:GetText(),
+		self.Input.History,
+		self.Input.HistoryIndex
 	}
 end
 
@@ -161,6 +164,10 @@ function PANEL:ImportBuffer(buffer)
 		self:Show()
 		self.Scroll.VBar:SetScroll(buffer[4])
 	end
+
+	self.Input:SetText(buffer[5] or "")
+	self.Input.History = buffer[6]
+	self.Input.HistoryIndex = buffer[7]
 end
 
 function PANEL:Paint(w, h)
