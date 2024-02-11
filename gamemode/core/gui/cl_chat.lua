@@ -93,9 +93,11 @@ end
 function PANEL:AddMessage(message, consoleMessage, tabs)
 	self.Scroll:AddMessage(message, consoleMessage, tabs)
 
-	for _, button in pairs(self.Buttons) do
-		if tobool(bit.band(button.Tab, tabs)) and not button.Active then
-			button:SetTextColor(self:GetSkin().Text.Primary)
+	if tabs then
+		for _, button in pairs(self.Buttons) do
+			if tobool(bit.band(button.Tab, tabs)) and not button.Active then
+				button:SetTextColor(self:GetSkin().Text.Primary)
+			end
 		end
 	end
 end
