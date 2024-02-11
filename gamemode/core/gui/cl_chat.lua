@@ -43,6 +43,7 @@ function PANEL:Init()
 
 		button.DoClick = function(pnl)
 			pnl.Active = not pnl.Active
+			pnl:SetTextColor(nil)
 
 			self:SaveTabConfig()
 		end
@@ -91,6 +92,12 @@ end
 
 function PANEL:AddMessage(message, consoleMessage, tabs)
 	self.Scroll:AddMessage(message, consoleMessage, tabs)
+
+	for _, button in pairs(self.Buttons) do
+		if tobool(bit.band(button.Tab, tabs)) and not button.Active then
+			button:SetTextColor(self:GetSkin().Text.Primary)
+		end
+	end
 end
 
 -- We explicitly don't call back to normal show/hide since we don't want to hide everything
