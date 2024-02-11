@@ -1,9 +1,9 @@
-TAB_LOOC 	= 2^1
-TAB_OOC 	= 2^2
-TAB_IC 		= 2^3
-TAB_ADMIN 	= 2^4
-TAB_PM 		= 2^5
-TAB_RADIO 	= 2^6
+TAB_LOOC	= 2^1
+TAB_OOC		= 2^2
+TAB_IC		= 2^3
+TAB_ADMIN	= 2^4
+TAB_PM		= 2^5
+TAB_RADIO	= 2^6
 
 module("Chat", package.seeall)
 
@@ -137,7 +137,8 @@ function Parse(ply, str)
 		local command = Commands[cmd]
 
 		if not command then
-			-- Send error
+			ply:SendChat("ERROR", string.format("Unknown command: '%s'", cmd))
+
 			return ""
 		end
 
