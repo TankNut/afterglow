@@ -32,12 +32,18 @@ function PANEL:PerformLayout()
 	end
 end
 
-function PANEL:AddMessage(message, tabs)
+function PANEL:AddMessage(message, consoleMessage, tabs)
 	local data = {
 		Scribe = scribe.Parse("<chat>" .. message, self:GetWide() - self.VBar:GetWide()),
 		ReceiveTime = CurTime(),
 		Tabs = tabs
 	}
+
+	if consoleMessage then
+		scribe.Parse("<chat>" .. consoleMessage):PrintToConsole()
+	else
+		data.Scribe:PrintToConsole()
+	end
 
 	table.insert(self.Buffer, data)
 

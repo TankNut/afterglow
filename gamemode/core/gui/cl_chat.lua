@@ -90,7 +90,7 @@ function PANEL:CanSeeTab(tab)
 end
 
 function PANEL:AddMessage(message, consoleMessage, tabs)
-	self.Scroll:AddMessage(message, tabs)
+	self.Scroll:AddMessage(message, consoleMessage, tabs)
 end
 
 -- We explicitly don't call back to normal show/hide since we don't want to hide everything
