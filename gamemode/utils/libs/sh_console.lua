@@ -26,10 +26,10 @@ function AddCommand(commands, callback)
 end
 
 function Rebuild()
-	for command in pairs(Commands) do
+	for command, commandObject in pairs(Commands) do
 		concommand.Add(command, function(ply, _, _, args)
 			Parse(ply, command, args)
-		end, AutoComplete)
+		end, AutoComplete, table.concat(commandObject:AutoComplete(), " | "))
 	end
 end
 
