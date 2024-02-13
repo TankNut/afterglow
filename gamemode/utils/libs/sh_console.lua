@@ -1,7 +1,6 @@
 module("console", package.seeall)
 
 Commands = Commands or {}
-
 Command = Command or {}
 
 function AddCommand(commands, callback)
@@ -101,6 +100,30 @@ function Parse(ply, name, args)
 		args = Split(args)
 	end
 
+	if IsValid(ply) then
+		if command.NoPlayer then
+			Feedback(ply, "This command can only be run from the server console.")
+
+			return
+		end
+
+		local ok, msg = command.CanAccess(ply)
+
+		if not ok then
+			Feedback(ply, msg or "You do not have access to do this.")
+
+			return
+		end
+
+		command:Invoke(ply, args)
+	else
+		if command.NoConsole then
+			Feedback(ply, "This command can only be run from an in-game client.")
+
+			return
+		end
+	end
+
 	if (not IsValid(ply) or command.CanAccess(ply)) and command.Realm then
 		command:Invoke(ply, args)
 	end
@@ -112,21 +135,15 @@ function AutoComplete(name, args)
 	return table.Add({name .. args}, command:AutoComplete())
 end
 
-function Command:Invoke(ply, args)
+function Feedback(ply, ...)
 	if IsValid(ply) then
-		if self.NoPlayer then
-			print("Attempt to run function as player")
-
-			return
-		end
+		ply:SendChat("ERROR", string.format(...))
 	else
-		if self.NoConsole then
-			print("Attempt to run function as console")
-
-			return
-		end
+		MsgC(Color(200, 0, 0), "Error: ", string.format(...), "\n")
 	end
+end
 
+function Command:Invoke(ply, args)
 	local processedArgs = {}
 
 	for k, arg in pairs(self.Arguments) do
@@ -136,7 +153,7 @@ function Command:Invoke(ply, args)
 
 				continue
 			else
-				print("Error missing argument: ", k)
+				Feedback(ply, "Missing argument #%s", k)
 
 				return
 			end
@@ -145,7 +162,7 @@ function Command:Invoke(ply, args)
 		local ok, processed = arg.Callback(ply, args, k == #self.Arguments, arg.Options)
 
 		if not ok then
-			print(string.format("Error parsing argument #%s: %s", k, processed or "No error specified"))
+			Feedback(ply, "Failed to parse argument #%s: %s", k, processed or "Unknown error")
 
 			return
 		end
