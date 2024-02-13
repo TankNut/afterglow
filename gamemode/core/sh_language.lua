@@ -33,8 +33,12 @@ end
 
 local meta = FindMetaTable("Player")
 
+function meta:IsOmniLingual()
+	return self:GetOmniLingual() or self:GetCharacterFlagAttribute("OmniLingual")
+end
+
 function meta:HasLanguage(lang)
-	if self:GetOmniLingual() then
+	if self:IsOmniLingual() then
 		return true
 	end
 
@@ -98,7 +102,6 @@ if SERVER then
 end
 
 Character.RegisterVar("OmniLingual", {
-	Private = true,
 	Accessor = "OmniLingual",
 	Default = false
 })

@@ -1,6 +1,7 @@
 FLAG.Name = "Citizen"
 
 FLAG.BaseLanguage = "eng"
+FLAG.OmniLingual = false
 
 FLAG.Weapons = {}
 
