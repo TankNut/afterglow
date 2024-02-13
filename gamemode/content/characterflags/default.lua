@@ -1,5 +1,7 @@
 FLAG.Name = "Citizen"
 
+FLAG.BaseLanguage = "eng"
+
 FLAG.Weapons = {}
 
 FLAG.Health = 100

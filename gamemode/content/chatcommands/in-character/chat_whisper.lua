@@ -18,7 +18,7 @@ if CLIENT then
 		if data.Form then -- We don't understand them
 			return string.format("<c=%s><i>%s %s.", self.LanguageColor, data.Name, data.Form)
 		else -- We do understand them
-			if data.Lang == Config.Get("BaseLanguage") then
+			if data.Lang == LocalPlayer():GetCharacterFlagAttribute("BaseLanguage") then
 				return string.format("<c=%s><i>%s: [WHISPER] %s", self.Color, data.Name, data.Text)
 			else
 				return string.format("<c=%s><i>(%s) %s: [WHISPER] %s", self.LanguageColor, Language.GetName(data.Lang), data.Name, data.Text)

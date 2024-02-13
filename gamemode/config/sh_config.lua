@@ -9,11 +9,11 @@ GM.Config.Languages = {
 	{"rus", "Russian"}
 }
 
--- The language that is considered 'normal' speak
-GM.Config.BaseLanguage = "eng"
 -- Default languages characters are given during creation
 GM.Config.DefaultLanguages = {"eng"}
 
+
+-- Characters
 GM.Config.MaxCharacters = 10
 
 GM.Config.MinNameLength = 3
