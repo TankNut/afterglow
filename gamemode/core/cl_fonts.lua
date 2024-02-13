@@ -57,3 +57,35 @@ do -- Chat component
 		}
 	}, "compound")
 end
+
+do -- Bold component
+	local COMPONENT = {
+		Name = {"bold", "b"}
+	}
+
+	function COMPONENT:Push()
+		self.Context:PushFont(self.Context.Font .. "bold")
+	end
+
+	function COMPONENT:Pop()
+		self.Context:PopFont()
+	end
+
+	scribe.Register(COMPONENT)
+end
+
+do -- Italic component
+	local COMPONENT = {
+		Name = {"italic", "i"}
+	}
+
+	function COMPONENT:Push()
+		self.Context:PushFont(self.Context.Font .. "italic")
+	end
+
+	function COMPONENT:Pop()
+		self.Context:PopFont()
+	end
+
+	scribe.Register(COMPONENT)
+end
