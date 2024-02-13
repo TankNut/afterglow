@@ -3,6 +3,17 @@ GM.Config.Content = {
 	"2891252709" -- Half Life 2 Props Extended
 }
 
+-- All languages
+GM.Config.Languages = {
+	{"eng", "English"},
+	{"rus", "Russian"}
+}
+
+-- The language that is considered 'normal' speak
+GM.Config.BaseLanguage = "eng"
+-- Default languages characters are given during creation
+GM.Config.DefaultLanguages = {"eng"}
+
 GM.Config.MaxCharacters = 10
 
 GM.Config.MinNameLength = 3

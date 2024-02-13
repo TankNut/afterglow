@@ -80,7 +80,7 @@ function LoadCommands()
 	recursive(basePath)
 end
 
-function Process(str)
+function Process(ply, str)
 	for k, v in pairs(Aliases) do
 		if string.find(str, k, 1, true) == 1 then
 			str = string.format("/%s %s", v, string.sub(str, #k + 1))
@@ -91,8 +91,8 @@ function Process(str)
 
 	local lang, command, args = str:match("^[/!](%w+)%.(%w+)%s*(.-)%s*$")
 
-	if not lang then
-		lang = "eng"
+	if not Language.Lookup[lang] then
+		lang = ply:GetActiveLanguage()
 		command, args = str:match("^[/!](%w+)%s*(.-)%s*$")
 
 		if not command then
@@ -100,7 +100,11 @@ function Process(str)
 		end
 	end
 
-	return lang:lower(), command:lower(), args
+	if lang then
+		lang = lang:lower()
+	end
+
+	return lang, command:lower(), args
 end
 
 function GetTargets(pos, range, muffledRange, withEntities)
@@ -125,7 +129,7 @@ function GetTargets(pos, range, muffledRange, withEntities)
 end
 
 function Parse(ply, str)
-	local lang, cmd, args = Process(str)
+	local lang, cmd, args = Process(ply, str)
 
 	if CLIENT then
 		if ConsoleCommands[cmd] then

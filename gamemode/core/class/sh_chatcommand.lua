@@ -44,7 +44,15 @@ if SERVER then
 		text = string.sub(text, 1, Config.Get("ChatLimit")):Escape()
 
 		if self.UseLanguage then
-			-- Check languages
+			if not lang then
+				ply:SendChat("ERROR", "You cannot speak!")
+
+				return
+			elseif not ply:HasLanguage(lang) then
+				ply:SendChat("ERROR", "You don't speak this language!")
+
+				return
+			end
 		end
 
 		local data = self:Parse(ply, lang, cmd, text)
