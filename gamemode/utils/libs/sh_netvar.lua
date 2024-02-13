@@ -193,7 +193,7 @@ else
 
 		local old = entry.Value
 
-		if old == value and istable(value) then
+		if old == value and not istable(value) then
 			return
 		end
 
