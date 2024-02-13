@@ -22,18 +22,16 @@ if CLIENT then
 			if data.Lang == Config.Get("BaseLanguage") then
 				return string.format("<c=%s>%s: %s", self.Color, data.Name, data.Text)
 			else
-				return string.format("<c=%s>[%s] %s: %s", self.LanguageColor, Language.Lookup[data.Lang][2], data.Name, data.Text)
+				return string.format("<c=%s>[%s] %s: %s", self.LanguageColor, Language.GetName(data.Lang), data.Name, data.Text)
 			end
 		end
 	end
 else
 	function CLASS:FormatUnknownLanguage(str, lang)
-		lang = Language.Lookup[lang]
-
-		local override = lang[4]
+		local override = Language.GetOverride(lang, "Say")
 
 		if override then
-			return isstring(override) or table.Random(override.Say)
+			return override
 		end
 
 		local lastCharacter = string.Right(str, 1)
@@ -45,7 +43,7 @@ else
 			form = "exclaims"
 		end
 
-		return form .. " something in " .. (lang[3] or lang[2])
+		return form .. " something in " .. Language.GetUnknown(lang)
 	end
 
 	function CLASS:Parse(ply, lang, cmd, text)
