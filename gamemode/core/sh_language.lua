@@ -6,25 +6,6 @@ for _, v in pairs(Config.Get("Languages")) do
 	Lookup[v[1]] = v
 end
 
-function FormatUnknown(str, lang)
-	lang = Lookup[lang]
-
-	if lang[4] then
-		return lang[3]
-	end
-
-	local lastCharacter = string.Right(str, 1)
-	local form = "says"
-
-	if lastCharacter == "?" then
-		form = "asks"
-	elseif lastCharacter == "!" then
-		form = "exclaims"
-	end
-
-	return form .. " something in " .. (lang[3] or lang[2])
-end
-
 local meta = FindMetaTable("Player")
 
 function meta:HasLanguage(lang)
