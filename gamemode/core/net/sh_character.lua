@@ -22,6 +22,8 @@ if SERVER then
 			end
 		end
 
+		hook.Run("PreCreateCharacter", ply, fields)
+
 		coroutine.wrap(function()
 			Character.LoadExternal(ply, Character.Create(ply:SteamID(), fields))
 		end)()

@@ -333,6 +333,9 @@ else
 
 	function GM:GetCharacterListName(id, fields)
 	end
+
+	function GM:PreCreateCharacter(ply, fields)
+	end
 end
 
 function GM:GetCharacterNameRules()
