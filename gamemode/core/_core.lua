@@ -30,6 +30,12 @@ IncludeFolder("core/gui/playermenu")
 
 IncludeFolder("core/net")
 
+if SERVER then
+	for _, v in pairs(GM.Config.Content) do
+		resource.AddWorkshop(v)
+	end
+end
+
 function GM:Initialize()
 	if SERVER then
 		Database.Initialize()

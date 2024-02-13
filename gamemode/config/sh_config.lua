@@ -1,3 +1,8 @@
+GM.Config.Content = {
+	"3149717683", -- Gmod expanded assets
+	"2891252709" -- Half Life 2 Props Extended
+}
+
 GM.Config.MaxCharacters = 10
 
 GM.Config.MinNameLength = 3
