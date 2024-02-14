@@ -123,10 +123,6 @@ function Parse(ply, name, args)
 			return
 		end
 	end
-
-	if (not IsValid(ply) or command.CanAccess(ply)) and command.Realm then
-		command:Invoke(ply, args)
-	end
 end
 
 function AutoComplete(name, args)
