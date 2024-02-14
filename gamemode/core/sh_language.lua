@@ -53,7 +53,7 @@ if SERVER then
 	function meta:CheckLanguage()
 		local active = self:GetActiveLanguage()
 
-		if not Lookup[active] then
+		if not Lookup[active] or not self:HasLanguage(active) then
 			local languages = self:GetLanguages()
 
 			for _, v in pairs(Config.Get("Languages")) do
