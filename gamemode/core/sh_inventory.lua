@@ -1,7 +1,5 @@
 module("Inventory", package.seeall)
 
-local meta = FindMetaTable("Entity")
-
 Class = Class or {}
 All = All or {}
 
@@ -17,34 +15,6 @@ _G.CLASS = nil
 
 function Get(id)
 	return All[id]
-end
-
-function meta:GetInventory()
-	return Get(self:GetNetVar("InventoryID"))
-end
-
-function meta:GetItems()
-	local inventory = self:GetInventory()
-
-	return inventory and inventory.Items or {}
-end
-
-function meta:InventoryWeight()
-	local inventory = self:GetInventory()
-
-	return inventory and inventory:GetWeight() or 0
-end
-
-function meta:InventoryMaxWeight()
-	local weight = self:GetCharacterFlagAttribute("MaxWeight")
-
-	return weight
-end
-
-if SERVER then
-	function meta:SetInventory(inventory)
-		self:SetNetVar("InventoryID", inventory.ID)
-	end
 end
 
 function Remove(id)
@@ -74,6 +44,42 @@ function New(storeType, storeID, id)
 	return instance
 end
 
-if SERVER and not Null then
-	Null = New(ITEM_NULL, 0)
+if SERVER then
+	if not Null then
+		Null = New(ITEM_NULL, 0)
+	end
+
+	hook.Add("PlayerDisconnected", "Inventory", function(ply)
+		Inventory.Remove(ply:GetNetVar("InventoryID"))
+	end)
+end
+
+local meta = FindMetaTable("Entity")
+
+function meta:GetInventory()
+	return Get(self:GetNetVar("InventoryID"))
+end
+
+function meta:GetItems()
+	local inventory = self:GetInventory()
+
+	return inventory and inventory.Items or {}
+end
+
+function meta:InventoryWeight()
+	local inventory = self:GetInventory()
+
+	return inventory and inventory:GetWeight() or 0
+end
+
+function meta:InventoryMaxWeight()
+	local weight = self:GetCharacterFlagAttribute("MaxWeight")
+
+	return weight
+end
+
+if SERVER then
+	function meta:SetInventory(inventory)
+		self:SetNetVar("InventoryID", inventory.ID)
+	end
 end

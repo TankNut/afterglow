@@ -64,7 +64,3 @@ function GM:PlayerSetup(ply)
 
 	flag:OnSpawn(ply)
 end
-
-function GM:PlayerDisconnected(ply)
-	Inventory.Remove(ply:GetNetVar("InventoryID"))
-end
