@@ -239,45 +239,6 @@ function Command:SetPlayerOnly()
 	self.NoConsole = true
 end
 
-local boolValues = {
-	f = false
-}
-
-Parser("Bool", function(ply, args, last, options)
-	local val = table.remove(args, 1)
-	local bool = boolValues[val]
-
-	if bool == nil then
-		bool = tobool(val)
-	end
-
-	return true, bool
-end)
-
-Parser("String", function(ply, args, last, options)
-	return true, last and table.concat(args, " ") or table.remove(args, 1)
-end)
-
-Parser("Number", function(ply, args, last, options)
-	local num = tonumber(table.remove(args, 1))
-
-	if num == nil then
-		return false, "Invalid number"
-	end
-
-	return true, num
-end)
-
-Parser("Time", function(ply, args, last, options)
-	local duration = duration.Parse(table.remove(args, 1), options.Format)
-
-	if duration == nil then
-		return false, "Invalid duration"
-	end
-
-	return true, duration
-end)
-
 if SERVER then
 	netstream.Hook("Console", function(ply, payload)
 		Parse(ply, payload.Name, payload.Args)
