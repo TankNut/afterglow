@@ -43,6 +43,29 @@ function Parser(name, callback)
 	end
 end
 
+function PlayerName(ply)
+	return IsValid(ply) and ply:Nick() or "CONSOLE"
+end
+
+function Feedback(ply, class, ...)
+	local args = {...}
+
+	for k, v in pairs(args) do
+		if isentity(v) and v:IsPlayer() then
+			args[k] = PlayerName(v)
+		end
+	end
+
+	if IsValid(ply) then
+		ply:SendChat(class, string.format(unpack(args)))
+	else
+		local color = Chat.List[class].Color
+		local prefix = class == "ERROR" and "Error: " or ""
+
+		MsgC(color, prefix, string.format(unpack(args)), "\n")
+	end
+end
+
 function Trim(str)
 	return str:match("^()%s*$") and "" or str:match("^%s*(.*%S)")
 end
@@ -102,7 +125,7 @@ function Parse(ply, name, args)
 
 	if IsValid(ply) then
 		if command.NoPlayer then
-			Feedback(ply, "This command can only be run from the server console.")
+			Feedback(ply, "ERROR", "This command can only be run from the server console.")
 
 			return
 		end
@@ -110,7 +133,7 @@ function Parse(ply, name, args)
 		local ok, msg = command.CanAccess(ply)
 
 		if not ok then
-			Feedback(ply, msg or "You do not have access to do this.")
+			Feedback(ply, "ERROR", msg or "You do not have access to do this.")
 
 			return
 		end
@@ -118,7 +141,7 @@ function Parse(ply, name, args)
 		command:Invoke(ply, args)
 	else
 		if command.NoConsole then
-			Feedback(ply, "This command can only be run from an in-game client.")
+			Feedback(ply, "ERROR", "This command can only be run from an in-game client.")
 
 			return
 		end
@@ -131,14 +154,6 @@ function AutoComplete(name, args)
 	return table.Add({name .. args}, command:AutoComplete())
 end
 
-function Feedback(ply, ...)
-	if IsValid(ply) then
-		ply:SendChat("ERROR", string.format(...))
-	else
-		MsgC(Color(200, 0, 0), "Error: ", string.format(...), "\n")
-	end
-end
-
 function Command:Invoke(ply, args)
 	local processedArgs = {}
 
@@ -149,7 +164,7 @@ function Command:Invoke(ply, args)
 
 				continue
 			else
-				Feedback(ply, "Missing argument #%s", k)
+				Feedback(ply, "ERROR", "Missing argument #%s (%s)", k, arg.Name or arg.Type)
 
 				return
 			end
@@ -158,7 +173,7 @@ function Command:Invoke(ply, args)
 		local ok, processed = arg.Callback(ply, args, k == #self.Arguments, arg.Options)
 
 		if not ok then
-			Feedback(ply, "Failed to parse argument #%s: %s", k, processed or "Unknown error")
+			Feedback(ply, "ERROR", "Failed to parse argument #%s (%s): %s", k, arg.Name or arg.Type, processed or "Unknown error")
 
 			return
 		end
