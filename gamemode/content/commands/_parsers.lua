@@ -46,3 +46,9 @@ console.Parser("Language", function(ply, args, last, options)
 
 	return true, lang
 end)
+
+console.Parser("Player", function(ply, args, last, options)
+	local match = last and table.concat(args, " ") or table.remove(args, 1)
+
+	return Command.FindPlayer(ply, match, options)
+end)
