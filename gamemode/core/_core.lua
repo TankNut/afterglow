@@ -45,7 +45,7 @@ end
 
 function GM:OnReloaded()
 	if SERVER then
-		for _, ply in pairs(player.GetAll()) do
+		for _, ply in player.Iterator() do
 			if ply:HasCharacter() then
 				ply:UpdateAppearance()
 				ply:UpdateArmor()
