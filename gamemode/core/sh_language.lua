@@ -117,6 +117,14 @@ Character.RegisterVar("Languages", {
 	Default = {}
 })
 
+function GM:CanHearLanguage(ply, lang)
+	return ply:HasLanguage(lang)
+end
+
+function GM:CanSpeakLanguage(ply, lang)
+	return ply:HasLanguage(lang)
+end
+
 if SERVER then
 	hook.Add("PostLoadCharacter", "Language", function(ply, id)
 		ply:CheckLanguage()

@@ -52,21 +52,28 @@ else
 		local valid = {}
 		local invalid = {}
 
-		for _, v in pairs(targets) do
-			table.insert(v:HasLanguage(lang) and valid or invalid, v)
+		for _, target in pairs(targets) do
+			if target == ply or hook.Run("CanHearLanguage", target, lang) then
+				table.insert(valid, target)
+			else
+				table.insert(invalid, target)
+			end
 		end
 
+		-- No reason to check for an empty table since we're always sending the valid version to ourselves
 		Chat.Send(self.Name, {
 			Name = ply:GetCharacterName(),
 			Lang = lang,
 			Text = text
 		}, valid)
 
-		local form = self:FormatUnknownLanguage(text, lang)
+		if not table.IsEmpty(invalid) then
+			local form = self:FormatUnknownLanguage(text, lang)
 
-		Chat.Send(self.Name, {
-			Name = ply:GetCharacterName(),
-			Form = form
-		}, invalid)
+			Chat.Send(self.Name, {
+				Name = ply:GetCharacterName(),
+				Form = form
+			}, invalid)
+		end
 	end
 end

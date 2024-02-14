@@ -44,11 +44,12 @@ if SERVER then
 		text = string.sub(text, 1, Config.Get("ChatLimit")):Escape()
 
 		if self.UseLanguage then
+			-- Should only happen if they don't have a language at all
 			if not lang then
 				ply:SendChat("ERROR", "You cannot speak!")
 
 				return
-			elseif not ply:HasLanguage(lang) then
+			elseif not hook.Run("CanSpeakLanguage", ply, lang) then
 				ply:SendChat("ERROR", "You don't speak this language!")
 
 				return
