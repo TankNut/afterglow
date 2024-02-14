@@ -77,7 +77,6 @@ reset:AddParameter(console.Player())
 reset:SetAccess(Command.IsAdmin)
 
 local set = console.AddCommand("rpa_setlanguages", function(ply, targets, languages)
-	print(type(languages))
 	languages = string.Explode("[^%a]+", languages, true)
 
 	for k, lang in pairs(languages) do
