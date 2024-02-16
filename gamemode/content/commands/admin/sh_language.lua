@@ -48,7 +48,7 @@ take:SetAccess(Command.IsAdmin)
 
 local reset = console.AddCommand("rpa_resetlanguages", function(ply, targets)
 	for _, target in pairs(targets) do
-		target:SetLanguages(Languages.FromConfig(target:GetCharacterFlagAttribute("DefaultLanguages")))
+		target:SetLanguages(target:GetCharacterFlagAttribute("DefaultLanguages"))
 		target:CheckLanguage()
 
 		console.Feedback(ply, "NOTICE", "You've reset %s's languages.", target:GetCharacterName())

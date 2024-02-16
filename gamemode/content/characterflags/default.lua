@@ -2,7 +2,7 @@ FLAG.Name = "Citizen"
 
 FLAG.BaseLanguage = "eng"
 FLAG.DefaultLanguages = {
-	{"eng", true}
+	eng = true
 }
 
 FLAG.Weapons = {}
