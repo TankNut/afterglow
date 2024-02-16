@@ -11,6 +11,8 @@ CLASS.Cast = false
 CLASS.Range = nil
 CLASS.MuffledRange = nil
 
+CLASS.Tabs = nil
+
 if CLIENT then
 	function CLASS:OnReceive(data)
 	end
