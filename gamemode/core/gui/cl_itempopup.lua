@@ -56,7 +56,7 @@ function PANEL:Init()
 		self.Item:OpenActionMenu(self, skipActionNames)
 	end
 
-	self.TitleScribe = self:Add("scribe_label")
+	self.TitleScribe = self:Add("ScribeLabel")
 	self.TitleScribe:DockMargin(5, 2, 5, 0)
 	self.TitleScribe:Dock(TOP)
 
