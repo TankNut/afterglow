@@ -43,7 +43,7 @@ else
 		local invalid = {}
 
 		for _, target in pairs(targets) do
-			if target == ply or hook.Run("CanHearLanguage", target, lang) then
+			if target == ply or ply:CanUnderstandLanguage(lang) then
 				table.insert(valid, target)
 			else
 				table.insert(invalid, target)

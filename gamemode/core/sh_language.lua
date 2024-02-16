@@ -31,31 +31,32 @@ function GetOverride(command, index)
 	end
 end
 
-local meta = FindMetaTable("Player")
+function FromConfig(data)
+	local langs = {}
 
-function meta:IsOmniLingual()
-	return self:GetOmniLingual() or self:GetCharacterFlagAttribute("OmniLingual")
+	for _, lang in pairs(data) do
+		langs[lang[1]] = lang[2]
+	end
+
+	return langs
 end
 
-function meta:HasLanguage(lang)
-	if self:IsOmniLingual() then
-		return true
-	end
+local meta = FindMetaTable("Player")
 
-	if not Lookup[lang] then
-		return false
-	end
+function meta:CanSpeakLanguage(lang)
+	return hook.Run("CanSpeakLanguage", self, lang)
+end
 
-	return self:GetLanguages()[lang]
+function meta:CanUnderstandLanguage(lang)
+	return hook.Run("CanUnderstandLanguage", self, lang)
 end
 
 if SERVER then
 	function meta:CheckLanguage()
+		local languages = self:GetLanguages()
 		local active = self:GetActiveLanguage()
 
-		if not Lookup[active] or not self:HasLanguage(active) then
-			local languages = self:GetLanguages()
-
+		if not Lookup[active] or not languages[active] then
 			for _, v in pairs(Config.Get("Languages")) do
 				if languages[v[1]] then
 					self:SetActiveLanguage(v[1])
@@ -68,27 +69,21 @@ if SERVER then
 		end
 	end
 
-	function meta:AddLanguage(lang, switch)
-		if not Lookup[lang] then
-			return
-		end
+	function meta:AddLanguage(lang, speak)
+		speak = speak or false
 
 		local languages = self:GetLanguages()
 
-		languages[lang] = true
+		languages[lang] = speak
 
 		self:SetLanguages(languages)
 
-		if switch or not self:GetActiveLanguage() then
+		if not self:GetActiveLanguage() then
 			self:SetActiveLanguage(lang)
 		end
 	end
 
 	function meta:RemoveLanguage(lang)
-		if not Lookup[lang] then
-			return
-		end
-
 		local languages = self:GetLanguages()
 
 		languages[lang] = nil
@@ -101,11 +96,6 @@ if SERVER then
 	end
 end
 
-Character.RegisterVar("OmniLingual", {
-	Accessor = "OmniLingual",
-	Default = false
-})
-
 Character.RegisterVar("ActiveLanguage", {
 	Private = true,
 	Accessor = "ActiveLanguage"
@@ -117,12 +107,12 @@ Character.RegisterVar("Languages", {
 	Default = {}
 })
 
-function GM:CanHearLanguage(ply, lang)
-	return ply:HasLanguage(lang)
+function GM:CanSpeakLanguage(ply, lang)
+	return ply:GetLanguages()[lang] == true
 end
 
-function GM:CanSpeakLanguage(ply, lang)
-	return ply:HasLanguage(lang)
+function GM:CanUnderstandLanguage(ply, lang)
+	return ply:GetLanguages()[lang] != nil
 end
 
 if SERVER then

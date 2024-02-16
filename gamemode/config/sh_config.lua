@@ -10,8 +10,9 @@ GM.Config.Languages = {
 }
 
 -- Default languages characters are given during creation
-GM.Config.DefaultLanguages = {"eng"}
-
+GM.Config.DefaultLanguages = {
+	{"eng", true}
+}
 
 -- Characters
 GM.Config.MaxCharacters = 10
