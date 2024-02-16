@@ -31,7 +31,7 @@ local function func(self)
 	self.Scroll:Dock(FILL)
 	self.Scroll:InvalidateParent(true)
 
-	self.Description = self.Scroll:Add("scribe_label")
+	self.Description = self.Scroll:Add("ScribeLabel")
 	self.Description:SetWide(self.Scroll:GetWide() - 15)
 
 	self.Scroll:AddItem(self.Description)

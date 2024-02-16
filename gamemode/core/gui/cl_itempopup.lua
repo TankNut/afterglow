@@ -64,11 +64,11 @@ function PANEL:Init()
 	self.Scroll:DockMargin(5, 0, 5, 0)
 	self.Scroll:Dock(FILL)
 
-	self.Scribe = self.Scroll:Add("scribe_label")
+	self.Scribe = self.Scroll:Add("ScribeLabel")
 
 	self.Scroll:AddItem(self.Scribe)
 
-	self.DataScribe = self.ButtonPanel:Add("scribe_label")
+	self.DataScribe = self.ButtonPanel:Add("ScribeLabel")
 	self.DataScribe:Dock(FILL)
 	self.DataScribe:DockMargin(5, 2, 5, 5)
 	self.DataScribe:SetAlignment(TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
