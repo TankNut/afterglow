@@ -206,7 +206,7 @@ function Command:GetUsage()
 			local fallback = ""
 
 			if arg.Fallback then
-				fallback = " = " .. (arg.FallbackText or arg.Fallback)
+				fallback = " = " .. (arg.FallbackText or tostring(arg.Fallback))
 			end
 
 			table.insert(args, string.format("[%s%s]", name, fallback))
