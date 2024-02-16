@@ -78,7 +78,7 @@ if SERVER then
 
 		self:SetLanguages(languages)
 
-		if not self:GetActiveLanguage() then
+		if not self:GetActiveLanguage() and speak then
 			self:SetActiveLanguage(lang)
 		end
 	end
