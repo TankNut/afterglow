@@ -78,6 +78,10 @@ if SERVER then
 	end
 
 	function GM:DoPlayerDeath(ply, attacker, dmg)
-		ply:CreateRagdoll()
+		local diff = 1 - math.abs(ply:GetPlayerScale())
+
+		if diff < 0.15 then
+			ply:CreateRagdoll()
+		end
 	end
 end
