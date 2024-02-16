@@ -145,6 +145,8 @@ function Parse(ply, name, args)
 
 			return
 		end
+
+		command:Invoke(ply, args)
 	end
 end
 
