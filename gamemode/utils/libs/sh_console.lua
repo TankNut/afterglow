@@ -207,7 +207,7 @@ function Command:GetUsage()
 		if arg.Optional then
 			local fallback = ""
 
-			if arg.Fallback then
+			if arg.Fallback or arg.FallbackText then
 				fallback = " = " .. (arg.FallbackText or tostring(arg.Fallback))
 			end
 
