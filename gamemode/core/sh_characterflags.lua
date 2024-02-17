@@ -16,9 +16,19 @@ Character.RegisterVar("Flag", {
 function Register(name, data)
 	if name != "default" then
 		setmetatable(data, {__index = List.default})
+	else
+		Default = data
 	end
 
 	List[name] = data
+end
+
+function Get(name)
+	return List[name]
+end
+
+function GetOrDefault(name)
+	return List[name] or List.default
 end
 
 function LoadFromFile(path, name)
@@ -60,7 +70,7 @@ function LoadFlags()
 end
 
 function meta:GetCharacterFlagTable()
-	return List[self:GetCharacterFlag()] or List.default
+	return GetOrDefault(self:GetCharacterFlag())
 end
 
 function meta:GetCharacterFlagAttribute(name)
