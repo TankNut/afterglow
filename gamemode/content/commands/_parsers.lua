@@ -47,6 +47,16 @@ console.Parser("Language", function(ply, args, last, options)
 	return true, lang
 end)
 
+console.Parser("CharacterFlag", function(ply, args, last, options)
+	local flag = table.remove(args, 1):lower()
+
+	if not CharacterFlags.Get(flag) then
+		return false, "Invalid flag"
+	end
+
+	return true, flag
+end)
+
 console.Parser("Player", function(ply, args, last, options)
 	local match = last and table.concat(args, " ") or table.remove(args, 1)
 
