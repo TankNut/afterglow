@@ -14,9 +14,8 @@ GM.Config = GM.Config or {}
 IncludeFolder("config")
 
 IncludeFile("core/_core.lua")
+IncludeFile("content/sh_teams.lua")
 
--- Load plugin folder
--- Load content folder
 Item.LoadItems()
 CharacterFlags.LoadFlags()
 Command.Load()

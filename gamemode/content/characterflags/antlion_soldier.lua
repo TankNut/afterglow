@@ -1,4 +1,5 @@
 FLAG.Name = "Antlion Soldier"
+FLAG.Team = TEAM_XENIAN
 
 FLAG.Model = Model("models/antlion.mdl")
 
