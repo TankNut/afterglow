@@ -76,7 +76,6 @@ local function verify(ply, tab)
 end
 
 local set = console.AddCommand("rpa_setlanguages", function(ply, targets, languages, hearing)
-	print(ply, targets, languages, hearing)
 	languages = verify(ply, string.Explode("[^%a]+", languages, true))
 
 	if not languages then
