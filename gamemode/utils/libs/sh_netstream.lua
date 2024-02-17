@@ -115,13 +115,15 @@ else
 	Ready = Ready or {}
 
 	function GetTargets(targets)
-		local result = targets
+		local result
 
 		if not targets then
 			result = player.GetAll()
 		elseif TypeID(targets) == TYPE_RECIPIENTFILTER then
 			result = targets:GetPlayers()
-		elseif not istable(targets) then
+		elseif istable(targets) then
+			result = table.Unique(targets)
+		else
 			result = {targets}
 		end
 

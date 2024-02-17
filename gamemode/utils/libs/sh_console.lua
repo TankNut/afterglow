@@ -59,7 +59,8 @@ function Feedback(ply, class, ...)
 	if IsValid(ply) then
 		ply:SendChat(class, string.format(unpack(args)))
 	else
-		local color = Chat.List[class].Color
+		local classTable = Chat.List[class]
+		local color = classTable.ConsoleColor or classTable.Color
 		local prefix = class == "ERROR" and "Error: " or ""
 
 		MsgC(color, prefix, string.format(unpack(args)), "\n")
