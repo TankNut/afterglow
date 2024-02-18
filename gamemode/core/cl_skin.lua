@@ -230,7 +230,7 @@ function SKIN:PaintProgressBar(panel, w, h)
 	local width = w - 2
 
 	surface.SetDrawColor(self.Colors.Primary)
-	surface.DrawRect(1, 1, width * panel:GetProgress(), h - 2)
+	surface.DrawRect(1, 1, width * math.Clamp(panel:GetProgress(), 0, 1), h - 2)
 
 	draw.SimpleText(panel:GetText(), "afterglow.labelsmall", w * 0.5, h * 0.5, self.Text.Normal, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
