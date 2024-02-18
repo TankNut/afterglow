@@ -1,3 +1,5 @@
+GM.Config.ServerName = "Afterglow"
+
 GM.Config.Content = {
 	"3149717683", -- Gmod expanded assets
 	"2891252709" -- Half Life 2 Props Extended
