@@ -37,6 +37,12 @@ console.Parser("Time", function(ply, args, last, options)
 	return true, duration
 end)
 
+console.Parser("Player", function(ply, args, last, options)
+	local match = last and table.concat(args, " ") or table.remove(args, 1)
+
+	return Command.FindPlayer(ply, match, options)
+end)
+
 console.Parser("Language", function(ply, args, last, options)
 	local lang = table.remove(args, 1):lower()
 
@@ -47,6 +53,26 @@ console.Parser("Language", function(ply, args, last, options)
 	return true, lang
 end)
 
+console.Parser("UserGroup", function(ply, args, last, options)
+	local group = table.remove(args, 1):lower()
+
+	if not Admin.Ranks[group] then
+		return false, "Invalid usergroup."
+	end
+
+	if IsValid(ply) then
+		if options.CheckImmunity and not ply:CheckUserGroup(group) then
+			return false, "You cannot select this usergroup."
+		end
+
+		if options.LowerOnly and group == ply:GetUserGroup() then
+			return false, "You cannot select your own usergroup."
+		end
+	end
+
+	return true, group
+end)
+
 console.Parser("CharacterFlag", function(ply, args, last, options)
 	local flag = table.remove(args, 1):lower()
 
@@ -55,10 +81,4 @@ console.Parser("CharacterFlag", function(ply, args, last, options)
 	end
 
 	return true, flag
-end)
-
-console.Parser("Player", function(ply, args, last, options)
-	local match = last and table.concat(args, " ") or table.remove(args, 1)
-
-	return Command.FindPlayer(ply, match, options)
 end)
