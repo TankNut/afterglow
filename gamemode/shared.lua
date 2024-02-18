@@ -14,6 +14,8 @@ GM.Config = GM.Config or {}
 IncludeFolder("config")
 
 IncludeFile("core/_core.lua")
+
+-- Content loading
 IncludeFile("content/sh_teams.lua")
 
 Item.LoadItems()
