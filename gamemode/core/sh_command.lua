@@ -20,15 +20,15 @@ function Load()
 end
 
 function IsAdmin(ply)
-	return ply:IsAdmin()
+	return ply:IsAdmin(), "You need to be an admin to do this."
 end
 
 function IsSuperAdmin(ply)
-	return ply:IsSuperAdmin()
+	return ply:IsSuperAdmin(), "You need to be a superadmin to do this."
 end
 
 function IsDeveloper(ply)
-	return ply:IsDeveloper()
+	return ply:IsDeveloper(), "You need to be a developer to do this."
 end
 
 function IsUserGroup(...)

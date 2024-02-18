@@ -107,7 +107,7 @@ local set = console.AddCommand("rpa_setlanguages", function(ply, targets, langua
 	end
 end)
 
-set:SetDescription("Sets a character's languages to a specific set of languages.")
+set:SetDescription("Sets a character's languages to a specific set.")
 set:AddParameter(console.Player())
 set:AddOptional(console.String({}, "Languages"), "", "none")
 set:AddOptional(console.String({}, "Hearing only"), "", "none")

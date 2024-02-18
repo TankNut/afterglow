@@ -21,7 +21,7 @@ console.Parser("Number", function(ply, args, last, options)
 	local num = tonumber(table.remove(args, 1))
 
 	if num == nil then
-		return false, "Invalid number"
+		return false, "Not a number."
 	end
 
 	return true, num
@@ -31,7 +31,7 @@ console.Parser("Time", function(ply, args, last, options)
 	local duration = duration.Parse(table.remove(args, 1), options.Format)
 
 	if duration == nil then
-		return false, "Invalid duration"
+		return false, "Invalid duration."
 	end
 
 	return true, duration
@@ -41,7 +41,7 @@ console.Parser("Language", function(ply, args, last, options)
 	local lang = table.remove(args, 1):lower()
 
 	if not Language.Get(lang) then
-		return false, "Invalid language"
+		return false, "Invalid language."
 	end
 
 	return true, lang
@@ -51,7 +51,7 @@ console.Parser("CharacterFlag", function(ply, args, last, options)
 	local flag = table.remove(args, 1):lower()
 
 	if not CharacterFlags.Get(flag) then
-		return false, "Invalid flag"
+		return false, "Invalid flag."
 	end
 
 	return true, flag
