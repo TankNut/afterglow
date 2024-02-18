@@ -18,8 +18,8 @@ function Add(name, color, hidden)
 	return index
 end
 
-function Get(name)
-	return Lookup[name]
+function Get(index)
+	return Lookup[index]
 end
 
 function Find(name)

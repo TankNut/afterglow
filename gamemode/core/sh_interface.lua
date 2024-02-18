@@ -79,7 +79,15 @@ else
 	end
 end
 
-if SERVER then
+if CLIENT then
+	function GM:ScoreboardShow()
+		OpenGroup("Scoreboard", "Scoreboard")
+	end
+
+	function GM:ScoreboardHide()
+		CloseGroup("Scoreboard")
+	end
+else
 	function GM:ShowTeam(ply)
 		ply:OpenGroupedInterface("CharacterSelect", "F2")
 	end

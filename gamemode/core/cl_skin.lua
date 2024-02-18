@@ -266,4 +266,15 @@ function SKIN:PaintMenuOption(panel, w, h)
 	end
 end
 
+function SKIN:PaintScoreboard(panel, w, h)
+	surface.SetDrawColor(ColorAlpha(self.Colors.FillDark, getAlpha()))
+	surface.DrawRect(0, 0, w, h)
+
+	surface.SetDrawColor(self.Colors.Border)
+	surface.DrawRect(0, 0, w, 50)
+	surface.DrawOutlinedRect(0, 0, w, h)
+
+	draw.DrawText(Config.Get("ServerName"), "afterglow.labelmassive", 10, 10, self.Text.Normal)
+end
+
 derma.DefineSkin("Afterglow", "Default Afterglow UI skin", SKIN)
