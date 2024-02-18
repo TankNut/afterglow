@@ -126,10 +126,15 @@ end
 
 function PANEL:UpdateWeight()
 	local weight = self:GetInventory():GetWeight()
-	local maxWeight = LocalPlayer():InventoryMaxWeight() -- UPDATE THIS
+	local maxWeight = self:GetInventory():GetMaxWeight()
 
-	self.Weight:SetProgress(math.Clamp(weight / maxWeight, 0, 1))
-	self.Weight:SetText(string.format("%.1f / %.1f kg", weight, maxWeight))
+	if maxWeight == 0 then
+		self.Weight:SetProgress(weight / 100)
+		self.Weight:SetText(string.format("%.1f kg", weight))
+	else
+		self.Weight:SetProgress(weight / maxWeight)
+		self.Weight:SetText(string.format("%.1f / %.1f kg", weight, maxWeight))
+	end
 end
 
 -- Filtering

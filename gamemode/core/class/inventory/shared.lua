@@ -70,6 +70,14 @@ function CLASS:GetWeight()
 	return weight
 end
 
+function CLASS:GetMaxWeight()
+	if self.StoreType == ITEM_PLAYER then
+		return self:GetParent():InventoryMaxWeight()
+	end
+
+	return 0
+end
+
 if CLIENT then
 	function CLASS:AddPanel(pnl)
 		table.insert(self.Panels, pnl)
