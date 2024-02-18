@@ -19,7 +19,17 @@ function Add(name, color, hidden)
 end
 
 function Get(name)
-	return Lookup[name:lower()]
+	return Lookup[name]
+end
+
+function Find(name)
+	name = name:lower()
+
+	for _, data in pairs(List) do
+		if string.find(data.Name:lower(), name) then
+			return data
+		end
+	end
 end
 
 function GM:CreateTeams()

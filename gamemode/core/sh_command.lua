@@ -99,7 +99,7 @@ function FindPlayer(ply, str, options)
 		end
 	elseif str[1] == "#" then -- Team
 		local name = str:sub(2)
-		local data = Team.Get(name)
+		local data = Team.Find(name)
 
 		if not data then
 			return false, "Invalid team."
