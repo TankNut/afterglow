@@ -59,6 +59,10 @@ function FindPlayer(ply, str, options)
 			return false, "Console does not support self-targeting."
 		end
 
+		if options.NoSelfTarget then
+			return false, "You cannot target yourself."
+		end
+
 		targets = {ply}
 	elseif str == "-" then -- Lookat
 		if not IsValid(ply) then
