@@ -51,7 +51,7 @@ function Feedback(ply, class, ...)
 	local args = {...}
 
 	for k, v in pairs(args) do
-		if isentity(v) and v:IsPlayer() then
+		if isentity(v) then
 			args[k] = PlayerName(v)
 		end
 	end
@@ -134,7 +134,7 @@ function Parse(ply, name, args)
 		local ok, msg = command.CanAccess(ply)
 
 		if not ok then
-			Feedback(ply, "ERROR", msg or "You do not have access to do this.")
+			Feedback(ply, "ERROR", msg or "You do not have access to this command.")
 
 			return
 		end
