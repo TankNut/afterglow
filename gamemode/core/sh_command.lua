@@ -87,7 +87,7 @@ function FindPlayer(ply, str, options)
 		local eye = ply:EyePos()
 
 		if not radius then
-			return false, "Invalid radius specified."
+			return false, "Invalid radius."
 		end
 
 		radius = radius * radius
@@ -97,7 +97,15 @@ function FindPlayer(ply, str, options)
 				table.insert(targets, target)
 			end
 		end
-	-- elseif str[1] == "#" then -- Team
+	elseif str[1] == "#" then -- Team
+		local name = str:sub(2)
+		local data = Team.Get(name)
+
+		if not data then
+			return false, "Invalid team."
+		end
+
+		targets = team.GetPlayers(data.Index)
 	elseif str == "@@" then
 		targets = player.GetAll()
 	else -- Match by name
