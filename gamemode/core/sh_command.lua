@@ -123,7 +123,7 @@ function FindPlayer(ply, str, options)
 	end
 
 	-- Don't allow us to target people that have our usergroup (e.g. admins cannot target admins/superadmins)
-	if options.CheckImmunity and not ply:IsDeveloper() then
+	if options.CheckImmunity and IsValid(ply) then
 		local usergroup = ply:GetUserGroup()
 
 		targets = table.Filter(targets, function(_, target)
