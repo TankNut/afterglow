@@ -25,6 +25,8 @@ GM.Config.MaxNameLength = 30
 GM.Config.MinDescriptionLength = 0
 GM.Config.MaxDescriptionLength = 2048
 
+GM.Config.ShortDescriptionLength = 64
+
 GM.Config.NameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789'"
 GM.Config.DescriptionCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789',\n!?@#$%^&*(){}[]_=|\\\"><`~"
 
