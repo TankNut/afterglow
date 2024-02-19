@@ -290,8 +290,8 @@ function SKIN:PaintScoreboardEntry(panel, w, h)
 
 	local ply = panel:GetPlayer()
 
-	draw.SimpleText(ply:GetCharacterName(), "afterglow.labelsmall", 66, h * 0.33, self.Text.Normal, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-	draw.SimpleText(ply:GetShortDescription(), "afterglow.labelsmall", 66, h * 0.66, self.Text.Disabled, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	draw.SimpleText(ply:GetCharacterName(), "afterglow.labelsmall", 66, math.Round(h * 0.33), self.Text.Normal, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	draw.SimpleText(ply:GetShortDescription(), "afterglow.labelsmall", 66, math.Round(h * 0.66), self.Text.Disabled, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 	draw.DrawText(ply:Ping(), "afterglow.labelsmall", w - 20, 5, self.Text.Normal, TEXT_ALIGN_RIGHT)
 
