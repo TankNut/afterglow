@@ -9,7 +9,7 @@ function Register(key, data)
 	Vars[key] = data
 
 	data.Key = "Player" .. (data.Key or key:FirstToUpper())
-	data.Accessor = data.Accessor or "RP" .. key:FirstToUpper()
+	data.Accessor = data.Accessor or key:FirstToUpper()
 
 	if data.Field then
 		Fields[data.Field] = data.Accessor

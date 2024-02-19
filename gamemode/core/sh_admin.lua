@@ -14,6 +14,7 @@ AddRank("superadmin", "admin")
 AddRank("developer", "superadmin")
 
 PlayerVar.Register("UserGroup", {
+	Accessor = "RPUserGroup",
 	Field = "usergroup",
 	Default = "user",
 	ServerOnly = true,
