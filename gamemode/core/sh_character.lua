@@ -120,10 +120,6 @@ function meta:GetCharacterList()
 	return self:GetNetVar("CharacterList", {})
 end
 
-function meta:GetShortDescription()
-	return self:GetNetVar("ShortDescription", "")
-end
-
 if SERVER then
 	function meta:SetCharID(id)
 		self:SetNetVar("CharID", id)
@@ -131,10 +127,6 @@ if SERVER then
 
 	function meta:SetCharacterList(characters)
 		self:SetPrivateNetVar("CharacterList", characters)
-	end
-
-	function meta:SetShortDescription(desc)
-		self:SetNetVar("ShortDescription", desc)
 	end
 
 	Load = coroutine.Bind(function(ply, id, fields)
@@ -308,6 +300,8 @@ RegisterVar("Description", {
 		end
 	end
 })
+
+PlayerVar.Register("ShortDescription", {})
 
 RegisterVar("Model", {
 	ServerOnly = true,
