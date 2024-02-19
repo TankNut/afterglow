@@ -120,6 +120,10 @@ function meta:GetCharacterList()
 	return self:GetNetVar("CharacterList", {})
 end
 
+function meta:GetShortDescription()
+	return self:GetNetVar("ShortDescription", "")
+end
+
 if SERVER then
 	function meta:SetCharID(id)
 		self:SetNetVar("CharID", id)
@@ -127,6 +131,10 @@ if SERVER then
 
 	function meta:SetCharacterList(characters)
 		self:SetPrivateNetVar("CharacterList", characters)
+	end
+
+	function meta:SetShortDescription(desc)
+		self:SetNetVar("ShortDescription", desc)
 	end
 
 	Load = coroutine.Bind(function(ply, id, fields)
@@ -283,9 +291,20 @@ RegisterVar("Name", {
 })
 
 RegisterVar("Description", {
+	Private = true,
 	Default = "",
 	Callback = function(ply, old, new)
 		hook.Run("CharacterDescriptionChanged", ply, old, new)
+
+		if SERVER then
+			local short = string.match(new, "^[^\r\n]*")
+
+			if #short > 0 and #short > 64 then
+				short = string.sub(short, 1, 64) .. "..."
+			end
+
+			ply:SetShortDescription(short)
+		end
 	end
 })
 
