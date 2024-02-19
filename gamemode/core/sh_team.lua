@@ -19,7 +19,7 @@ function Add(name, color, hidden)
 end
 
 function Get(index)
-	return Lookup[index]
+	return List[index]
 end
 
 function Find(name)
