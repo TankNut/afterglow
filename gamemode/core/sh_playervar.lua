@@ -1,4 +1,4 @@
-module("PlayerVars", package.seeall)
+module("PlayerVar", package.seeall)
 
 local meta = FindMetaTable("Player")
 

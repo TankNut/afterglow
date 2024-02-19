@@ -6,7 +6,7 @@ function GM:PlayerInitialSpawn(ply)
 	ply:SetMaxArmor(0)
 
 	coroutine.wrap(function()
-		PlayerVars.Load(ply)
+		PlayerVar.Load(ply)
 		Character.LoadList(ply)
 	end)()
 end

@@ -13,7 +13,7 @@ AddRank("admin", "user")
 AddRank("superadmin", "admin")
 AddRank("developer", "superadmin")
 
-PlayerVars.Register("UserGroup", {
+PlayerVar.Register("UserGroup", {
 	Field = "usergroup",
 	Default = "user",
 	ServerOnly = true,
