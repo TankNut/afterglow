@@ -28,6 +28,7 @@ function PANEL:SetPlayer(ply)
 	self.Player = ply
 	self.Icon:SetPlayer(ply)
 	self.Hidden = hook.Run("ShouldHidePlayer", ply)
+	self.Badges = ply:GetAllBadges()
 end
 
 function PANEL:Paint(w, h)

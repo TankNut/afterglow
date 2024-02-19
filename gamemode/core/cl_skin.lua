@@ -289,17 +289,21 @@ function SKIN:PaintScoreboardEntry(panel, w, h)
 	end
 
 	local ply = panel:GetPlayer()
-	local nameY, descY = 10, 28
 
-	draw.DrawText(ply:GetCharacterName(), "afterglow.labelsmall", 66, nameY, self.Text.Normal)
-	draw.DrawText(ply:GetShortDescription(), "afterglow.labelsmall", 66, descY, self.Text.Disabled)
+	draw.SimpleText(ply:GetCharacterName(), "afterglow.labelsmall", 66, h * 0.33, self.Text.Normal, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	draw.SimpleText(ply:GetShortDescription(), "afterglow.labelsmall", 66, h * 0.66, self.Text.Disabled, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
-	local pingY, badgeY, nickY = nameY, descY, 28
-
-	draw.DrawText(ply:Ping(), "afterglow.labelsmall", w - 20, pingY, self.Text.Normal, TEXT_ALIGN_RIGHT)
+	draw.DrawText(ply:Ping(), "afterglow.labelsmall", w - 20, 5, self.Text.Normal, TEXT_ALIGN_RIGHT)
 
 	if LocalPlayer():IsAdmin() then
-		draw.DrawText(ply:Nick(), "afterglow.labelsmall", w - 20, nickY, self.Text.Normal, TEXT_ALIGN_RIGHT)
+		draw.DrawText(ply:Nick(), "afterglow.labelsmall", w - 20, 40, self.Text.Normal, TEXT_ALIGN_RIGHT)
+	end
+
+	surface.SetDrawColor(color_white)
+
+	for k, v in pairs(panel.Badges) do
+		surface.SetMaterial(v.Material)
+		surface.DrawTexturedRect(w - 14 - (k * 18), 22, 16, 16)
 	end
 end
 

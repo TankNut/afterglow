@@ -63,7 +63,7 @@ function PANEL:Init()
 			local entry = self.Players:Add("RPScoreboardEntry")
 
 			entry:Dock(TOP)
-			entry:SetTall(57)
+			entry:SetTall(60)
 			entry:SetPlayer(ply)
 			entry:SetAlt(alt)
 

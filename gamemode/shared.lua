@@ -17,6 +17,7 @@ IncludeFile("core/_core.lua")
 
 -- Content loading
 IncludeFile("content/sh_teams.lua")
+IncludeFile("content/sh_badges.lua")
 
 Item.LoadItems()
 CharacterFlags.LoadFlags()
