@@ -1,21 +1,13 @@
 module("Team", package.seeall)
 
 List = {}
-Lookup = {}
 
 function Add(name, color, hidden)
-	local data = {
+	return table.insert(List, {
 		Name = name,
 		Color = color,
 		Hidden = tobool(hidden)
-	}
-
-	local index = table.insert(List, data)
-
-	data.Index = index
-	Lookup[name:lower()] = data
-
-	return index
+	})
 end
 
 function Get(index)
