@@ -6,7 +6,7 @@ AccessorFunc(PANEL, "_LookAtTarget", "LookAtTarget")
 
 function PANEL:Init()
 	self:SetCamPosTarget(Vector(60, -20, 64))
-	self:SetLookAtTarget(Vector(0, 0, 54))
+	self:SetLookAtTarget(Vector(0, 0, 64))
 end
 
 function PANEL:SetPlayer(ply)
