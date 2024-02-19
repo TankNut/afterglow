@@ -277,4 +277,30 @@ function SKIN:PaintScoreboard(panel, w, h)
 	draw.DrawText(Config.Get("ServerName"), "afterglow.labelmassive", 10, 10, self.Text.Normal)
 end
 
+function SKIN:PaintScoreboardEntry(panel, w, h)
+	if panel:GetAlt() then
+		surface.SetDrawColor(ColorAlpha(self.Colors.Border, 130))
+		surface.DrawRect(0, 0, w, h)
+	end
+
+	if panel:GetHidden() then
+		surface.SetDrawColor(ColorAlpha(self.Colors.Primary, 10))
+		surface.DrawRect(0, 0, w, h)
+	end
+
+	local ply = panel:GetPlayer()
+	local nameY, descY = 10, 28
+
+	draw.DrawText(ply:GetCharacterName(), "afterglow.labelsmall", 66, nameY, self.Text.Normal)
+	draw.DrawText(ply:GetShortDescription(), "afterglow.labelsmall", 66, descY, self.Text.Disabled)
+
+	local pingY, badgeY, nickY = nameY, descY, 28
+
+	draw.DrawText(ply:Ping(), "afterglow.labelsmall", w - 20, pingY, self.Text.Normal, TEXT_ALIGN_RIGHT)
+
+	if LocalPlayer():IsAdmin() then
+		draw.DrawText(ply:Nick(), "afterglow.labelsmall", w - 20, nickY, self.Text.Normal, TEXT_ALIGN_RIGHT)
+	end
+end
+
 derma.DefineSkin("Afterglow", "Default Afterglow UI skin", SKIN)
