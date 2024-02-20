@@ -139,7 +139,7 @@ if SERVER then
 
 		_G.CHARACTER_LOADING = true
 
-		ply:SetNetVar("CharID", id)
+		ply:SetCharID(id)
 
 		for k, v in pairs(Vars) do
 			local val = fields[v.Field] or nil
@@ -181,7 +181,7 @@ if SERVER then
 
 		_G.CHARACTER_LOADING = true
 
-		ply:SetNetVar("CharID", -1)
+		ply:SetCharID(nil)
 
 		for k, v in pairs(Vars) do
 			ply["Set" .. v.Accessor](ply, nil, true)
