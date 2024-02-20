@@ -301,7 +301,9 @@ RegisterVar("Description", {
 	end
 })
 
-PlayerVar.Register("ShortDescription", {})
+PlayerVar.Register("ShortDescription", {
+	Default = ""
+})
 
 RegisterVar("Model", {
 	ServerOnly = true,
