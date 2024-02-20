@@ -7,7 +7,6 @@ end)
 
 usergroup:SetDescription("Sets the user group of another player.")
 usergroup:AddParameter(console.Player({
-	ForceNick = true,
 	CheckImmunity = true,
 	NoSelfTarget = true,
 	SingleTarget = true
