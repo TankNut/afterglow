@@ -12,7 +12,6 @@ include("utils/_utils.lua")
 GM.Config = GM.Config or {}
 
 IncludeFolder("config")
-
 IncludeFile("core/_core.lua")
 
 -- Content loading
