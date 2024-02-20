@@ -26,13 +26,17 @@ function Define(name, normal, combat)
 	end
 end
 
-function Add(name, models)
+function Add(name, models, offset)
 	if not istable(models) then
 		models = {models}
 	end
 
 	for _, model in pairs(models) do
 		Models[model:lower()] = Tables[name]
+	end
+
+	if offset then
+		AddOffset(models, offset)
 	end
 end
 
