@@ -40,19 +40,13 @@ Define("antlion", {
 
 Add("antlion", {"models/antlion.mdl", "models/antlion_worker.mdl"})
 
-function meta:GetPlayerScale()
-	return self:GetNetVar("Scale", 1)
-end
-
-if SERVER then
-	function meta:SetPlayerScale(scale)
-		self:SetNetVar("Scale", scale)
+PlayerVar.Register("Scale", {
+	Accessor = "PlayerScale",
+	Default = 1,
+	Callback = function(ply, old, new)
+		ply:RefreshHull()
 	end
-end
-
-netvar.AddEntityHook("Scale", "Hull", function(ply)
-	ply:RefreshHull()
-end)
+})
 
 function meta:RefreshHull()
 	local data = Models[self:GetModel():lower()] or Default
