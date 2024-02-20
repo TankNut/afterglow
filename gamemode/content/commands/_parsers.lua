@@ -65,7 +65,7 @@ console.Parser("UserGroup", function(ply, args, last, options)
 			return false, "You cannot select this usergroup."
 		end
 
-		if options.LowerOnly and group == ply:GetUserGroup() then
+		if options.NoSelfSelect and group == ply:GetUserGroup() then
 			return false, "You cannot select your own usergroup."
 		end
 	end

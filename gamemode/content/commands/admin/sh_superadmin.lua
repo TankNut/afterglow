@@ -14,6 +14,6 @@ usergroup:AddParameter(console.Player({
 }))
 usergroup:AddOptional(console.UserGroup({
 	CheckImmunity = true,
-	LowerOnly = true
+	NoSelfSelect = true
 }), "user")
 usergroup:SetAccess(Command.IsSuperAdmin)
