@@ -7,7 +7,7 @@ Lookup = Lookup or {}
 function Add(id, name, mat, callback)
 	local data = {
 		ID = id,
-		Name = Name,
+		Name = name,
 		Material = Material(mat),
 		Callback = callback,
 		Automated = tobool(callback)
@@ -34,9 +34,9 @@ function meta:GetAllBadges()
 	local custom = self:GetBadges()
 	local badges = {}
 
-	for _, v in pairs(List) do
-		if (v.Automated and v.Callback(self)) or custom[v.ID] then
-			table.insert(badges, v)
+	for _, badge in pairs(List) do
+		if (badge.Automated and badge.Callback(self)) or custom[badge.ID] then
+			table.insert(badges, badge)
 		end
 	end
 
