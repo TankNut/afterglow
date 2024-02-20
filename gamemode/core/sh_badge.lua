@@ -43,6 +43,16 @@ function meta:GetAllBadges()
 	return badges
 end
 
+function meta:HasBadge(id)
+	local badge = Get(id)
+
+	if badge.Automated then
+		return tobool(badge.Callback(self))
+	else
+		return tobool(self:GetBadges()[id])
+	end
+end
+
 if SERVER then
 	function meta:GiveBadge(id)
 		local badge = Get(id)
