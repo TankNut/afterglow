@@ -15,3 +15,4 @@ Animtable.Define("antlion", {
 })
 
 Animtable.Add("antlion", {"models/antlion.mdl", "models/antlion_worker.mdl"})
+Animtable.AddOffset({"models/antlion.mdl", "models/antlion_worker.mdl"}, Vector(50, -10, -40))

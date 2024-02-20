@@ -2,6 +2,7 @@ module("Animtable", package.seeall)
 
 Tables = Tables or {}
 Models = Models or {}
+Offsets = Offsets or {}
 
 function Define(name, normal, combat)
 	local tab = Tables[name]
@@ -30,9 +31,27 @@ function Add(name, models)
 		models = {models}
 	end
 
-	for _, v in pairs(models) do
-		Models[v:lower()] = Tables[name]
+	for _, model in pairs(models) do
+		Models[model:lower()] = Tables[name]
 	end
+end
+
+function AddOffset(models, offset)
+	if not istable(models) then
+		models = {models}
+	end
+
+	for _, model in pairs(models) do
+		Offsets[model:lower()] = offset
+	end
+end
+
+function Get(model)
+	return Models[model:lower()]
+end
+
+function GetOffset(model)
+	return Offsets[model:lower()] or Vector()
 end
 
 function GM:CalcMainActivity(ply, vel)
@@ -68,9 +87,9 @@ function GM:CalcMainActivity(ply, vel)
 end
 
 function GM:HandleNonPlayerModel(ply, vel)
-	local tab = Models[string.lower(ply:GetModel())]
+	local animtable = Get(ply:GetModel())
 
-	if not tab then
+	if not animtable then
 		return
 	end
 
@@ -84,11 +103,11 @@ function GM:HandleNonPlayerModel(ply, vel)
 	-- 	tab = tab["__COMBAT"]
 	-- end
 
-	if tab[ply.CalcIdeal] then
-		if type(tab[ply.CalcIdeal]) == "number" then
-			ply.CalcIdeal = tab[ply.CalcIdeal]
+	if animtable[ply.CalcIdeal] then
+		if type(animtable[ply.CalcIdeal]) == "number" then
+			ply.CalcIdeal = animtable[ply.CalcIdeal]
 		else
-			ply.CalcSeqOverride = ply:LookupSequence(tab[ply.CalcIdeal])
+			ply.CalcSeqOverride = ply:LookupSequence(animtable[ply.CalcIdeal])
 		end
 	end
 end

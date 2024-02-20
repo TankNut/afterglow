@@ -14,8 +14,6 @@ function PANEL:Init()
 	self:SetLookAtRange({Vector(0, 0, 36), Vector(0, 0, 64)})
 	self:SetFOVRange({20, 11})
 
-	self.Offset = Vector()
-
 	self.Dragging = false
 	self.DragStart = 0
 end

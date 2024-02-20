@@ -17,6 +17,18 @@ function PANEL:SetPlayer(ply)
 	self.Entity.GetPlayerColor = function()
 		return ply:GetPlayerColor()
 	end
+
+	local animtable = Animtable.Get(ply:GetModel())
+
+	if animtable then
+		local sequence = animtable[ACT_MP_STAND_IDLE]
+
+		if isstring(sequence) then
+			sequence = self.Entity:LookupSequence(animtable[ACT_MP_STAND_IDLE])
+		end
+
+		self.Entity:SetSequence(self.Entity:SelectWeightedSequence(sequence))
+	end
 end
 
 function PANEL:LayoutEntity(ent)
@@ -54,8 +66,10 @@ function PANEL:GetTargets()
 	pos:Rotate(ang)
 	look:Rotate(ang)
 
-	pos = pos + self.Offset
-	look = look + self.Offset
+	local offset = Animtable.GetOffset(self:GetModel())
+
+	pos = pos + offset
+	look = look + offset
 
 	return self.Entity:GetPos() + pos, self.Entity:GetPos() + look
 end
@@ -63,7 +77,17 @@ end
 function PANEL:PreDrawModel()
 	local ent = self.Entity
 
+	render.SuppressEngineLighting(true)
+	render.ResetModelLighting(0.3, 0.3, 0.3)
+
+	render.SetModelLighting(BOX_FRONT, 1, 1, 1)
+	render.SetModelLighting(BOX_TOP, 1, 1, 1)
+
+	render.SetColorModulation(1, 1, 1)
+
 	ent:DrawModel()
+
+	render.SuppressEngineLighting(false)
 
 	return false
 end
