@@ -62,10 +62,10 @@ function PANEL:Paint(w, h)
 		self.IsDrawing = true
 
 		render.SuppressEngineLighting(true)
-		render.ResetModelLighting(0.3, 0.3, 0.3)
+		render.ResetModelLighting(0.7, 0.7, 0.7)
 
 		render.SetModelLighting(BOX_FRONT, 1, 1, 1)
-		render.SetModelLighting(BOX_TOP, 1, 1, 1)
+		render.SetModelLighting(BOX_BOTTOM, 0.3, 0.3, 0.3)
 
 		render.SetColorModulation(1, 1, 1)
 
