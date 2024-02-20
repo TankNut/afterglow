@@ -11,6 +11,13 @@ Default = {
 	View = {Vector(0, 0, 64), Vector(0, 0, 28)}
 }
 
+function Standard(size, height)
+	return {
+		Vector(-size, -size, 0),
+		Vector(size, size, height)
+	}
+end
+
 function Define(name, data)
 	local tab = Tables[name]
 
@@ -31,14 +38,6 @@ function Add(name, models)
 		Models[v:lower()] = Tables[name]
 	end
 end
-
-Define("antlion", {
-	Hull = {Vector(-18, -18, 0), Vector(18, 18, 36)},
-	DuckHull = {Vector(-18, -18, 0), Vector(18, 18, 36)},
-	View = {Vector(0, 0, 32), Vector(0, 0, 32)}
-})
-
-Add("antlion", {"models/antlion.mdl", "models/antlion_worker.mdl"})
 
 PlayerVar.Register("Scale", {
 	Accessor = "PlayerScale",
