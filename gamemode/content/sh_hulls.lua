@@ -1,4 +1,4 @@
-Hulls.Default = {
+Hull.Default = {
 	Hull = Hull.Standard(16, 72),
 	DuckHull = Hull.Standard(16, 36),
 	View = {Vector(0, 0, 64), Vector(0, 0, 28)}
