@@ -104,9 +104,24 @@ function GetRules()
 	return rules
 end
 
-function meta:GetCharID()
-	return self:GetNetVar("CharID", -1)
-end
+PlayerVar.Register("CharID", {
+	Default = -1,
+	Callback = function(ply, old, new)
+		if CLIENT and ply == LocalPlayer() and new > -1 then
+			Interface.CloseGroup("F2")
+		end
+	end
+})
+
+PlayerVar.Register("CharacterList", {
+	Private = true,
+	Default = {},
+	Callback = function(ply, old, new)
+		if CLIENT and (not ply:HasCharacter() or IsValid(Interface.Get("CharacterSelect")[1])) then
+			Interface.OpenGroup("CharacterSelect", "F2")
+		end
+	end
+})
 
 function meta:HasCharacter()
 	return self:GetCharID() != -1
@@ -116,19 +131,7 @@ function meta:IsTemporaryCharacter()
 	return self:GetCharID() == 0
 end
 
-function meta:GetCharacterList()
-	return self:GetNetVar("CharacterList", {})
-end
-
 if SERVER then
-	function meta:SetCharID(id)
-		self:SetNetVar("CharID", id)
-	end
-
-	function meta:SetCharacterList(characters)
-		self:SetPrivateNetVar("CharacterList", characters)
-	end
-
 	Load = coroutine.Bind(function(ply, id, fields)
 		if ply:HasCharacter() then
 			OnUnload(ply)
@@ -325,19 +328,7 @@ RegisterVar("Skin", {
 	end
 })
 
-if CLIENT then
-	netvar.AddEntityHook("CharacterList", "Character", function(ply)
-		if not ply:HasCharacter() or IsValid(Interface.Get("CharacterSelect")[1]) then
-			Interface.OpenGroup("CharacterSelect", "F2")
-		end
-	end)
-
-	netvar.AddEntityHook("CharID", "Character", function(ply, _, new)
-		if ply == LocalPlayer() and new > -1 then
-			Interface.CloseGroup("F2")
-		end
-	end)
-else
+if SERVER then
 	function GM:PostLoadCharacter(ply, id)
 		ply:Spawn()
 	end
