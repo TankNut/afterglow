@@ -48,6 +48,7 @@ function Copy(from, to)
 	end
 end
 
+-- Not a PlayerVar because we apply to both entities and players
 function meta:GetAppearance()
 	return self:GetNetVar("Appearance", {})
 end
