@@ -62,3 +62,9 @@ function meta:RefreshHull()
 		self:SetViewOffsetDucked(data.View[2] * scale)
 	end)
 end
+
+if SERVER then
+	hook.Add("PostLoadCharacter", "Hull", function(ply)
+		ply:SetPlayerScale(1)
+	end)
+end
