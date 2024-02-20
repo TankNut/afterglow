@@ -53,6 +53,21 @@ console.Parser("Language", function(ply, args, last, options)
 	return true, lang
 end)
 
+console.Parser("Badge", function(ply, args, last, options)
+	local badge = table.remove(args, 1):lower()
+	local data = Badge.Get(badge)
+
+	if not data then
+		return false, "Invalid badge."
+	end
+
+	if options.CustomOnly and data.Automated then
+		return false, "You cannot select this badge."
+	end
+
+	return true, badge
+end)
+
 console.Parser("UserGroup", function(ply, args, last, options)
 	local group = table.remove(args, 1):lower()
 
