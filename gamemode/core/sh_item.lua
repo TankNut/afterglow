@@ -9,6 +9,8 @@ module("Item", package.seeall)
 List = List or {}
 All = All or setmetatable({}, {__mode = "v"})
 
+TempID = TempID or -1
+
 function Inherit(tab, base)
 	if not base then
 		return tab
@@ -175,6 +177,14 @@ if SERVER then
 
 		return Instance(name, id, data)
 	end)
+
+	function CreateTemp(name, data)
+		local item = Instance(name, TempID, data)
+
+		TempID = TempID - 1
+
+		return item
+	end
 
 	LoadWorldItems = coroutine.Bind(function()
 		local query = mysql:Select("rp_items")
