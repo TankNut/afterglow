@@ -15,12 +15,4 @@ IncludeFolder("config")
 IncludeFile("core/_core.lua")
 
 -- Content loading
-IncludeFile("content/sh_animtables.lua")
-IncludeFile("content/sh_badges.lua")
-IncludeFile("content/sh_hulls.lua")
-IncludeFile("content/sh_teams.lua")
-
-Item.LoadItems()
-CharacterFlags.LoadFlags()
-Command.Load()
-Chat.LoadCommands()
+IncludeFile("content/_content.lua")
