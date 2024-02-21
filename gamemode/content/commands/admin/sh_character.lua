@@ -1,5 +1,5 @@
 local charflag = console.AddCommand("rpa_setcharacterflag", function(ply, targets, flag)
-	local flagTable = CharacterFlags.GetOrDefault(flag)
+	local flagTable = CharacterFlag.GetOrDefault(flag)
 	local name = flagTable.Name
 
 	for _, target in pairs(targets) do
@@ -12,5 +12,5 @@ end)
 
 charflag:SetDescription("Sets a character's character flag.")
 charflag:AddParameter(console.Player())
-charflag:AddOptional(console.CharacterFlag(), nil, CharacterFlags.Default.Name)
+charflag:AddOptional(console.CharacterFlag(), nil, CharacterFlag.Default.Name)
 charflag:SetAccess(Command.IsAdmin)

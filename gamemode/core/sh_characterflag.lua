@@ -1,4 +1,4 @@
-module("CharacterFlags", package.seeall)
+module("CharacterFlag", package.seeall)
 
 local meta = FindMetaTable("Player")
 
@@ -37,7 +37,6 @@ function LoadFromFile(path, name)
 	_G.FLAG = {}
 
 	IncludeFile(path)
-
 	Register(name, FLAG)
 
 	_G.FLAG = nil

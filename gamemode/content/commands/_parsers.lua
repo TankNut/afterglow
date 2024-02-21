@@ -91,7 +91,7 @@ end)
 console.Parser("CharacterFlag", function(ply, args, last, options)
 	local flag = table.remove(args, 1):lower()
 
-	if not CharacterFlags.Get(flag) then
+	if not CharacterFlag.Get(flag) then
 		return false, "Invalid flag."
 	end
 
