@@ -7,6 +7,8 @@ FLAG.WalkSpeed = 195
 FLAG.RunSpeed = 355
 FLAG.JumpPower = 410
 
+FLAG.NoFallDamage = true
+
 FLAG.AllowClothing = false
 
 if SERVER then
