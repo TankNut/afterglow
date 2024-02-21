@@ -2,9 +2,13 @@ module("request", package.seeall)
 
 Requests = Requests or {}
 
+local writeLog = log.Category("Request")
+
 if CLIENT then
 	function Hook(name, callback)
 		netstream.Hook(name, function(payload)
+			writeLog("Request: #%s (%s) from SERVER", payload.Index, name)
+
 			netstream.Send("Request", {
 				Index = payload.Index,
 				Payload = callback(payload.Data)
@@ -21,6 +25,8 @@ if CLIENT then
 
 		local index = table.insert(Requests, cr)
 
+		writeLog("Query: #%s (%s) to SERVER", index, name)
+
 		netstream.Send(name, {
 			Index = index,
 			Data = data
@@ -32,6 +38,8 @@ if CLIENT then
 	netstream.Hook("Request", function(payload)
 		local cr = Requests[payload.Index]
 
+		writeLog("Response: #%s from SERVER", payload.Index)
+
 		Requests[payload.Index] = nil
 
 		if cr then
@@ -41,6 +49,8 @@ if CLIENT then
 else
 	function Hook(name, callback)
 		netstream.Hook(name, function(ply, payload)
+			writeLog("Request: #%s (%s) from %s", payload.Index, name, ply)
+
 			netstream.Send("Request", ply, {
 				Index = payload.Index,
 				Data = callback(ply, payload.Data)
@@ -61,6 +71,8 @@ else
 
 		local index = table.insert(Requests[ply], cr)
 
+		writeLog("Query: #%s (%s) to %s", index, name, ply)
+
 		netstream.Send(name, ply, {
 			Index = index,
 			Data = data
@@ -75,6 +87,8 @@ else
 		end
 
 		local cr = Requests[ply][payload.Index]
+
+		writeLog("Response: #%s from %s", payload.Index, ply)
 
 		Requests[ply][payload.Index] = nil
 
