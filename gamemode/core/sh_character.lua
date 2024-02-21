@@ -127,7 +127,7 @@ function meta:HasCharacter()
 	return self:GetCharID() != -1
 end
 
-function meta:IsTemporaryCharacter()
+function meta:IsTemplateCharacter()
 	return self:GetCharID() == 0
 end
 
@@ -151,7 +151,7 @@ if SERVER then
 
 		ply:SetInventory(inventory)
 
-		if not ply:IsTemporaryCharacter() then
+		if not ply:IsTemplateCharacter() then
 			inventory:LoadItems()
 		end
 

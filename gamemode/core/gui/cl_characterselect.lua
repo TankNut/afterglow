@@ -76,7 +76,7 @@ function PANEL:Populate()
 	self.TempCharacters = self:Add("DButton")
 	self.TempCharacters:DockMargin(0, 5, 0, 0)
 	self.TempCharacters:Dock(TOP)
-	self.TempCharacters:SetText("Temporary characters")
+	self.TempCharacters:SetText("Template characters")
 
 	self.TempCharacters.DoClick = function(pnl)
 	end

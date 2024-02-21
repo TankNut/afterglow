@@ -98,7 +98,7 @@ if SERVER then
 	end
 
 	function ITEM:CanPickup(ply)
-		if ply:IsTemporaryCharacter() and not self:IsTempItem() then
+		if ply:IsTemplateCharacter() and not self:IsTempItem() then
 			return false
 		end
 
