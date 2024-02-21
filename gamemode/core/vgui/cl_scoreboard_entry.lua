@@ -12,6 +12,12 @@ function PANEL:Init()
 	self.BadgeButton:SetText("")
 	self.BadgeButton.Paint = function() end
 
+	self.BadgeButton.DoClick = function()
+		if IsValid(self.Player) then
+			Interface.Open("BadgeList", self.Player)
+		end
+	end
+
 	self.ExamineButton = self:Add("DButton")
 	self.ExamineButton:Dock(FILL)
 	self.ExamineButton:SetText("")
