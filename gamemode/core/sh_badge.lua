@@ -23,15 +23,15 @@ function Get(id)
 	return Lookup[id]
 end
 
-PlayerVar.Register("Badges", {
+PlayerVar.Register("CustomBadges", {
 	Field = "badges",
 	Default = {}
 })
 
 local meta = FindMetaTable("Player")
 
-function meta:GetAllBadges()
-	local custom = self:GetBadges()
+function meta:GetBadges()
+	local custom = self:GetCustomBadges()
 	local badges = {}
 
 	for _, badge in pairs(List) do
@@ -54,35 +54,35 @@ function meta:HasBadge(id)
 end
 
 if SERVER then
-	function meta:GiveBadge(id)
+	function meta:GiveCustomBadge(id)
 		local badge = Get(id)
 
 		if badge.Automated then
 			return
 		end
 
-		local badges = self:GetBadges()
+		local badges = self:GetCustomBadges()
 
 		badges[id] = true
 
-		self:SetBadges(badges)
+		self:SetCustomBadges(badges)
 	end
 
-	function meta:TakeBadge(id)
+	function meta:TakeCustomBadge(id)
 		local badge = Get(id)
 
 		if badge.Automated then
 			return
 		end
 
-		local badges = self:GetBadges()
+		local badges = self:GetCustomBadges()
 
 		badges[id] = nil
 
 		if table.IsEmpty(badges) then
-			self:SetBadges(nil)
+			self:SetCustomBadges(nil)
 		else
-			self:SetBadges(badges)
+			self:SetCustomBadges(badges)
 		end
 	end
 end
