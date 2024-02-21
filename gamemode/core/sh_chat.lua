@@ -8,7 +8,6 @@ TAB_RADIO	= 2^6
 module("Chat", package.seeall)
 
 Class = Class or {}
-
 List = List or {}
 
 ConsoleCommands = ConsoleCommands or {}
@@ -157,7 +156,7 @@ if CLIENT then
 		Interface.GetGroup("Chat"):Hide()
 	end
 
-	function Add(name, data)
+	function Receive(name, data)
 		local command = List[name]
 		local message, consoleMessage = command:OnReceive(data)
 
@@ -218,7 +217,7 @@ if CLIENT then
 			error("Attempt to SendChat to a non-local player")
 		end
 
-		Add(name, data)
+		Receive(name, data)
 	end
 else
 	function plyMeta:SendChat(name, data)
