@@ -67,14 +67,7 @@ if CLIENT then
 		end
 	end
 
-	net.Receive("Netstream", function()
-		local name = net.ReadString()
-		local callback = Hooks[name]
-
-		if not callback then
-			return
-		end
-
+	function Read(name)
 		local final = net.ReadBool()
 		local length = net.ReadUInt(15)
 		local payload = net.ReadData(length)
@@ -86,11 +79,26 @@ if CLIENT then
 		if final then
 			local raw = table.concat(cache)
 
-			writeLog("Incoming: '%s' (%s) from SERVER", name, string.NiceSize(#raw))
-
 			table.Empty(cache)
 
-			callback(Decode(raw))
+			return Decode(raw), #raw
+		end
+	end
+
+	net.Receive("Netstream", function()
+		local name = net.ReadString()
+		local callback = Hooks[name]
+
+		if not callback then
+			return
+		end
+
+		local data, len = Read(name)
+
+		if data then
+			writeLog("Incoming: '%s' (%s) from SERVER", name, string.NiceSize(len))
+
+			callback(data)
 		end
 	end)
 
@@ -177,16 +185,7 @@ else
 		end
 	end
 
-	net.Receive("Netstream", function(_, ply)
-		local name = net.ReadString()
-		local callback = Hooks[name]
-
-		if not callback then
-			writeLog("Rejected: '%s' from %s", name, ply)
-
-			return
-		end
-
+	function Read(name, ply)
 		local final = net.ReadBool()
 		local length = net.ReadUInt(15)
 		local payload = net.ReadData(length)
@@ -202,11 +201,28 @@ else
 		if final then
 			local raw = table.concat(cache[ply])
 
-			writeLog("Incoming: '%s' (%s) from %s", name, string.NiceSize(#raw), ply)
-
 			table.Empty(cache[ply])
 
-			callback(ply, Decode(raw))
+			return Decode(raw), #raw
+		end
+	end
+
+	net.Receive("Netstream", function(_, ply)
+		local name = net.ReadString()
+		local callback = Hooks[name]
+
+		if not callback then
+			writeLog("Rejected: '%s' from %s", name, ply)
+
+			return
+		end
+
+		local data, len = Read(name, ply)
+
+		if data then
+			writeLog("Incoming: '%s' (%s) from %s", name, string.NiceSize(len), ply)
+
+			callback(ply, data)
 		end
 	end)
 
