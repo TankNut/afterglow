@@ -123,13 +123,12 @@ function LoadFromFile(path, name)
 	_G.ITEM = {}
 
 	IncludeFile(path)
-
 	Register(name, ITEM)
 
 	_G.ITEM = nil
 end
 
-function LoadItems()
+function LoadFromFolder(basePath)
 	local recursive
 
 	recursive = function(path)
@@ -156,7 +155,7 @@ function LoadItems()
 		end
 	end
 
-	recursive(engine.ActiveGamemode() .. "/gamemode/content/items")
+	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 
 	for name in pairs(List) do
 		baseclass.Set(name, GetTable(name))
