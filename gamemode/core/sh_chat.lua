@@ -21,7 +21,7 @@ IncludeFile("class/sh_chatcommand.lua")
 
 _G.CLASS = nil
 
-function Register(data)
+function Add(data)
 	List[data.Name] = setmetatable(data, {
 		__index = Class
 	})
@@ -35,28 +35,16 @@ function Register(data)
 	end
 end
 
-function AddConsoleCommand(names, command)
-	if not istable(names) then
-		names = {names}
-	end
-
-	for _, name in pairs(names) do
-		ConsoleCommands[name] = command
-	end
-end
-
-function LoadFromFile(path)
+function AddFile(path)
 	_G.CLASS = {}
 
 	IncludeFile(path)
-
-	Register(CLASS)
+	Add(CLASS)
 
 	_G.CLASS = nil
 end
 
-function LoadCommands()
-	local basePath = engine.ActiveGamemode() .. "/gamemode/content/chatcommands"
+function AddFolder(basePath)
 	local recursive
 
 	recursive = function(path)
@@ -67,7 +55,7 @@ function LoadCommands()
 				continue
 			end
 
-			LoadFromFile(path .. "/" .. v)
+			AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -75,7 +63,17 @@ function LoadCommands()
 		end
 	end
 
-	recursive(basePath)
+	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
+end
+
+function AddConsoleCommand(names, command)
+	if not istable(names) then
+		names = {names}
+	end
+
+	for _, name in pairs(names) do
+		ConsoleCommands[name] = command
+	end
 end
 
 function Process(ply, str)

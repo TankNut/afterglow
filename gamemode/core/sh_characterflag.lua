@@ -4,16 +4,7 @@ local meta = FindMetaTable("Player")
 
 List = List or {}
 
-Character.RegisterVar("Flag", {
-	Default = "default",
-	Callback = function(ply, old, new)
-		if SERVER and not CHARACTER_LOADING then
-			hook.Run("PlayerSetup", ply)
-		end
-	end
-})
-
-function Register(name, data)
+function Add(name, data)
 	if name != "default" then
 		setmetatable(data, {__index = List.default})
 	else
@@ -23,29 +14,21 @@ function Register(name, data)
 	List[name] = data
 end
 
-function Get(name)
-	return List[name]
-end
-
-function GetOrDefault(name)
-	return List[name] or List.default
-end
-
-function LoadFromFile(path, name)
+function AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
 	_G.FLAG = {}
 
 	IncludeFile(path)
-	Register(name, FLAG)
+	Add(name, FLAG)
 
 	_G.FLAG = nil
 end
 
-function LoadFlags()
-	local basePath = engine.ActiveGamemode() .. "/gamemode/content/characterflags"
+function AddFolder(basePath)
+	basePath = engine.ActiveGamemode() .. "/gamemode/" .. basePath
 
-	LoadFromFile(basePath .. "/default.lua")
+	AddFile(basePath .. "/default.lua")
 
 	local recursive
 
@@ -57,7 +40,7 @@ function LoadFlags()
 				continue
 			end
 
-			LoadFromFile(path .. "/" .. v)
+			AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -67,6 +50,23 @@ function LoadFlags()
 
 	recursive(basePath)
 end
+
+function Get(name)
+	return List[name]
+end
+
+function GetOrDefault(name)
+	return List[name] or List.default
+end
+
+Character.AddVar("Flag", {
+	Default = "default",
+	Callback = function(ply, old, new)
+		if SERVER and not CHARACTER_LOADING then
+			hook.Run("PlayerSetup", ply)
+		end
+	end
+})
 
 function meta:GetCharacterFlagTable()
 	return GetOrDefault(self:GetCharacterFlag())

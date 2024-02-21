@@ -47,13 +47,13 @@ function IsBasedOn(name, base)
 	return IsBasedOn(item.Base, base)
 end
 
-function Register(name, data)
+function Add(name, data)
 	if name != "base_item" then
 		data.Base = data.Base or "base_item"
 	end
 
 	if data.Model and not util.HasPhysicsObject(data.Model) then
-		Msg("ERROR: Trying to register item " .. name .. " with invalid model " .. data.Model .. "!\n")
+		Msg("ERROR: Trying to add item " .. name .. " with invalid model " .. data.Model .. "!\n")
 
 		return
 	end
@@ -119,25 +119,25 @@ if CLIENT then
 	end
 end
 
-function LoadFromFile(path, name)
+function AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
 	_G.ITEM = {}
 
 	IncludeFile(path)
-	Register(name, ITEM)
+	Add(name, ITEM)
 
 	_G.ITEM = nil
 end
 
-function LoadFromFolder(basePath)
+function AddFolder(basePath)
 	local recursive
 
 	recursive = function(path)
 		local abort = file.Exists(path .. "/shared.lua", "LUA")
 
 		if abort then
-			LoadFromFile(path .. "/shared.lua", path:GetFileFromFilename())
+			AddFile(path .. "/shared.lua", path:GetFileFromFilename())
 
 			return
 		end
@@ -149,7 +149,7 @@ function LoadFromFolder(basePath)
 				continue
 			end
 
-			LoadFromFile(path .. "/" .. v)
+			AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do

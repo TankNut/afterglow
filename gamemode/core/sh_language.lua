@@ -96,12 +96,12 @@ if SERVER then
 	end
 end
 
-Character.RegisterVar("ActiveLanguage", {
+Character.AddVar("ActiveLanguage", {
 	Private = true,
 	Accessor = "ActiveLanguage"
 })
 
-Character.RegisterVar("Languages", {
+Character.AddVar("Languages", {
 	Private = true,
 	Accessor = "Languages",
 	Default = {}

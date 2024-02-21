@@ -1,7 +1,6 @@
 module("Command", package.seeall)
 
-function Load()
-	local basePath = engine.ActiveGamemode() .. "/gamemode/content/commands"
+function AddFolder(basePath)
 	local recursive
 
 	recursive = function(path)
@@ -16,7 +15,7 @@ function Load()
 		end
 	end
 
-	recursive(basePath)
+	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
 function IsAdmin(ply)

@@ -39,7 +39,7 @@ function Add(name, models)
 	end
 end
 
-PlayerVar.Register("Scale", {
+PlayerVar.Add("Scale", {
 	Accessor = "PlayerScale",
 	Default = 1,
 	Callback = function(ply, old, new)

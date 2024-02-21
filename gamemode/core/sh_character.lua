@@ -4,7 +4,7 @@ local meta = FindMetaTable("Player")
 
 Vars = Vars or {}
 
-function RegisterVar(key, data)
+function AddVar(key, data)
 	Vars[key] = data
 
 	data.Key = "Character" .. (data.Key or key:FirstToUpper())
@@ -104,7 +104,7 @@ function GetRules()
 	return rules
 end
 
-PlayerVar.Register("CharID", {
+PlayerVar.Add("CharID", {
 	Default = -1,
 	Callback = function(ply, old, new)
 		if CLIENT and ply == LocalPlayer() and new > -1 then
@@ -113,7 +113,7 @@ PlayerVar.Register("CharID", {
 	end
 })
 
-PlayerVar.Register("CharacterList", {
+PlayerVar.Add("CharacterList", {
 	Private = true,
 	Default = {},
 	Callback = function(ply, old, new)
@@ -274,7 +274,7 @@ if SERVER then
 	end
 end
 
-RegisterVar("Name", {
+AddVar("Name", {
 	Default = "*INVALID*",
 	Callback = function(ply, old, new)
 		hook.Run("CharacterNameChanged", ply, old, new)
@@ -285,7 +285,7 @@ RegisterVar("Name", {
 	end
 })
 
-RegisterVar("Description", {
+AddVar("Description", {
 	Private = true,
 	Default = "",
 	Callback = function(ply, old, new)
@@ -304,11 +304,11 @@ RegisterVar("Description", {
 	end
 })
 
-PlayerVar.Register("ShortDescription", {
+PlayerVar.Add("ShortDescription", {
 	Default = ""
 })
 
-RegisterVar("Model", {
+AddVar("Model", {
 	ServerOnly = true,
 	Default = "models/player/skeleton.mdl",
 	Callback = function(ply)
@@ -318,7 +318,7 @@ RegisterVar("Model", {
 	end
 })
 
-RegisterVar("Skin", {
+AddVar("Skin", {
 	ServerOnly = true,
 	Default = 0,
 	Callback = function(ply)

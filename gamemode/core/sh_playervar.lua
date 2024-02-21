@@ -5,7 +5,7 @@ local meta = FindMetaTable("Player")
 Vars = Vars or {}
 Fields = Fields or {}
 
-function Register(key, data)
+function Add(key, data)
 	Vars[key] = data
 
 	data.Key = "Player" .. (data.Key or key:FirstToUpper())

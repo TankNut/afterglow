@@ -23,7 +23,7 @@ function Get(id)
 	return Lookup[id]
 end
 
-PlayerVar.Register("CustomBadges", {
+PlayerVar.Add("CustomBadges", {
 	Field = "badges",
 	Default = {}
 })
