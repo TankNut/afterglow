@@ -22,11 +22,9 @@ IncludeFile("class/sh_chatcommand.lua")
 _G.CLASS = nil
 
 function Register(data)
-	setmetatable(data, {
+	List[data.Name] = setmetatable(data, {
 		__index = Class
 	})
-
-	List[data.Name] = data
 
 	for _, v in pairs(data.Commands) do
 		Commands[v] = data
@@ -219,7 +217,7 @@ if CLIENT then
 
 	function plyMeta:SendChat(name, data)
 		if self != LocalPlayer() then
-			error("Attempt to SendChat to another player")
+			error("Attempt to SendChat to a non-local player")
 		end
 
 		Add(name, data)
