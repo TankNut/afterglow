@@ -3,6 +3,8 @@ module("console", package.seeall)
 Commands = Commands or {}
 Command = Command or {}
 
+local writeLog = log.Category("Console")
+
 function AddCommand(commands, callback)
 	local command = setmetatable({
 		Callback = callback,
@@ -104,7 +106,7 @@ function Split(str)
 	return args
 end
 
-function Parse(ply, name, args)
+function Parse(ply, name, str)
 	local command = Commands[name]
 
 	if not command then
@@ -114,18 +116,17 @@ function Parse(ply, name, args)
 	if CLIENT and not command.Realm then
 		netstream.Send("Console", {
 			Name = name,
-			Args = args
+			Args = str
 		})
 
 		return
 	end
 
-	if isstring(args) then
-		args = Split(args)
-	end
+	local args = Split(str)
 
 	if IsValid(ply) then
 		if command.NoPlayer then
+			writeLog("Rejected: %s -> %s %s (NoPlayer)", ply, name, str)
 			Feedback(ply, "ERROR", "This command can only be run from the server console.")
 
 			return
@@ -134,18 +135,26 @@ function Parse(ply, name, args)
 		local ok, msg = command.CanAccess(ply)
 
 		if not ok then
-			Feedback(ply, "ERROR", msg or "You do not have access to this command.")
+			msg = msg or "You do not have access to this command."
+
+			writeLog("Rejected: %s -> %s %s (%s)", ply, name, str, msg)
+			Feedback(ply, "ERROR", msg)
 
 			return
 		end
+
+		writeLog("Invoke: %s -> %s %s", ply, name, str)
 
 		command:Invoke(ply, args)
 	else
 		if command.NoConsole then
+			writeLog("Rejected: CONSOLE -> %s %s (NoConsole)", name, str)
 			Feedback(ply, "ERROR", "This command can only be run from an in-game client.")
 
 			return
 		end
+
+		writeLog("Invoke: CONSOLE -> %s %s", name, str)
 
 		command:Invoke(ply, args)
 	end
