@@ -5,7 +5,7 @@ local usergroup = console.AddCommand("rpa_usergroup_set", function(ply, target, 
 	console.Feedback(target, "NOTICE", "%s has set your usergroup to %s.", ply, group)
 end)
 
-usergroup:SetDescription("Sets the user group of another player.")
+usergroup:SetDescription("Sets someone's usergroup.")
 usergroup:AddParameter(console.Player({
 	CheckImmunity = true,
 	NoSelfTarget = true,

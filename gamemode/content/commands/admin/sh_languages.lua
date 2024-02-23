@@ -16,7 +16,7 @@ local give = console.AddCommand("rpa_language_give", function(ply, targets, lang
 	end
 end)
 
-give:SetDescription("Gives a character the ability to speak or understand a specific language.")
+give:SetDescription("Gives someone the ability to speak or understand a specific language.")
 give:AddParameter(console.Player())
 give:AddParameter(console.Language())
 give:AddOptional(console.Bool({}, "Speaking"), true)
@@ -41,7 +41,7 @@ local take = console.AddCommand("rpa_language_take", function(ply, targets, lang
 	end
 end)
 
-take:SetDescription("Removes the ability to understand a specific language from a character.")
+take:SetDescription("Removes the ability to understand a specific language from someone.")
 take:AddParameter(console.Player())
 take:AddParameter(console.Language())
 take:SetAccess(Command.IsAdmin)
@@ -56,7 +56,7 @@ local reset = console.AddCommand("rpa_language_reset", function(ply, targets)
 	end
 end)
 
-reset:SetDescription("Resets a character's languages to the default for their character flag.")
+reset:SetDescription("Resets someone's languages to the default for their character flag.")
 reset:AddParameter(console.Player())
 reset:SetAccess(Command.IsAdmin)
 
@@ -107,7 +107,7 @@ local set = console.AddCommand("rpa_language_set", function(ply, targets, langua
 	end
 end)
 
-set:SetDescription("Sets a character's languages to a specific set.")
+set:SetDescription("Sets someone's languages to a specific set.")
 set:AddParameter(console.Player())
 set:AddOptional(console.String({}, "Languages"), "", "none")
 set:AddOptional(console.String({}, "Hearing only"), "", "none")

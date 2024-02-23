@@ -15,7 +15,7 @@ local give = console.AddCommand("rpa_badge_give", function(ply, targets, badge)
 	end
 end)
 
-give:SetDescription("Gives a player a scoreboard badge.")
+give:SetDescription("Gives someone a scoreboard badge.")
 give:AddParameter(console.Player())
 give:AddParameter(console.Badge({CustomOnly = true}))
 give:SetAccess(Command.IsSuperAdmin)
@@ -37,7 +37,7 @@ local take = console.AddCommand("rpa_badge_take", function(ply, targets, badge)
 	end
 end)
 
-take:SetDescription("Takes a scoreboard badge from a player.")
+take:SetDescription("Takes a scoreboard badge from someone.")
 take:AddParameter(console.Player())
 take:AddParameter(console.Badge({CustomOnly = true}))
 take:SetAccess(Command.IsSuperAdmin)

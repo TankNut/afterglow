@@ -10,7 +10,7 @@ local charflag = console.AddCommand("rpa_flag_set", function(ply, targets, flag)
 	end
 end)
 
-charflag:SetDescription("Sets a character's character flag.")
+charflag:SetDescription("Sets someone's character flag.")
 charflag:AddParameter(console.Player())
 charflag:AddOptional(console.CharacterFlag(), nil, CharacterFlag.Default.Name)
 charflag:SetAccess(Command.IsAdmin)
