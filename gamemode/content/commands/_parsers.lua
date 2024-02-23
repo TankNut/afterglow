@@ -97,3 +97,13 @@ console.Parser("CharacterFlag", function(ply, args, last, options)
 
 	return true, flag
 end)
+
+console.Parser("Template", function(ply, args, last, options)
+	local template = table.remove(args, 1):lower()
+
+	if not Template.Get(template) then
+		return false, "Invalid template."
+	end
+
+	return true, template
+end)

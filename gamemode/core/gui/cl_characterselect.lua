@@ -21,7 +21,9 @@ end
 function PANEL:Populate()
 	self.Buttons = {}
 
-	for k, v in SortedPairs(LocalPlayer():GetCharacterList()) do
+	local ply = LocalPlayer()
+
+	for k, v in SortedPairs(ply:GetCharacterList()) do
 		local button = self:Add("DButton")
 
 		button:DockMargin(0, 0, 0, 5)
@@ -38,7 +40,7 @@ function PANEL:Populate()
 			end
 		end
 
-		if k == LocalPlayer():GetCharID() then
+		if k == ply:GetCharID() then
 			button:SetDisabled(true)
 		end
 
@@ -78,9 +80,10 @@ function PANEL:Populate()
 	self.TempCharacters:SetText("Template characters")
 
 	self.TempCharacters.DoClick = function(pnl)
+		Interface.OpenGroup("TemplateSelect", "F2")
 	end
 
-	self.TempCharacters:SetDisabled(true)
+	self.TempCharacters:SetDisabled(table.IsEmpty(ply:GetAvailableTemplates()))
 
 	self.Delete = self:Add("DButton")
 	self.Delete:DockMargin(0, 5, 0, 0)
@@ -99,7 +102,7 @@ function PANEL:Populate()
 				v:SetDisabled(false)
 			end
 		else
-			local id = LocalPlayer():GetCharID()
+			local id = ply:GetCharID()
 
 			for _, v in pairs(self.Buttons) do
 				v:SetDisabled(v.ID == id)
