@@ -146,7 +146,7 @@ function PANEL:OnSearchChanged(val)
 		return
 	end
 
-	self.FilterValue = val:Trim()
+	self.FilterValue = val:Trim():lower()
 	self:Filter()
 end
 
