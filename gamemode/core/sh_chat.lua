@@ -190,7 +190,7 @@ end
 
 if CLIENT then
 	netstream.Hook("SendChat", function(payload)
-		Add(payload.__Type, payload)
+		Receive(payload.__Type, payload)
 	end)
 
 	hook.Add("InitPostEntity", "Chat", function()
