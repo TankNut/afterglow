@@ -193,10 +193,6 @@ else
 
 		local old = entry.Value
 
-		if old == value and not istable(value) then
-			return
-		end
-
 		entry.ChangeNumber = entry.ChangeNumber + 1
 		entry.Private = private and ent:IsPlayer()
 		entry.Value = value
