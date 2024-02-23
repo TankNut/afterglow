@@ -21,10 +21,6 @@ function Parse(str, outputFormat)
 	outputFormat = outputFormat and outputFormat:lower() or "s"
 	str = tostring(str)
 
-	if str == "now" then
-		return 0
-	end
-
 	local outputRatio = Formats[outputFormat]
 
 	if not outputRatio then
