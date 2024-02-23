@@ -7,6 +7,9 @@ TAB_RADIO	= 2^6
 
 module("Chat", package.seeall)
 
+local meta = FindMetaTable("Entity")
+local plyMeta = FindMetaTable("Player")
+
 Class = Class or {}
 List = List or {}
 
@@ -176,8 +179,6 @@ else
 	end
 end
 
-local meta = FindMetaTable("Entity")
-
 function meta:CanHear(pos)
 	return util.TraceLine({
 		start = self:IsPlayer() and self:EyePos() or self:WorldSpaceCenter(),
@@ -186,8 +187,6 @@ function meta:CanHear(pos)
 		mask = MASK_OPAQUE
 	}).Fraction == 1
 end
-
-local plyMeta = FindMetaTable("Player")
 
 if CLIENT then
 	netstream.Hook("SendChat", function(payload)

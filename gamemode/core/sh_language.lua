@@ -1,5 +1,7 @@
 module("Language", package.seeall)
 
+local meta = FindMetaTable("Player")
+
 List = table.Copy(Config.Get("Languages"))
 Lookup = {}
 
@@ -40,8 +42,6 @@ function FromConfig(data)
 
 	return langs
 end
-
-local meta = FindMetaTable("Player")
 
 function meta:CanSpeakLanguage(lang)
 	return hook.Run("CanSpeakLanguage", self, lang)

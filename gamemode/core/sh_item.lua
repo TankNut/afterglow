@@ -48,6 +48,8 @@ function IsBasedOn(name, base)
 end
 
 function Add(name, data)
+	name = name:lower()
+
 	if name != "base_item" then
 		data.Base = data.Base or "base_item"
 	end
@@ -62,6 +64,55 @@ function Add(name, data)
 	data.Internal = tobool(data.Internal)
 
 	List[name] = data
+end
+
+function AddFile(path, name)
+	name = name or path:GetFileFromFilename():sub(1, -5)
+
+	_G.ITEM = {}
+
+	IncludeFile(path)
+	Add(name, ITEM)
+
+	_G.ITEM = nil
+end
+
+function AddFolder(basePath)
+	local recursive
+
+	recursive = function(path)
+		local abort = file.Exists(path .. "/shared.lua", "LUA")
+
+		if abort then
+			AddFile(path .. "/shared.lua", path:GetFileFromFilename())
+
+			return
+		end
+
+		local files, folders = file.Find(path .. "/*", "LUA")
+
+		for _, v in pairs(files) do
+			if v:GetExtensionFromFilename() != "lua" then
+				continue
+			end
+
+			AddFile(path .. "/" .. v)
+		end
+
+		for _, v in pairs(folders) do
+			recursive(path .. "/" .. v)
+		end
+	end
+
+	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
+
+	for name in pairs(List) do
+		baseclass.Set(name, GetTable(name))
+	end
+
+	for _, item in pairs(All) do
+		table.Merge(item, GetTable(item.ClassName))
+	end
 end
 
 function GetTable(name)
@@ -116,55 +167,6 @@ if CLIENT then
 		end
 
 		return item
-	end
-end
-
-function AddFile(path, name)
-	name = name or path:GetFileFromFilename():sub(1, -5)
-
-	_G.ITEM = {}
-
-	IncludeFile(path)
-	Add(name, ITEM)
-
-	_G.ITEM = nil
-end
-
-function AddFolder(basePath)
-	local recursive
-
-	recursive = function(path)
-		local abort = file.Exists(path .. "/shared.lua", "LUA")
-
-		if abort then
-			AddFile(path .. "/shared.lua", path:GetFileFromFilename())
-
-			return
-		end
-
-		local files, folders = file.Find(path .. "/*", "LUA")
-
-		for _, v in pairs(files) do
-			if v:GetExtensionFromFilename() != "lua" then
-				continue
-			end
-
-			AddFile(path .. "/" .. v)
-		end
-
-		for _, v in pairs(folders) do
-			recursive(path .. "/" .. v)
-		end
-	end
-
-	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
-
-	for name in pairs(List) do
-		baseclass.Set(name, GetTable(name))
-	end
-
-	for _, item in pairs(All) do
-		table.Merge(item, GetTable(item.ClassName))
 	end
 end
 

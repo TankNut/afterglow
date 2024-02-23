@@ -1,5 +1,7 @@
 module("Inventory", package.seeall)
 
+local meta = FindMetaTable("Entity")
+
 Class = Class or {}
 All = All or {}
 
@@ -53,8 +55,6 @@ if SERVER then
 		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end)
 end
-
-local meta = FindMetaTable("Entity")
 
 function meta:GetInventory()
 	return Get(self:GetNetVar("InventoryID"))

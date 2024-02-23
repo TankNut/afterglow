@@ -1,5 +1,7 @@
 module("Progress", package.seeall)
 
+local meta = FindMetaTable("Player")
+
 Active = Active or {}
 
 if CLIENT then
@@ -177,8 +179,6 @@ else
 	function CheckItem(ply, item)
 		return item:CanInteract(ply)
 	end
-
-	local meta = FindMetaTable("Player")
 
 	function meta:WaitFor(time, text, checklist, notify, notifyText)
 		return Start(self, time, text, checklist, notify, notifyText)

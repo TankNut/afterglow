@@ -1,5 +1,7 @@
 module("Interface", package.seeall)
 
+local meta = FindMetaTable("Player")
+
 if CLIENT then
 	Types = Types or {}
 	Instances = Instances or {}
@@ -68,8 +70,6 @@ if CLIENT then
 		end
 	end)
 else
-	local meta = FindMetaTable("Player")
-
 	function meta:OpenInterface(name, ...)
 		netstream.Send("OpenInterface", self, {Name = name, Args = {...}})
 	end

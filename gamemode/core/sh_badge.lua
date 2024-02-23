@@ -1,5 +1,7 @@
 module("Badge", package.seeall)
 
+local meta = FindMetaTable("Player")
+
 Index = 1
 List = List or {}
 Lookup = Lookup or {}
@@ -27,8 +29,6 @@ PlayerVar.Add("CustomBadges", {
 	Field = "badges",
 	Default = {}
 })
-
-local meta = FindMetaTable("Player")
 
 function meta:GetBadges()
 	local custom = self:GetCustomBadges()
