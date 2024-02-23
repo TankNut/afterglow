@@ -90,7 +90,11 @@ if SERVER then
 		end
 
 		for field, func in pairs(template.Callbacks) do
-			fields[field] = template[func](template, ply)
+			local val = template[func](template, ply)
+
+			if val != nil then
+				fields[field] = val
+			end
 		end
 
 		Character.Load(ply, 0, fields)
