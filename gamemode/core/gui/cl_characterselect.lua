@@ -1,5 +1,4 @@
 local PANEL = {}
-DEFINE_BASECLASS("afterglow_basepanel")
 
 function PANEL:Init()
 	self:SetWide(200)

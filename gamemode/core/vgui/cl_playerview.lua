@@ -1,5 +1,4 @@
 local PANEL = {}
-DEFINE_BASECLASS("afterglow_modelpanel")
 
 AccessorFunc(PANEL, "_CamPosTarget", "CamPosTarget")
 AccessorFunc(PANEL, "_LookAtTarget", "LookAtTarget")
