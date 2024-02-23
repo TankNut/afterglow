@@ -69,7 +69,7 @@ if SERVER then
 		end
 	end
 
-	function meta:AddLanguage(lang, speak)
+	function meta:GiveLanguage(lang, speak)
 		speak = speak or false
 
 		local languages = self:GetLanguages()
@@ -83,7 +83,7 @@ if SERVER then
 		end
 	end
 
-	function meta:RemoveLanguage(lang)
+	function meta:TakeLanguage(lang)
 		local languages = self:GetLanguages()
 
 		languages[lang] = nil

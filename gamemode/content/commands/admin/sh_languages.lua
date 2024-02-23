@@ -9,7 +9,7 @@ local give = console.AddCommand("rpa_language_give", function(ply, targets, lang
 			continue
 		end
 
-		target:AddLanguage(lang, speaking)
+		target:GiveLanguage(lang, speaking)
 
 		console.Feedback(ply, "NOTICE", "You've given %s the ability to %s %s.", target:GetCharacterName(), ability, name)
 		console.Feedback(target, "NOTICE", "%s has given you the ability to %s %s.", ply, ability, name)
@@ -34,7 +34,7 @@ local take = console.AddCommand("rpa_language_take", function(ply, targets, lang
 
 		local ability = ply:CanSpeakLanguage(lang) and "speak" or "understand"
 
-		target:RemoveLanguage(lang)
+		target:TakeLanguage(lang)
 
 		console.Feedback(ply, "NOTICE", "You've taken the ability to %s %s from %s.", ability, name, target:GetCharacterName())
 		console.Feedback(target, "NOTICE", "%s has removed your ability to %s %s.", ply, ability, name)

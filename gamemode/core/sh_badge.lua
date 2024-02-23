@@ -54,7 +54,7 @@ function meta:HasBadge(id)
 end
 
 if SERVER then
-	function meta:GiveCustomBadge(id)
+	function meta:GiveBadge(id)
 		local badge = Get(id)
 
 		if badge.Automated then
@@ -68,7 +68,7 @@ if SERVER then
 		self:SetCustomBadges(badges)
 	end
 
-	function meta:TakeCustomBadge(id)
+	function meta:TakeBadge(id)
 		local badge = Get(id)
 
 		if badge.Automated then
