@@ -1,4 +1,4 @@
-local give = console.AddCommand("rpa_givebadge", function(ply, targets, badge)
+local give = console.AddCommand("rpa_badge_give", function(ply, targets, badge)
 	local name = Badge.Get(badge).Name
 
 	for _, target in pairs(targets) do
@@ -20,7 +20,7 @@ give:AddParameter(console.Player())
 give:AddParameter(console.Badge({CustomOnly = true}))
 give:SetAccess(Command.IsSuperAdmin)
 
-local take = console.AddCommand("rpa_takebadge", function(ply, targets, badge)
+local take = console.AddCommand("rpa_badge_take", function(ply, targets, badge)
 	local name = Badge.Get(badge).Name
 
 	for _, target in pairs(targets) do

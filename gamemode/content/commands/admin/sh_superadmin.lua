@@ -1,4 +1,4 @@
-local usergroup = console.AddCommand("rpa_setusergroup", function(ply, target, group)
+local usergroup = console.AddCommand("rpa_usergroup_set", function(ply, target, group)
 	target:SetRPUserGroup(group)
 
 	console.Feedback(ply, "NOTICE", "You've set %s's usergroup to %s.", target:Nick(), group)

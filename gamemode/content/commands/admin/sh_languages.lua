@@ -1,4 +1,4 @@
-local give = console.AddCommand("rpa_givelanguage", function(ply, targets, lang, speaking)
+local give = console.AddCommand("rpa_language_give", function(ply, targets, lang, speaking)
 	local name = Language.GetName(lang)
 	local ability = speaking and "speak" or "understand"
 
@@ -22,7 +22,7 @@ give:AddParameter(console.Language())
 give:AddOptional(console.Bool({}, "Speaking"), true)
 give:SetAccess(Command.IsAdmin)
 
-local take = console.AddCommand("rpa_takelanguage", function(ply, targets, lang)
+local take = console.AddCommand("rpa_language_take", function(ply, targets, lang)
 	local name = Language.GetName(lang)
 
 	for _, target in pairs(targets) do
@@ -46,7 +46,7 @@ take:AddParameter(console.Player())
 take:AddParameter(console.Language())
 take:SetAccess(Command.IsAdmin)
 
-local reset = console.AddCommand("rpa_resetlanguages", function(ply, targets)
+local reset = console.AddCommand("rpa_language_reset", function(ply, targets)
 	for _, target in pairs(targets) do
 		target:SetLanguages(target:GetCharacterFlagAttribute("DefaultLanguages"))
 		target:CheckLanguage()
@@ -75,7 +75,7 @@ local function verify(ply, tab)
 	return tab
 end
 
-local set = console.AddCommand("rpa_setlanguages", function(ply, targets, languages, hearing)
+local set = console.AddCommand("rpa_language_set", function(ply, targets, languages, hearing)
 	languages = verify(ply, string.Explode("[^%a]+", languages, true))
 
 	if not languages then

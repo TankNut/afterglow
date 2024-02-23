@@ -1,4 +1,4 @@
-local charflag = console.AddCommand("rpa_setcharacterflag", function(ply, targets, flag)
+local charflag = console.AddCommand("rpa_flag_set", function(ply, targets, flag)
 	local flagTable = CharacterFlag.GetOrDefault(flag)
 	local name = flagTable.Name
 
