@@ -2,6 +2,7 @@ function ITEM:GetInventory()
 	return Inventory.Get(self.InventoryID)
 end
 
+
 function ITEM:SetInventory(inventory, loaded)
 	if IsValid(self.Entity) then
 		self.Entity.Item = nil
@@ -42,6 +43,7 @@ function ITEM:SetInventory(inventory, loaded)
 	end
 end
 
+
 function ITEM:GetAppearance()
 	return {
 		Model = self:GetProperty("Model"),
@@ -49,6 +51,7 @@ function ITEM:GetAppearance()
 		Bodygroups = self:GetProperty("Bodygroups")
 	}
 end
+
 
 if SERVER then
 	function ITEM:SetWorldPos(pos, ang, loaded)

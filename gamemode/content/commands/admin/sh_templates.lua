@@ -17,6 +17,7 @@ set:AddParameter(console.Player())
 set:AddParameter(console.Template())
 set:SetAccess(Command.IsAdmin)
 
+
 local give = console.AddCommand("rpa_template_give", function(ply, targets, template)
 	local name = Template.Get(template).Name
 
@@ -40,6 +41,7 @@ give:AddParameter(console.Player({
 }))
 give:AddParameter(console.Template())
 give:SetAccess(Command.IsAdmin)
+
 
 local take = console.AddCommand("rpa_template_take", function(ply, targets, badge)
 	local name = Template.Get(template).Name

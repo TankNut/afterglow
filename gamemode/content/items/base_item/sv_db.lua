@@ -9,6 +9,7 @@ function ITEM:SaveData()
 	query:Execute()
 end
 
+
 function ITEM:SaveLocation()
 	if self:IsTempItem() then
 		return
@@ -33,6 +34,7 @@ function ITEM:SaveLocation()
 	query:WhereEqual("id", self.ID)
 	query:Execute()
 end
+
 
 function ITEM:Destroy()
 	self:SetInventory(nil, true)

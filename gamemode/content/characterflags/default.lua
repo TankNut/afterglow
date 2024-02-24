@@ -24,11 +24,13 @@ FLAG.NoFallDamage = false
 FLAG.BloodColor = BLOOD_COLOR_RED
 FLAG.AllowClothing = true
 
+
 function FLAG:GetAttribute(name, ply)
 	local func = self["Get" .. name]
 
 	return func and func(self, ply) or self[name]
 end
+
 
 if SERVER then
 	-- Overwrite if you want to keep equipment logic
@@ -36,6 +38,7 @@ if SERVER then
 		data.Model = ply:GetCharacterModel()
 		data.Skin = ply:GetCharacterSkin()
 	end
+
 
 	-- Overwrite if you want full control over player appearance
 	function FLAG:GetAppearance(ply, data)
@@ -47,9 +50,11 @@ if SERVER then
 		end
 	end
 
+
 	function FLAG:GetName(ply)
 		return ply:GetCharacterName()
 	end
+
 
 	function FLAG:OnSpawn(ply)
 	end

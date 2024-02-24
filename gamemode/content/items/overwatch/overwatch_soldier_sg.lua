@@ -11,6 +11,7 @@ ITEM.InspectFOV = 55
 
 ITEM.Armor = 5
 
+
 function ITEM:GetModelData(ply, data)
 	data.Model = Model("models/player/combine_soldier.mdl")
 	data.Materials = {

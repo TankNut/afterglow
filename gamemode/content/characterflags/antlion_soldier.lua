@@ -11,6 +11,7 @@ FLAG.NoFallDamage = true
 
 FLAG.AllowClothing = false
 
+
 if SERVER then
 	function FLAG:GetAppearance(ply, data)
 		data.Model = self.Model

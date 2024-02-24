@@ -5,16 +5,19 @@ GM.Config.Content = {
 	"2891252709" -- Half Life 2 Props Extended
 }
 
+
 -- All languages
 GM.Config.Languages = {
 	{"eng", "English"},
 	{"rus", "Russian"}
 }
 
+
 -- Default languages characters are given during creation
 GM.Config.DefaultLanguages = {
 	{"eng", true}
 }
+
 
 -- Characters
 GM.Config.MaxCharacters = 10
@@ -29,6 +32,7 @@ GM.Config.ShortDescriptionLength = 64
 
 GM.Config.NameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789'"
 GM.Config.DescriptionCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ áàâäçéèêëíìîïóòôöúùûüÿÁÀÂÄßÇÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜŸ.-0123456789',\n!?@#$%^&*(){}[]_=|\\\"><`~"
+
 
 GM.Config.CharacterModels = {
 	Model("models/player/group01/male_01.mdl"),
@@ -48,11 +52,13 @@ GM.Config.CharacterModels = {
 	Model("models/player/group01/female_06.mdl")
 }
 
+
 GM.Config.DamageScale = {
 	[HITGROUP_HEAD] = 1.5,
 	[HITGROUP_LEFTLEG] = 0.75,
 	[HITGROUP_RIGHTLEG] = 0.75
 }
+
 
 -- Anything at or above this damage threshold will penetrate armor no questions asked
 GM.Config.PenetrationCap = 75

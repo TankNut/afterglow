@@ -4,13 +4,16 @@ function ITEM:CanInteract(ply)
 	end
 end
 
+
 function ITEM:CanDrop(ply)
 	return true
 end
 
+
 function ITEM:CanDestroy(ply)
 	return true
 end
+
 
 if CLIENT then
 	function ITEM:OpenActionMenu(parent, exclude)
@@ -42,6 +45,7 @@ if CLIENT then
 	end
 end
 
+
 function ITEM:FireAction(ply, name, val)
 	for _, action in pairs(self:GetActions(ply)) do
 		if action.Name != name then
@@ -71,6 +75,7 @@ function ITEM:FireAction(ply, name, val)
 		break
 	end
 end
+
 
 function ITEM:GetActions(ply)
 	local tab = {}

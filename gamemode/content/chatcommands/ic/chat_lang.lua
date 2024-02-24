@@ -7,6 +7,7 @@ for _, v in pairs(Language.List) do
 	table.insert(CLASS.Commands, v[1])
 end
 
+
 if SERVER then
 	function CLASS:Parse(ply, _, lang, text)
 		if #text > 0 then

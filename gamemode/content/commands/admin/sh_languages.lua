@@ -22,6 +22,7 @@ give:AddParameter(console.Language())
 give:AddOptional(console.Bool({}, "Speaking"), true)
 give:SetAccess(Command.IsAdmin)
 
+
 local take = console.AddCommand("rpa_language_take", function(ply, targets, lang)
 	local name = Language.GetName(lang)
 
@@ -46,6 +47,7 @@ take:AddParameter(console.Player())
 take:AddParameter(console.Language())
 take:SetAccess(Command.IsAdmin)
 
+
 local reset = console.AddCommand("rpa_language_reset", function(ply, targets)
 	for _, target in pairs(targets) do
 		target:SetLanguages(target:GetCharacterFlagAttribute("DefaultLanguages"))
@@ -59,6 +61,7 @@ end)
 reset:SetDescription("Resets someone's languages to the default for their character flag.")
 reset:AddParameter(console.Player())
 reset:SetAccess(Command.IsAdmin)
+
 
 local function verify(ply, tab)
 	for k, lang in pairs(tab) do
@@ -74,6 +77,7 @@ local function verify(ply, tab)
 
 	return tab
 end
+
 
 local set = console.AddCommand("rpa_language_set", function(ply, targets, languages, hearing)
 	languages = verify(ply, string.Explode("[^%a]+", languages, true))

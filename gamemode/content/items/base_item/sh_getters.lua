@@ -10,21 +10,26 @@ function ITEM:GetFormattedItemName()
 	return self:GetName()
 end
 
+
 function ITEM:GetName()
 	return self:GetProperty("Name")
 end
+
 
 function ITEM:GetDescription()
 	return self:GetProperty("Description")
 end
 
+
 function ITEM:GetCategory()
 	return self:GetProperty("Category")
 end
 
+
 function ITEM:GetWeight()
 	return self:GetProperty("Weight")
 end
+
 
 function ITEM:GetTags()
 	local cache = self:GetCache("Tags")
@@ -43,6 +48,7 @@ function ITEM:GetTags()
 
 	return tags
 end
+
 
 function ITEM:GetAmount()
 	return 1
