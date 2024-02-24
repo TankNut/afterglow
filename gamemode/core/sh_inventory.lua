@@ -60,16 +60,24 @@ function meta:GetInventory()
 	return Get(self:GetNetVar("InventoryID"))
 end
 
-function meta:GetItems()
-	local inventory = self:GetInventory()
+function meta:GetItems(class, allowChildren)
+	return self:GetInventory():GetItems(class, allowChildren)
+end
 
-	return inventory and inventory.Items or {}
+function meta:GetFirstItem(class, allowChildren)
+	return self:GetInventory():GetFirstItem(class, allowChildren)
+end
+
+function meta:GetItemAmount(class)
+	return self:GetInventory():GetAmount(class)
+end
+
+function meta:HasItem(class, amount)
+	return self:GetInventory():HasItem(class, amount)
 end
 
 function meta:InventoryWeight()
-	local inventory = self:GetInventory()
-
-	return inventory and inventory:GetWeight() or 0
+	return self:GetInventory():GetWeight()
 end
 
 function meta:InventoryMaxWeight()

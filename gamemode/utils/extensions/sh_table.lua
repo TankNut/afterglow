@@ -51,3 +51,13 @@ function table.DBKeyValues(tab)
 
 	return res
 end
+
+function table.Collapse(tab)
+	local ret = {}
+
+	for _, v in pairs(tab) do
+		table.insert(ret, v)
+	end
+
+	return ret
+end

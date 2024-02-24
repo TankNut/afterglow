@@ -1,4 +1,5 @@
 IncludeFile("sh_event.lua")
+IncludeFile("sh_helpers.lua")
 IncludeFile("sv_net.lua")
 
 CLASS.__Inventory = true
