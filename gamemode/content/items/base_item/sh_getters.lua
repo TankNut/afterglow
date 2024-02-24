@@ -43,3 +43,7 @@ function ITEM:GetTags()
 
 	return tags
 end
+
+function ITEM:GetAmount()
+	return 1
+end

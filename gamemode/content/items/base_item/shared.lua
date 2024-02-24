@@ -52,6 +52,10 @@ function ITEM:GetProperty(key)
 	return val != nil and val or self[key]
 end
 
+function ITEM:GetClass()
+	return self.ClassName
+end
+
 function ITEM:SetProperty(key, val)
 	local old = self.CustomData[key]
 
