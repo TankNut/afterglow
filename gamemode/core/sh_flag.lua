@@ -1,8 +1,8 @@
 module("CharacterFlag", package.seeall)
 
-local meta = FindMetaTable("Player")
 
 List = List or {}
+
 
 function Add(name, data)
 	if name != "default" then
@@ -14,6 +14,7 @@ function Add(name, data)
 	List[name] = data
 end
 
+
 function AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
@@ -24,6 +25,7 @@ function AddFile(path, name)
 
 	_G.FLAG = nil
 end
+
 
 function AddFolder(basePath)
 	basePath = engine.ActiveGamemode() .. "/gamemode/" .. basePath
@@ -51,29 +53,12 @@ function AddFolder(basePath)
 	recursive(basePath)
 end
 
+
 function Get(name)
 	return List[name]
 end
 
+
 function GetOrDefault(name)
 	return List[name] or List.default
-end
-
-Character.AddVar("Flag", {
-	Default = "default",
-	Callback = function(ply, old, new)
-		if SERVER and not CHARACTER_LOADING then
-			hook.Run("PlayerSetup", ply)
-		end
-	end
-})
-
-function meta:GetCharacterFlagTable()
-	return GetOrDefault(self:GetCharacterFlag())
-end
-
-function meta:GetCharacterFlagAttribute(name)
-	local flag = self:GetCharacterFlagTable()
-
-	return flag:GetAttribute(name, self)
 end

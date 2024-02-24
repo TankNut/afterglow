@@ -96,17 +96,6 @@ if SERVER then
 	end
 end
 
-Character.AddVar("ActiveLanguage", {
-	Private = true,
-	Accessor = "ActiveLanguage"
-})
-
-Character.AddVar("Languages", {
-	Private = true,
-	Accessor = "Languages",
-	Default = {}
-})
-
 function GM:CanSpeakLanguage(ply, lang)
 	return ply:GetLanguages()[lang] == true
 end

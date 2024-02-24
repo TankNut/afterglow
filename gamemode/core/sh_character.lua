@@ -104,33 +104,6 @@ function GetRules()
 	return rules
 end
 
-PlayerVar.Add("CharID", {
-	Default = -1,
-	Callback = function(ply, old, new)
-		if CLIENT and ply == LocalPlayer() and new > -1 then
-			Interface.CloseGroup("F2")
-		end
-	end
-})
-
-PlayerVar.Add("CharacterList", {
-	Private = true,
-	Default = {},
-	Callback = function(ply, old, new)
-		if CLIENT and (not ply:HasCharacter() or IsValid(Interface.Get("CharacterSelect")[1])) then
-			Interface.OpenGroup("CharacterSelect", "F2")
-		end
-	end
-})
-
-function meta:HasCharacter()
-	return self:GetCharID() != -1
-end
-
-function meta:IsTemplateCharacter()
-	return self:GetCharID() == 0
-end
-
 if SERVER then
 	Load = coroutine.Bind(function(ply, id, fields)
 		if ply:HasCharacter() then
@@ -273,60 +246,6 @@ if SERVER then
 		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end
 end
-
-AddVar("Name", {
-	Default = "*INVALID*",
-	Callback = function(ply, old, new)
-		hook.Run("CharacterNameChanged", ply, old, new)
-
-		if SERVER and not CHARACTER_LOADING then
-			LoadList(ply)
-		end
-	end
-})
-
-AddVar("Description", {
-	Private = true,
-	Default = "",
-	Callback = function(ply, old, new)
-		hook.Run("CharacterDescriptionChanged", ply, old, new)
-
-		if SERVER then
-			local short = string.match(new, "^[^\r\n]*")
-			local config = Config.Get("ShortDescriptionLength")
-
-			if #short > 0 and #short > config then
-				short = string.sub(short, 1, config) .. "..."
-			end
-
-			ply:SetShortDescription(short)
-		end
-	end
-})
-
-PlayerVar.Add("ShortDescription", {
-	Default = ""
-})
-
-AddVar("Model", {
-	ServerOnly = true,
-	Default = "models/player/skeleton.mdl",
-	Callback = function(ply)
-		if SERVER and not CHARACTER_LOADING then
-			ply:UpdateAppearance()
-		end
-	end
-})
-
-AddVar("Skin", {
-	ServerOnly = true,
-	Default = 0,
-	Callback = function(ply)
-		if SERVER and not CHARACTER_LOADING then
-			ply:UpdateAppearance()
-		end
-	end
-})
 
 if SERVER then
 	function GM:PostLoadCharacter(ply, id)

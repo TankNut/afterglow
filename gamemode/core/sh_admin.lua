@@ -13,16 +13,6 @@ AddRank("admin", "user")
 AddRank("superadmin", "admin")
 AddRank("developer", "superadmin")
 
-PlayerVar.Add("UserGroup", {
-	Accessor = "RPUserGroup",
-	Field = "usergroup",
-	Default = "user",
-	ServerOnly = true,
-	Callback = function(ply, _, new)
-		ply:SetUserGroup(new)
-	end
-})
-
 function meta:CheckUserGroup(group)
 	local usergroup = self:GetUserGroup()
 

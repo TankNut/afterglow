@@ -1,7 +1,7 @@
 module("Appearance", package.seeall)
 
 local meta = FindMetaTable("Entity")
-local plyMeta = FindMetaTable("Player")
+
 
 Default = {
 	Model = Model("models/player/skeleton.mdl"),
@@ -9,6 +9,7 @@ Default = {
 }
 
 UpdateList = UpdateList or {}
+
 
 function Apply(ent, data)
 	if ent:GetModel() != data.Model then
@@ -40,6 +41,7 @@ function Apply(ent, data)
 	end
 end
 
+
 function Copy(from, to)
 	if CLIENT then
 		Apply(to, from:GetAppearance())
@@ -48,15 +50,18 @@ function Copy(from, to)
 	end
 end
 
+
 -- Not a PlayerVar because we apply to both entities and players
 function meta:GetAppearance()
 	return self:GetNetVar("Appearance", {})
 end
 
+
 if SERVER then
 	function meta:SetAppearance(data)
 		self:SetNetVar("Appearance", data)
 	end
+
 
 	function Update(ply)
 		local data = table.Copy(Default)
@@ -80,9 +85,11 @@ if SERVER then
 		ply:SetupHands()
 	end
 
-	function plyMeta:UpdateAppearance()
-		UpdateList[self] = true
+
+	function QueueUpdate(ply)
+		UpdateList[ply] = true
 	end
+
 
 	hook.Add("Think", "Appearance", function()
 		for ply in pairs(UpdateList) do
@@ -93,24 +100,21 @@ if SERVER then
 	end)
 end
 
+
 function GM:PostSetAppearance(ent)
 	if ent:IsPlayer() then
 		ent:RefreshHull()
 	end
 end
 
+
 if SERVER then
 	function GM:GetAppearance(ply, data)
 		ply:GetCharacterFlagTable():GetAppearance(ply, data)
 	end
 
+
 	function GM:PlayerSetHandsModel(ply, ent)
 		Appearance.Apply(ent, ply.HandsAppearance)
 	end
 end
-
-netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
-	Appearance.Apply(ent, appearance)
-
-	hook.Run("PostSetAppearance", ent)
-end)

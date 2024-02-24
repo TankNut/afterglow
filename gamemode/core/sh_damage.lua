@@ -12,24 +12,6 @@ if SERVER then
 	function entMeta:SetArmor(val)
 		self:SetNetVar("Armor", val)
 	end
-
-	function plyMeta:UpdateArmor()
-		local armor = 0
-
-		if self:HasCharacter() then
-			armor = self:GetCharacterFlagAttribute("Armor")
-
-			for _, v in pairs(self:GetEquipment()) do
-				if v:IsBasedOn("base_clothing") then
-					armor = math.max(armor, v:GetArmor())
-				end
-			end
-		end
-
-		if self:Armor() != armor then
-			self:SetArmor(armor > 0 and armor or nil)
-		end
-	end
 end
 
 function GM:ScalePlayerDamage(ply, hitgroup, dmg)

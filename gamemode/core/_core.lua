@@ -13,7 +13,7 @@ IncludeFile("sh_inventory.lua")
 IncludeFile("sh_equipment.lua")
 IncludeFile("sh_interface.lua")
 IncludeFile("sh_progress.lua")
-IncludeFile("sh_characterflag.lua")
+IncludeFile("sh_flag.lua")
 IncludeFile("sh_damage.lua")
 IncludeFile("sv_player.lua")
 IncludeFile("sh_animtable.lua")
@@ -29,11 +29,15 @@ IncludeFile("sh_template.lua")
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")
 
+IncludeFolder("core/vars")
+IncludeFolder("core/meta")
+
 IncludeFolder("core/vgui")
 IncludeFolder("core/gui")
 IncludeFolder("core/gui/playermenu")
 
 IncludeFolder("core/net")
+
 
 if SERVER then
 	for _, v in pairs(GM.Config.Content) do
@@ -41,11 +45,13 @@ if SERVER then
 	end
 end
 
+
 function GM:Initialize()
 	if SERVER then
 		Database.Initialize()
 	end
 end
+
 
 function GM:OnReloaded()
 	if SERVER then

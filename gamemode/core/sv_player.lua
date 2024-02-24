@@ -29,6 +29,7 @@ function GM:PlayerSetup(ply)
 	local healthFraction = ply:Health() / ply:GetMaxHealth()
 	local health = flag:GetAttribute("Health")
 
+	ply:UpdateTeam()
 	ply:SetTeam(flag.Team)
 
 	ply:SetMaxHealth(health)
