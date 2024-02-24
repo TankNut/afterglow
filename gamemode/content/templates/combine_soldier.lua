@@ -23,9 +23,5 @@ function TEMPLATE:GetName(ply)
 end
 
 function TEMPLATE:OnCreate(ply)
-	local inventory = ply:GetInventory()
-
-	for _, item in pairs(inventory.Items) do
-		item:Equip("Uniform")
-	end
+	ply:GetFirstItem("overwatch_soldier"):Equip("Uniform")
 end
