@@ -2,7 +2,7 @@ local meta = FindMetaTable("Player")
 
 
 function meta:RefreshHull()
-	local data = Models[self:GetModel():lower()] or Default
+	local data = Hull.Models[self:GetModel():lower()] or Hull.Default
 	local scale = self:GetPlayerScale()
 
 	self:SetModelScale(scale, 0.0001)

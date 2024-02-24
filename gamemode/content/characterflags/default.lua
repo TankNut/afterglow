@@ -51,7 +51,7 @@ if SERVER then
 	end
 
 
-	function FLAG:GetName(ply)
+	function FLAG:GetCharacterName(ply)
 		return ply:GetCharacterName()
 	end
 

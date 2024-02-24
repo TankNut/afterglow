@@ -9,7 +9,7 @@ function meta:CheckUserGroup(group)
 	end
 
 	while usergroup do
-		local parent = Ranks[usergroup]
+		local parent = Admin.Ranks[usergroup]
 
 		if parent == group then
 			return true

@@ -334,3 +334,16 @@ end
 function GM:CanChangeCharacterDescription(ply)
 	return true
 end
+
+
+function GM:CharacterNameChanged(ply)
+	if SERVER then
+		ply:UpdateName()
+	end
+end
+
+
+function GM:GetVisibleName(ply)
+	return "Test name"
+	--return ply:GetCharacterFlagAttribute("CharacterName")
+end

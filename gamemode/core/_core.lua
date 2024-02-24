@@ -12,7 +12,7 @@ IncludeFile("sh_item.lua")
 IncludeFile("sh_inventory.lua")
 IncludeFile("sh_interface.lua")
 IncludeFile("sh_progress.lua")
-IncludeFile("sh_flag.lua")
+IncludeFile("sh_characterflag.lua")
 IncludeFile("sh_damage.lua")
 IncludeFile("sv_player.lua")
 IncludeFile("sh_animtable.lua")
@@ -58,6 +58,7 @@ function GM:OnReloaded()
 			if ply:HasCharacter() then
 				ply:UpdateAppearance()
 				ply:UpdateArmor()
+				ply:UpdateName()
 			end
 		end
 	end

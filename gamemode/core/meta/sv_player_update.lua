@@ -25,6 +25,11 @@ function meta:UpdateTeam()
 end
 
 
+function meta:UpdateName()
+	self:SetVisibleName(hook.Run("GetVisibleName", self))
+end
+
+
 function meta:UpdateAppearance()
 	Appearance.QueueUpdate(self)
 end

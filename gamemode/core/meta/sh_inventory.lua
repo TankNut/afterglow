@@ -2,7 +2,7 @@ local meta = FindMetaTable("Entity")
 
 
 function meta:GetInventory()
-	return Get(self:GetNetVar("InventoryID"))
+	return Inventory.Get(self:GetNetVar("InventoryID"))
 end
 
 

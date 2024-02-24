@@ -5,7 +5,7 @@ function meta:GetBadges()
 	local custom = self:GetCustomBadges()
 	local badges = {}
 
-	for _, badge in pairs(List) do
+	for _, badge in pairs(Badge.List) do
 		if (badge.Automated and badge.Callback(self)) or custom[badge.ID] then
 			table.insert(badges, badge)
 		end
