@@ -7,6 +7,7 @@ function PANEL:Init()
 	self:SetAllowEscape(true)
 	self:SetDrawTopBar(true)
 	self:SetTitle("Badges")
+	self:SetDraggable(true)
 
 	self:MakePopup()
 	self:Center()
