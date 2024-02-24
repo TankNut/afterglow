@@ -1,6 +1,5 @@
 module("Admin", package.seeall)
 
-
 Ranks = Ranks or {}
 
 

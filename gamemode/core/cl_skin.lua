@@ -24,6 +24,7 @@ SKIN.Text.Disabled = Color(150, 150, 150)
 SKIN.Text.Highlight = Color(40, 40, 40)
 SKIN.Text.Bad = Color(200, 0, 0)
 
+
 for k, v in pairs(SKIN.Text) do
 	local COMPONENT = {
 		Name = {"c" .. k:lower()}
@@ -34,6 +35,7 @@ for k, v in pairs(SKIN.Text) do
 
 	scribe.Register(COMPONENT)
 end
+
 
 -- Overrides for hardcoded values
 
@@ -53,11 +55,13 @@ SKIN.Colours.Label.Highlight = SKIN.Text.Normal
 
 SKIN.Colours.TooltipText = Color(110, 102, 60)
 
+
 -- Helper functions
 
 local function getAlpha()
 	return 250
 end
+
 
 function SKIN:DrawButton(disabled, w, h)
 	surface.SetDrawColor(disabled and self.Colors.FillDark or self.Colors.FillLight)
@@ -66,6 +70,7 @@ function SKIN:DrawButton(disabled, w, h)
 	surface.SetDrawColor(self.Colors.FillMedium)
 	surface.DrawOutlinedRect(0, 0, w, h)
 end
+
 
 function SKIN:SetButtonTextColor(panel)
 	local col = self.Text.Normal
@@ -81,6 +86,7 @@ function SKIN:SetButtonTextColor(panel)
 	surface.SetTextColor(col)
 end
 
+
 -- Actual skin hooks
 
 function SKIN:PaintPanel(panel, w, h)
@@ -94,6 +100,7 @@ function SKIN:PaintPanel(panel, w, h)
 	surface.DrawRect(0, 0, w, h)
 end
 
+
 function SKIN:PaintFrame(panel, w, h)
 	surface.SetDrawColor(ColorAlpha(self.Colors.FillDark, getAlpha()))
 	surface.DrawRect(0, 0, w, h)
@@ -105,6 +112,7 @@ function SKIN:PaintFrame(panel, w, h)
 		surface.DrawRect(0, 0, w, 25)
 	end
 end
+
 
 function SKIN:PaintButton(panel, w, h)
 	local bool = panel.GetDisabled and panel:GetDisabled() or false
@@ -119,6 +127,7 @@ function SKIN:PaintButton(panel, w, h)
 
 	self:DrawButton(bool, w, h)
 end
+
 
 function SKIN:PaintTextEntry(panel, w, h)
 	if panel.m_bBackground then
@@ -150,14 +159,17 @@ function SKIN:PaintTextEntry(panel, w, h)
 	panel:DrawTextEntryText(self.Text.Normal, self.Text.Highlight, self.Text.Normal)
 end
 
+
 function SKIN:PaintVScrollBar(panel, w, h)
 	surface.SetDrawColor(self.Colors.FillDark)
 	surface.DrawRect(0, 0, w, h)
 end
 
+
 function SKIN:PaintScrollBarGrip( panel, w, h )
 	self:DrawButton(panel:GetDisabled(), w, h)
 end
+
 
 function SKIN:PaintButtonDown(panel, w, h)
 	if not panel.m_bBackground then
@@ -175,6 +187,7 @@ function SKIN:PaintButtonDown(panel, w, h)
 	surface.DrawText("6")
 end
 
+
 function SKIN:PaintButtonUp(panel, w, h)
 	if not panel.m_bBackground then
 		return
@@ -190,6 +203,7 @@ function SKIN:PaintButtonUp(panel, w, h)
 	surface.SetTextPos(math.ceil(w * 0.5 - tw * 0.5), math.ceil(h * 0.5 - th * 0.5))
 	surface.DrawText("5")
 end
+
 
 function SKIN:PaintButtonLeft(panel, w, h)
 	if not panel.m_bBackground then
@@ -207,6 +221,7 @@ function SKIN:PaintButtonLeft(panel, w, h)
 	surface.DrawText("3")
 end
 
+
 function SKIN:PaintButtonRight(panel, w, h)
 	if not panel.m_bBackground then
 		return
@@ -223,6 +238,7 @@ function SKIN:PaintButtonRight(panel, w, h)
 	surface.DrawText("4")
 end
 
+
 function SKIN:PaintProgressBar(panel, w, h)
 	surface.SetDrawColor(self.Colors.FillDark)
 	surface.DrawRect(0, 0, w, h)
@@ -235,6 +251,7 @@ function SKIN:PaintProgressBar(panel, w, h)
 	draw.SimpleText(panel:GetText(), "afterglow.labelsmall", w * 0.5, h * 0.5, self.Text.Normal, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
+
 function SKIN:PaintHighlight(x, y, w, h)
 	surface.SetDrawColor(ColorAlpha(self.Colors.Primary, 25))
 	surface.DrawRect(x, y, w, h)
@@ -243,9 +260,11 @@ function SKIN:PaintHighlight(x, y, w, h)
 	surface.DrawOutlinedRect(x, y, w, h)
 end
 
+
 function SKIN:PaintItemHover(x, y, w, h)
 	self:PaintHighlight(x, y, w, h)
 end
+
 
 function SKIN:PaintMenu(panel, w, h)
 	surface.SetDrawColor(self.Colors.FillMedium)
@@ -254,6 +273,7 @@ function SKIN:PaintMenu(panel, w, h)
 	surface.SetDrawColor(self.Colors.FillDark)
 	surface.DrawOutlinedRect(0, 0, w, h, 1)
 end
+
 
 function SKIN:PaintMenuOption(panel, w, h)
 	if panel.m_bBackground and not panel:IsEnabled() then
@@ -266,6 +286,7 @@ function SKIN:PaintMenuOption(panel, w, h)
 	end
 end
 
+
 function SKIN:PaintScoreboard(panel, w, h)
 	surface.SetDrawColor(ColorAlpha(self.Colors.FillDark, getAlpha()))
 	surface.DrawRect(0, 0, w, h)
@@ -276,6 +297,7 @@ function SKIN:PaintScoreboard(panel, w, h)
 
 	draw.DrawText(Config.Get("ServerName"), "afterglow.labelmassive", 10, 10, self.Text.Normal)
 end
+
 
 function SKIN:PaintScoreboardEntry(panel, w, h)
 	if panel:GetAlt() then
@@ -306,5 +328,6 @@ function SKIN:PaintScoreboardEntry(panel, w, h)
 		surface.DrawTexturedRect(w - 14 - (k * 18), 22, 16, 16)
 	end
 end
+
 
 derma.DefineSkin("Afterglow", "Default Afterglow UI skin", SKIN)

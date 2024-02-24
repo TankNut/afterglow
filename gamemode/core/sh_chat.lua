@@ -5,10 +5,8 @@ TAB_ADMIN	= 2^4
 TAB_PM		= 2^5
 TAB_RADIO	= 2^6
 
-module("Chat", package.seeall)
 
-local meta = FindMetaTable("Entity")
-local plyMeta = FindMetaTable("Player")
+module("Chat", package.seeall)
 
 Class = Class or {}
 List = List or {}
@@ -17,11 +15,11 @@ ConsoleCommands = ConsoleCommands or {}
 Commands = Commands or {}
 Aliases = Aliases or {}
 
+
 _G.CLASS = Class
-
 IncludeFile("class/sh_chatcommand.lua")
-
 _G.CLASS = nil
+
 
 function Add(data)
 	List[data.Name] = setmetatable(data, {
@@ -37,6 +35,7 @@ function Add(data)
 	end
 end
 
+
 function AddFile(path)
 	_G.CLASS = {}
 
@@ -45,6 +44,7 @@ function AddFile(path)
 
 	_G.CLASS = nil
 end
+
 
 function AddFolder(basePath)
 	local recursive
@@ -68,6 +68,7 @@ function AddFolder(basePath)
 	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
+
 function AddConsoleCommand(names, command)
 	if not istable(names) then
 		names = {names}
@@ -77,6 +78,7 @@ function AddConsoleCommand(names, command)
 		ConsoleCommands[name] = command
 	end
 end
+
 
 function Process(ply, str)
 	for k, v in pairs(Aliases) do
@@ -105,6 +107,7 @@ function Process(ply, str)
 	return lang, command:lower(), args
 end
 
+
 function GetTargets(pos, range, muffledRange, withEntities)
 	local maxRange = math.max(range, muffledRange)
 	local targets = {}
@@ -125,6 +128,7 @@ function GetTargets(pos, range, muffledRange, withEntities)
 		end
 	end
 end
+
 
 function Parse(ply, str)
 	local lang, cmd, args = Process(ply, str)
@@ -150,14 +154,17 @@ function Parse(ply, str)
 	return ""
 end
 
+
 if CLIENT then
 	function Show()
 		Interface.GetGroup("Chat"):Show()
 	end
 
+
 	function Hide()
 		Interface.GetGroup("Chat"):Hide()
 	end
+
 
 	function Receive(name, data)
 		local command = List[name]
@@ -167,7 +174,10 @@ if CLIENT then
 			Interface.GetGroup("Chat"):AddMessage(message, consoleMessage, command.Tabs)
 		end
 	end
-else
+end
+
+
+if SERVER then
 	function Send(name, data, targets)
 		if isstring(data) then
 			data = {Text = data}
@@ -179,29 +189,24 @@ else
 	end
 end
 
-function meta:CanHear(pos)
-	return util.TraceLine({
-		start = self:IsPlayer() and self:EyePos() or self:WorldSpaceCenter(),
-		endpos = pos,
-		filter = self,
-		mask = MASK_OPAQUE
-	}).Fraction == 1
-end
 
 if CLIENT then
 	netstream.Hook("SendChat", function(payload)
 		Receive(payload.__Type, payload)
 	end)
 
+
 	hook.Add("InitPostEntity", "Chat", function()
 		Interface.OpenGroup("Chat", "Chat")
 	end)
+
 
 	hook.Add("OnReloaded", "Chat", function()
 		local buffer = Interface.GetGroup("Chat"):ExportBuffer()
 
 		Interface.OpenGroup("Chat", "Chat"):ImportBuffer(buffer)
 	end)
+
 
 	hook.Add("PlayerBindPress", "Chat", function(ply, bind, down)
 		if down and string.find(bind, "messagemode") then
@@ -210,20 +215,10 @@ if CLIENT then
 			return true
 		end
 	end)
+end
 
-	function plyMeta:SendChat(name, data)
-		if self != LocalPlayer() then
-			error("Attempt to SendChat to a non-local player")
-		end
 
-		Receive(name, data)
-	end
-else
-	function plyMeta:SendChat(name, data)
-		Send(name, data, self)
-	end
-
+if SERVER then
 	netstream.Hook("ParseChat", Parse)
-
 	hook.Add("PlayerSay", "Chat", Parse)
 end

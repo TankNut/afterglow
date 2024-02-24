@@ -1,10 +1,12 @@
 GM.MainFont = "Tahoma"
 
+
 function surface.FontExists(font)
 	local ok = pcall(surface.SetFont, font)
 
 	return ok
 end
+
 
 surface.CreateFont("DefaultBold", {
 	font = GM.MainFont,
@@ -12,11 +14,13 @@ surface.CreateFont("DefaultBold", {
 	weight = 1000
 })
 
+
 surface.CreateFont("afterglow.labelworld", {
 	font = GM.MainFont,
 	size = 2048,
 	weight = 21
 })
+
 
 for k, v in pairs({massive = 30, giant = 22, big = 18, medium = 16, small = 14, tiny = 12}) do
 	surface.CreateFont("afterglow.label" .. k, {
@@ -25,11 +29,13 @@ for k, v in pairs({massive = 30, giant = 22, big = 18, medium = 16, small = 14, 
 		weight = 500
 	})
 
+
 	surface.CreateFont("afterglow.label" .. k .. "bold", {
 		font = GM.MainFont,
 		size = v,
 		weight = 1600
 	})
+
 
 	surface.CreateFont("afterglow.label" .. k .. "italic", {
 		font = GM.MainFont,
@@ -38,15 +44,19 @@ for k, v in pairs({massive = 30, giant = 22, big = 18, medium = 16, small = 14, 
 		italic = true
 	})
 
+
 	local COMPONENT = {
 		Name = {k}
 	}
 
+
 	function COMPONENT:Push() self.Context:PushFont("afterglow.label" .. k) end
 	function COMPONENT:Pop() self.Context:PopFont() end
 
+
 	scribe.Register(COMPONENT)
 end
+
 
 do -- Chat component
 	scribe.Register({
@@ -58,18 +68,22 @@ do -- Chat component
 	}, "compound")
 end
 
+
 do -- Bold component
 	local COMPONENT = {
 		Name = {"bold", "b"}
 	}
 
+
 	function COMPONENT:Push()
 		self.Context:PushFont(self.Context.Font .. "bold")
 	end
 
+
 	function COMPONENT:Pop()
 		self.Context:PopFont()
 	end
+
 
 	scribe.Register(COMPONENT)
 end
@@ -79,13 +93,16 @@ do -- Italic component
 		Name = {"italic", "i"}
 	}
 
+
 	function COMPONENT:Push()
 		self.Context:PushFont(self.Context.Font .. "italic")
 	end
 
+
 	function COMPONENT:Pop()
 		self.Context:PopFont()
 	end
+
 
 	scribe.Register(COMPONENT)
 end

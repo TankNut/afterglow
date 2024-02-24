@@ -2,7 +2,6 @@ module("Appearance", package.seeall)
 
 local meta = FindMetaTable("Entity")
 
-
 Default = {
 	Model = Model("models/player/skeleton.mdl"),
 	Hands = {}
