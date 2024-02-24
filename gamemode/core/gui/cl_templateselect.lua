@@ -24,16 +24,15 @@ function PANEL:Populate()
 
 	local ply = LocalPlayer()
 
-	for _, id in pairs(ply:GetAvailableTemplates()) do
+	for _, data in SortedPairsByMemberValue(ply:GetAvailableTemplates(), "Name") do
 		local button = self:Add("DButton")
-		local name = Template.Get(id).Name
 
 		button:DockMargin(0, 0, 0, 5)
 		button:Dock(TOP)
-		button:SetText(name)
+		button:SetText(data.Name)
 
 		button.DoClick = function(pnl)
-			netstream.Send("LoadTemplate", id)
+			netstream.Send("LoadTemplate", data.ID)
 		end
 
 		table.insert(self.Buttons, button)

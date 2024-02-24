@@ -13,6 +13,7 @@ _G.TEMPLATE = nil
 
 function Add(name, data)
 	name = name:lower()
+	data.ID = name
 
 	-- Rewrite fields and callbacks so they're in the proper load format
 	if data.Vars then
@@ -96,9 +97,9 @@ end
 function meta:GetAvailableTemplates()
 	local tab = {}
 
-	for id in pairs(List) do
+	for id, data in pairs(List) do
 		if hook.Run("HasTemplateAccess", self, id) then
-			table.insert(tab, id)
+			table.insert(tab, data)
 		end
 	end
 
