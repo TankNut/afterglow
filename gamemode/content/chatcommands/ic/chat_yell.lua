@@ -58,7 +58,7 @@ if SERVER then
 
 		-- No reason to check for an empty table since we're always sending the valid version to ourselves
 		Chat.Send(self.Name, {
-			Name = ply:GetCharacterName(),
+			Name = ply:GetVisibleName(),
 			Lang = lang,
 			Text = text
 		}, valid)
@@ -67,7 +67,7 @@ if SERVER then
 			local form = self:FormatUnknownLanguage(text, lang)
 
 			Chat.Send(self.Name, {
-				Name = ply:GetCharacterName(),
+				Name = ply:GetVisibleName(),
 				Form = form
 			}, invalid)
 		end

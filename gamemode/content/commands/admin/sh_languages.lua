@@ -4,14 +4,14 @@ local give = console.AddCommand("rpa_language_give", function(ply, targets, lang
 
 	for _, target in pairs(targets) do
 		if target:CanSpeakLanguage(lang) or (not speaking and target:CanUnderstandLanguage(lang)) then
-			console.Feedback(ply, "ERROR", "%s already %ss %s.", target:GetCharacterName(), ability, name)
+			console.Feedback(ply, "ERROR", "%s already %ss %s.", target:GetVisibleName(), ability, name)
 
 			continue
 		end
 
 		target:GiveLanguage(lang, speaking)
 
-		console.Feedback(ply, "NOTICE", "You've given %s the ability to %s %s.", target:GetCharacterName(), ability, name)
+		console.Feedback(ply, "NOTICE", "You've given %s the ability to %s %s.", target:GetVisibleName(), ability, name)
 		console.Feedback(target, "NOTICE", "%s has given you the ability to %s %s.", ply, ability, name)
 	end
 end)
@@ -28,7 +28,7 @@ local take = console.AddCommand("rpa_language_take", function(ply, targets, lang
 
 	for _, target in pairs(targets) do
 		if not target:CanUnderstandLanguage(lang) then
-			console.Feedback(ply, "ERROR", "%s doesn't know %s.", target:GetCharacterName(), name)
+			console.Feedback(ply, "ERROR", "%s doesn't know %s.", target:GetVisibleName(), name)
 
 			continue
 		end
@@ -37,7 +37,7 @@ local take = console.AddCommand("rpa_language_take", function(ply, targets, lang
 
 		target:TakeLanguage(lang)
 
-		console.Feedback(ply, "NOTICE", "You've taken the ability to %s %s from %s.", ability, name, target:GetCharacterName())
+		console.Feedback(ply, "NOTICE", "You've taken the ability to %s %s from %s.", ability, name, target:GetVisibleName())
 		console.Feedback(target, "NOTICE", "%s has removed your ability to %s %s.", ply, ability, name)
 	end
 end)
@@ -53,7 +53,7 @@ local reset = console.AddCommand("rpa_language_reset", function(ply, targets)
 		target:SetLanguages(target:GetCharacterFlagAttribute("DefaultLanguages"))
 		target:CheckLanguage()
 
-		console.Feedback(ply, "NOTICE", "You've reset %s's languages.", target:GetCharacterName())
+		console.Feedback(ply, "NOTICE", "You've reset %s's languages.", target:GetVisibleName())
 		console.Feedback(target, "NOTICE", "%s has reset your languages.", ply)
 	end
 end)
@@ -106,7 +106,7 @@ local set = console.AddCommand("rpa_language_set", function(ply, targets, langua
 		target:SetLanguages(data)
 		target:CheckLanguage()
 
-		console.Feedback(ply, "NOTICE", "You've set %s's languages.", target:GetCharacterName(), names)
+		console.Feedback(ply, "NOTICE", "You've set %s's languages.", target:GetVisibleName(), names)
 		console.Feedback(target, "NOTICE", "%s has set your languages.", ply, names)
 	end
 end)

@@ -326,8 +326,9 @@ function GM:ModifyCharacterRules(rules)
 end
 
 
+-- TODO: Find a better way of doing this?
 function GM:CanChangeCharacterName(ply)
-	return true
+	return ply:GetVisibleName() == ply:GetCharacterName()
 end
 
 

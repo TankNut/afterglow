@@ -3,7 +3,7 @@ local set = console.AddCommand("rpa_template", function(ply, targets, template)
 	local name = data.Name
 
 	for _, target in pairs(targets) do
-		local oldName = target:GetCharacterName()
+		local oldName = target:GetVisibleName()
 
 		Template.Load(ply, data)
 
@@ -23,14 +23,14 @@ local give = console.AddCommand("rpa_template_give", function(ply, targets, temp
 
 	for _, target in pairs(targets) do
 		if target:HasTemplate(template) then
-			console.Feedback(ply, "ERROR", "%s already has access to the %s template.", target:GetCharacterName(), name)
+			console.Feedback(ply, "ERROR", "%s already has access to the %s template.", target:GetVisibleName(), name)
 
 			continue
 		end
 
 		target:GiveTemplate(template)
 
-		console.Feedback(ply, "NOTICE", "You've given %s access to the %s template.", target:GetCharacterName(), name)
+		console.Feedback(ply, "NOTICE", "You've given %s access to the %s template.", target:GetVisibleName(), name)
 		console.Feedback(target, "NOTICE", "%s has given you access to the %s template.", ply, name)
 	end
 end)
@@ -48,14 +48,14 @@ local take = console.AddCommand("rpa_template_take", function(ply, targets, badg
 
 	for _, target in pairs(targets) do
 		if not target:HasTemplate(template) then
-			console.Feedback(ply, "ERROR", "%s doesn't have access to the %s template.", target:GetCharacterName(), name)
+			console.Feedback(ply, "ERROR", "%s doesn't have access to the %s template.", target:GetVisibleName(), name)
 
 			continue
 		end
 
 		target:TakeTemplate(badge)
 
-		console.Feedback(ply, "NOTICE", "You've removed %s's %s template access.", target:GetCharacterName(), name)
+		console.Feedback(ply, "NOTICE", "You've removed %s's %s template access.", target:GetVisibleName(), name)
 		console.Feedback(target, "NOTICE", "%s has removed your %s template access.", ply, name)
 	end
 end)

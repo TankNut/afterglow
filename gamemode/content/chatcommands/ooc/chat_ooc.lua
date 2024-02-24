@@ -19,7 +19,7 @@ end
 if SERVER then
 	function CLASS:Parse(ply, lang, cmd, text)
 		return {
-			Name = ply:GetCharacterName(),
+			Name = ply:GetVisibleName(),
 			Color = team.GetColor(ply:Team()),
 			Text = text
 		}

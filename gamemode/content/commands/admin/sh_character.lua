@@ -5,7 +5,7 @@ local charflag = console.AddCommand("rpa_flag_set", function(ply, targets, flag)
 	for _, target in pairs(targets) do
 		target:SetCharacterFlag(flag)
 
-		console.Feedback(ply, "NOTICE", "You've set %s's character flag to %s.", target:GetCharacterName(), name)
+		console.Feedback(ply, "NOTICE", "You've set %s's character flag to %s.", target:GetVisibleName(), name)
 		console.Feedback(target, "NOTICE", "%s has set your character flag to %s.", ply, name)
 	end
 end)

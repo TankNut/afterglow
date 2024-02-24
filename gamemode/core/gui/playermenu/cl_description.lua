@@ -24,7 +24,7 @@ local function func(self)
 	self.CharacterName:Dock(TOP)
 	self.CharacterName:SetTall(22)
 	self.CharacterName:SetFont("afterglow.labelgiant")
-	self.CharacterName:SetText(LocalPlayer():GetCharacterName())
+	self.CharacterName:SetText(LocalPlayer():GetVisibleName())
 
 	self.Scroll = self:Add("DScrollPanel")
 	self.Scroll:DockMargin(0, 0, 0, 0)
@@ -72,7 +72,7 @@ local function func(self)
 				Min = Config.Get("MinNameLength"),
 				Max = Config.Get("MaxNameLength"),
 				AllowedCharacters = Config.Get("NameCharacters"),
-				Default = LocalPlayer():GetCharacterName()
+				Default = LocalPlayer():GetVisibleName()
 			})
 
 			netstream.Send("SetCharacterName", new)

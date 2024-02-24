@@ -121,7 +121,7 @@ function FindPlayer(ply, str, options)
 		end
 
 		for _, target in player.Iterator() do
-			if target:HasCharacter() and string.find(target:GetCharacterName():lower(), str, 1, not multi) then
+			if target:HasCharacter() and string.find(target:GetVisibleName():lower(), str, 1, not multi) then
 				table.insert(targets, target)
 
 				continue

@@ -23,7 +23,7 @@ end
 if SERVER then
 	function CLASS:Parse(ply, lang, cmd, text)
 		return {
-			Name = ply:GetCharacterName(),
+			Name = ply:GetVisibleName(),
 			Text = text
 		}
 	end
