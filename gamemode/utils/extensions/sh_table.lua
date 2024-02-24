@@ -8,6 +8,7 @@ function table.Map(tab, func)
 	return res
 end
 
+
 function table.Lookup(tab)
 	local res = {}
 
@@ -17,6 +18,7 @@ function table.Lookup(tab)
 
 	return res
 end
+
 
 function table.Filter(tab, func)
 	local res = {}
@@ -38,9 +40,11 @@ function table.Filter(tab, func)
 	return res
 end
 
+
 function table.Unique(tab)
 	return table.GetKeys(table.Lookup(tab))
 end
+
 
 function table.DBKeyValues(tab)
 	local res = {}
@@ -51,6 +55,7 @@ function table.DBKeyValues(tab)
 
 	return res
 end
+
 
 function table.Collapse(tab)
 	local ret = {}

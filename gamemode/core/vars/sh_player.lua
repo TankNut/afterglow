@@ -9,18 +9,10 @@ PlayerVar.Add("CharacterList", {
 })
 
 
-PlayerVar.Add("UserGroup", {
-	Accessor = "RPUserGroup",
-	Field = "usergroup",
-	Default = "user",
-	ServerOnly = true,
-	Callback = function(ply, _, new)
-		ply:SetUserGroup(new)
+PlayerVar.Add("Scale", {
+	Accessor = "PlayerScale",
+	Default = 1,
+	Callback = function(ply, old, new)
+		ply:RefreshHull()
 	end
-})
-
-
-PlayerVar.Add("CustomBadges", {
-	Field = "badges",
-	Default = {}
 })

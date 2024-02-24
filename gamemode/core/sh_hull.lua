@@ -1,7 +1,5 @@
 module("Hull", package.seeall)
 
-local meta = FindMetaTable("Player")
-
 Tables = Tables or {}
 Models = Models or {}
 
@@ -11,12 +9,14 @@ Default = {
 	View = {Vector(0, 0, 64), Vector(0, 0, 28)}
 }
 
+
 function Standard(size, height)
 	return {
 		Vector(-size, -size, 0),
 		Vector(size, size, height)
 	}
 end
+
 
 function Define(name, data)
 	local tab = Tables[name]
@@ -29,6 +29,7 @@ function Define(name, data)
 	table.Merge(tab, data)
 end
 
+
 function Add(name, models)
 	if not istable(models) then
 		models = {models}
@@ -39,28 +40,6 @@ function Add(name, models)
 	end
 end
 
-PlayerVar.Add("Scale", {
-	Accessor = "PlayerScale",
-	Default = 1,
-	Callback = function(ply, old, new)
-		ply:RefreshHull()
-	end
-})
-
-function meta:RefreshHull()
-	local data = Models[self:GetModel():lower()] or Default
-	local scale = self:GetPlayerScale()
-
-	self:SetModelScale(scale, 0.0001)
-
-	timer.Simple(0, function()
-		self:SetHull(data.Hull[1] * scale, data.Hull[2] * scale)
-		self:SetHullDuck(data.DuckHull[1] * scale, data.DuckHull[2] * scale)
-
-		self:SetViewOffset(data.View[1] * scale)
-		self:SetViewOffsetDucked(data.View[2] * scale)
-	end)
-end
 
 if SERVER then
 	hook.Add("PostLoadCharacter", "Hull", function(ply)

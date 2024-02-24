@@ -2,6 +2,7 @@ module("validate", package.seeall)
 
 Rules = Rules or {}
 
+
 function AddRule(name, callback, checkNil)
 	Rules[name] = setmetatable({
 		Callback = callback,
@@ -17,6 +18,7 @@ function AddRule(name, callback, checkNil)
 
 	validate[name] = Rules[name]
 end
+
 
 function Value(val, rules)
 	if rules.Name then
@@ -39,6 +41,7 @@ function Value(val, rules)
 
 	return true, val
 end
+
 
 function Multi(tab, rules)
 	Cache = weakref(tab)
@@ -75,9 +78,11 @@ function Multi(tab, rules)
 	return true, ret
 end
 
+
 AddRule("Required", function(val)
 	return val != nil, "Cannot be nil"
 end, true)
+
 
 AddRule("Is", function(val, types)
 	local id = TypeID(val)
@@ -95,17 +100,11 @@ AddRule("Is", function(val, types)
 	end
 end, true)
 
-AddRule("Number", function(val)
-	return isnumber(val), "Is not a number"
-end)
 
-AddRule("String", function(val)
-	return isstring(val), "Is not a string"
-end)
+AddRule("Number", function(val) return isnumber(val), "Is not a number" end)
+AddRule("String", function(val) return isstring(val), "Is not a string" end)
+AddRule("Bool", function(val) return isbool(val), "Is not a boolean" end)
 
-AddRule("Bool", function(val)
-	return isbool(val), "Is not a boolean"
-end)
 
 AddRule("Min", function(val, min)
 	if isstring(val) then
@@ -115,6 +114,7 @@ AddRule("Min", function(val, min)
 	end
 end)
 
+
 AddRule("Max", function(val, max)
 	if isstring(val) then
 		return #val <= max, string.format("Cannot be more than %s characters long", max)
@@ -122,6 +122,7 @@ AddRule("Max", function(val, max)
 		return val <= max, "Cannot be more than " .. max
 	end
 end)
+
 
 AddRule("AllowedCharacters", function(val, characters)
 	local lookup = table.Lookup(string.Explode("", characters))
@@ -144,13 +145,16 @@ AddRule("AllowedCharacters", function(val, characters)
 	return true
 end)
 
+
 AddRule("Callback", function(val, callback)
 	return callback(val)
 end)
 
+
 AddRule("InList", function(val, tab)
 	return table.HasValue(tab, val)
 end)
+
 
 local function getProperty(val, index, ...)
 	if index == nil then
@@ -170,34 +174,15 @@ local function getProperty(val, index, ...)
 	return property
 end
 
-AddRule("True", function(val, property, ...)
-	return tobool(getProperty(val, property, ...))
-end)
 
-AddRule("False", function(val, property, ...)
-	return not tobool(getProperty(val, property, ...))
-end)
+AddRule("True", function(val, property, ...) return tobool(getProperty(val, property, ...)) end)
+AddRule("False", function(val, property, ...) return not tobool(getProperty(val, property, ...)) end)
 
-AddRule("Equals", function(val, other, property, ...)
-	return getProperty(val, property, ...) == other
-end)
+AddRule("Equals", function(val, other, property, ...) return getProperty(val, property, ...) == other end)
+AddRule("Differs", function(val, other, property, ...) return getProperty(val, property, ...) != other end)
 
-AddRule("Differs", function(val, other, property, ...)
-	return getProperty(val, property, ...) != other
-end)
+AddRule("LessThan", function(val, other, property, ...) return getProperty(val, property, ...) < other end)
+AddRule("LessThanEquals", function(val, other, property, ...) return getProperty(val, property, ...) <= other end)
 
-AddRule("LessThan", function(val, other, property, ...)
-	return getProperty(val, property, ...) < other
-end)
-
-AddRule("LessThanEquals", function(val, other, property, ...)
-	return getProperty(val, property, ...) <= other
-end)
-
-AddRule("GreaterThan", function(val, other, property, ...)
-	return getProperty(val, property, ...) > other
-end)
-
-AddRule("GreaterThanEquals", function(val, other, property, ...)
-	return getProperty(val, property, ...) >= other
-end)
+AddRule("GreaterThan", function(val, other, property, ...) return getProperty(val, property, ...) > other end)
+AddRule("GreaterThanEquals", function(val, other, property, ...) return getProperty(val, property, ...) >= other end)

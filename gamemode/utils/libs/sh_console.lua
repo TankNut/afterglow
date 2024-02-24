@@ -5,6 +5,7 @@ Command = Command or {}
 
 local writeLog = log.Category("Console")
 
+
 function AddCommand(commands, callback)
 	local command = setmetatable({
 		Callback = callback,
@@ -26,6 +27,7 @@ function AddCommand(commands, callback)
 	return command
 end
 
+
 function Rebuild()
 	for command, commandObject in pairs(Commands) do
 		concommand.Add(command, function(ply, _, _, args)
@@ -33,6 +35,7 @@ function Rebuild()
 		end, AutoComplete, table.concat(commandObject:AutoComplete(), " | "))
 	end
 end
+
 
 function Parser(name, callback)
 	console[name] = function(options, argName)
@@ -45,9 +48,11 @@ function Parser(name, callback)
 	end
 end
 
+
 function PlayerName(ply)
 	return IsValid(ply) and ply:Nick() or "CONSOLE"
 end
+
 
 function Feedback(ply, class, ...)
 	local args = {...}
@@ -69,9 +74,11 @@ function Feedback(ply, class, ...)
 	end
 end
 
+
 function Trim(str)
 	return str:match("^()%s*$") and "" or str:match("^%s*(.*%S)")
 end
+
 
 function Split(str)
 	str = str:Trim()
@@ -105,6 +112,7 @@ function Split(str)
 
 	return args
 end
+
 
 function Parse(ply, name, str)
 	local command = Commands[name]
@@ -160,11 +168,13 @@ function Parse(ply, name, str)
 	end
 end
 
+
 function AutoComplete(name, args)
 	local command = Commands[name]
 
 	return table.Add({name .. args}, command:AutoComplete())
 end
+
 
 function Command:Invoke(ply, args)
 	local processedArgs = {}
@@ -196,13 +206,16 @@ function Command:Invoke(ply, args)
 	self.Callback(ply, unpack(processedArgs))
 end
 
+
 function Command:AutoComplete()
 	return {"Description: " .. self.Description, self:GetUsage()}
 end
 
+
 function Command.CanAccess(ply)
 	return true
 end
+
 
 function Command:GetUsage()
 	if #self.Arguments == 0 then
@@ -230,9 +243,11 @@ function Command:GetUsage()
 	return "Usage: " .. table.concat(args, ", ")
 end
 
+
 function Command:AddParameter(arg)
 	table.insert(self.Arguments, arg)
 end
+
 
 function Command:AddOptional(arg, fallback, fallbackText)
 	arg.Optional = true
@@ -242,31 +257,38 @@ function Command:AddOptional(arg, fallback, fallbackText)
 	table.insert(self.Arguments, arg)
 end
 
+
 function Command:SetAccess(callback)
 	self.CanAccess = callback
 end
+
 
 function Command:SetDescription(new)
 	self.Description = new
 end
 
+
 function Command:SetRealm(realm)
 	self.Realm = realm
 end
+
 
 function Command:SetConsoleOnly()
 	self.NoPlayer = true
 end
 
+
 function Command:SetPlayerOnly()
 	self.NoConsole = true
 end
+
 
 if SERVER then
 	netstream.Hook("Console", function(ply, payload)
 		Parse(ply, payload.Name, payload.Args)
 	end)
 end
+
 
 hook.Add("InitPostEntity", "Console", Rebuild)
 hook.Add("OnReloaded", "Console", Rebuild)

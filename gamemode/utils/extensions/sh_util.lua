@@ -4,6 +4,7 @@ function util.HasPhysicsObject(mdl)
 	return info.KeyValues and util.KeyValuesToTable(info.KeyValues).solid
 end
 
+
 function util.GetModelSkins(mdl)
 	local info = util.GetModelInfo(mdl)
 

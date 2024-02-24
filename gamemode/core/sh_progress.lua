@@ -4,6 +4,7 @@ local meta = FindMetaTable("Player")
 
 Active = Active or {}
 
+
 if CLIENT then
 	netstream.Hook("StartProgress", function(payload)
 		Active[payload.Player] = {
@@ -13,9 +14,11 @@ if CLIENT then
 		}
 	end)
 
+
 	netstream.Hook("StopProgress", function(ply)
 		Active[ply] = nil
 	end)
+
 
 	hook.Add("PostRenderVGUI", "Progress", function()
 		local uiSkin = derma.GetNamedSkin("Afterglow").Colors
@@ -46,7 +49,9 @@ if CLIENT then
 			y = y + 50
 		end
 	end)
-else
+end
+
+if SERVER then
 	function Start(ply, time, text, checklist, notify, notifyText)
 		if Active[ply] then
 			Stop(ply, true)
@@ -83,6 +88,7 @@ else
 		end
 	end
 
+
 	function Stop(ply, silent)
 		local data = Active[ply]
 
@@ -105,6 +111,7 @@ else
 		Active[ply] = nil
 	end
 
+
 	function Finish(ply)
 		local data = Active[ply]
 
@@ -118,6 +125,7 @@ else
 
 		Active[ply] = nil
 	end
+
 
 	function Think()
 		for ply, data in pairs(Active) do
@@ -148,6 +156,7 @@ else
 		end
 	end
 
+
 	function CheckOwner(ply, pos)
 		if not ply:Alive() or ply:GetPos():DistToSqr(pos) > 4 then
 			return false
@@ -155,6 +164,7 @@ else
 
 		return true
 	end
+
 
 	function Validate(ply, check)
 		if isentity(check) then
@@ -168,21 +178,26 @@ else
 		end
 	end
 
+
 	function CheckEntity(ply, ent)
 		return true
 	end
+
 
 	function CheckPlayer(ply, target)
 		return true
 	end
 
+
 	function CheckItem(ply, item)
 		return item:CanInteract(ply)
 	end
 
+
 	function meta:WaitFor(time, text, checklist, notify, notifyText)
 		return Start(self, time, text, checklist, notify, notifyText)
 	end
+
 
 	hook.Add("Think", "Progress", Think)
 end

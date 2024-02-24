@@ -11,6 +11,7 @@ function GM:PlayerInitialSpawn(ply)
 	end)()
 end
 
+
 function GM:PlayerSpawn(ply)
 	ply:Freeze(not ply:HasCharacter())
 
@@ -22,6 +23,7 @@ function GM:PlayerSpawn(ply)
 
 	hook.Run("PlayerSetup", ply)
 end
+
 
 function GM:PlayerSetup(ply)
 	local flag = ply:GetCharacterFlagTable()

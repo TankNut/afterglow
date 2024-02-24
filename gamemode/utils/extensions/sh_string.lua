@@ -2,6 +2,7 @@ function string.FirstToUpper(str)
 	return str:sub(1, 1):upper() .. str:sub(2)
 end
 
+
 function string.LastSpace(str)
 	for i = #str, 1, -1 do
 		if str[i] == " " then
@@ -9,6 +10,7 @@ function string.LastSpace(str)
 		end
 	end
 end
+
 
 local escapeEntities = {
 	["&"] = "&amp;",
@@ -22,9 +24,11 @@ local unescapeEntities = {
 	["&gt;"] = ">"
 }
 
+
 function string.Escape(str)
 	return tostring(str):gsub("[&<>]", escapeEntities)
 end
+
 
 function string.Unescape(str)
 	return tostring(str):gsub("(&.-;)", unescapeEntities)

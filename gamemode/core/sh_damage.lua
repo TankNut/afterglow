@@ -1,19 +1,3 @@
-local entMeta = FindMetaTable("Entity")
-local plyMeta = FindMetaTable("Player")
-
-plyMeta.Armor = nil
-plyMeta.SetArmor = nil
-
-function entMeta:Armor()
-	return self:GetNetVar("Armor", 0)
-end
-
-if SERVER then
-	function entMeta:SetArmor(val)
-		self:SetNetVar("Armor", val)
-	end
-end
-
 function GM:ScalePlayerDamage(ply, hitgroup, dmg)
 	local scale = Config.Get("DamageScale")[hitgroup]
 
@@ -21,6 +5,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmg)
 		dmg:ScaleDamage(scale)
 	end
 end
+
 
 if SERVER then
 	function GM:EntityTakeDamage(ent, dmg)
@@ -40,8 +25,10 @@ if SERVER then
 		end
 	end
 
+
 	function GM:HandlePlayerArmorReduction(ply, dmg)
 	end
+
 
 	function GM:ScaleNPCDamage(npc, hitgroup, dmg)
 		local scale = Config.Get("DamageScale")[hitgroup]
@@ -51,6 +38,7 @@ if SERVER then
 		end
 	end
 
+
 	function GM:GetFallDamage(ply, speed)
 		if ply:GetCharacterFlagAttribute("NoFallDamage") then
 			return 0
@@ -58,6 +46,7 @@ if SERVER then
 
 		return (speed - 526.5) * (100 / 396)
 	end
+
 
 	function GM:DoPlayerDeath(ply, attacker, dmg)
 		local diff = 1 - math.abs(ply:GetPlayerScale())

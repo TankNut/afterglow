@@ -1,6 +1,7 @@
 local resultValue = {}
 local weakMeta = {__mode = "k"}
 
+
 local function createUnpack(...)
 	local args = {...}
 	local res = {"local t = ... return "}
@@ -21,6 +22,7 @@ local function createUnpack(...)
 		return func(args)
 	end
 end
+
 
 function Memoize(func)
 	return setmetatable({

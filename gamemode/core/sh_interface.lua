@@ -1,24 +1,27 @@
 module("Interface", package.seeall)
 
-local meta = FindMetaTable("Player")
 
 if CLIENT then
 	Types = Types or {}
 	Instances = Instances or {}
 	Groups = Groups or {}
 
+
 	function Register(name, func)
 		Types[name] = func
 		Instances[name] = Instances[name] or {}
 	end
 
+
 	function Get(name)
 		return table.Filter(Instances[name], function(_, v) return IsValid(v) end)
 	end
 
+
 	function GetGroup(group)
 		return Groups[group]
 	end
+
 
 	function Open(name, ...)
 		local ui = Types[name]
@@ -31,6 +34,7 @@ if CLIENT then
 		return panel
 	end
 
+
 	function Close(name)
 		for _, v in pairs(Get(name)) do
 			v:Remove()
@@ -39,11 +43,13 @@ if CLIENT then
 		table.Empty(Instances[name])
 	end
 
+
 	function CloseGroup(group)
 		if IsValid(Groups[group]) then
 			Groups[group]:Remove()
 		end
 	end
+
 
 	function OpenGroup(name, group, ...)
 		local existing = Groups[group]
@@ -62,6 +68,7 @@ if CLIENT then
 		return panel
 	end
 
+
 	netstream.Hook("OpenInterface", function(payload)
 		if payload.Group then
 			OpenGroup(payload.Name, payload.Group, unpack(payload.Args))
@@ -69,29 +76,27 @@ if CLIENT then
 			Open(payload.Name, unpack(payload.Args))
 		end
 	end)
-else
-	function meta:OpenInterface(name, ...)
-		netstream.Send("OpenInterface", self, {Name = name, Args = {...}})
-	end
-
-	function meta:OpenGroupedInterface(name, group, ...)
-		netstream.Send("OpenInterface", self, {Name = name, Group = group, Args = {...}})
-	end
 end
+
 
 if CLIENT then
 	function GM:ScoreboardShow()
 		OpenGroup("Scoreboard", "Scoreboard")
 	end
 
+
 	function GM:ScoreboardHide()
 		CloseGroup("Scoreboard")
 		Close("BadgeList")
 	end
-else
+end
+
+
+if SERVER then
 	function GM:ShowTeam(ply)
 		ply:OpenGroupedInterface("CharacterSelect", "F2")
 	end
+
 
 	function GM:ShowSpare1(ply)
 		ply:OpenGroupedInterface("PlayerMenu", "F3")

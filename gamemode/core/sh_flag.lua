@@ -1,6 +1,5 @@
 module("CharacterFlag", package.seeall)
 
-
 List = List or {}
 
 

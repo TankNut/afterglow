@@ -5,6 +5,7 @@ Components = Components or {}
 local defaultFont = "afterglow.labelbig"
 local defaultColor = color_white
 
+
 function Register(component, base)
 	base = Components[base] or BaseComponent
 
@@ -28,6 +29,7 @@ function Register(component, base)
 	end
 end
 
+
 function Parse(str, maxWidth)
 	local instance = setmetatable({}, {
 		__index = Core
@@ -38,8 +40,10 @@ function Parse(str, maxWidth)
 	return instance
 end
 
+
 do -- Core object
 	local CORE = {}
+
 	function CORE:New(str, maxWidth)
 		self.Pos = {x = 0, y = 0}
 		self.Caret = {x = 0, y = 0}
@@ -54,6 +58,7 @@ do -- Core object
 		self:Parse(str)
 	end
 
+
 	function CORE:Reset()
 		self.Stack = {}
 
@@ -63,6 +68,7 @@ do -- Core object
 
 		self.CharModifiers = {}
 	end
+
 
 	function CORE:ProcessMatch(stack, str)
 		if not str or str == "" or str == "<nop>" then
@@ -112,6 +118,7 @@ do -- Core object
 		end
 	end
 
+
 	function CORE:Parse(str)
 		table.Empty(self.Blocks)
 
@@ -134,11 +141,13 @@ do -- Core object
 		self:Recalculate()
 	end
 
+
 	function CORE:Recalculate()
 		self.DryRun = true
 		self:Draw(0, 0)
 		self.DryRun = nil
 	end
+
 
 	function CORE:Newline()
 		self.TotalWidth = math.max(self.TotalWidth, self.Caret.x)
@@ -149,11 +158,13 @@ do -- Core object
 		self.LineHeight = 0
 	end
 
+
 	function CORE:SetFont(font)
 		self.Font = font
 
 		surface.SetFont(font)
 	end
+
 
 	function CORE:SetColor(color)
 		self.Color = color
@@ -168,6 +179,7 @@ do -- Core object
 		self.Stack[index]:Push(val)
 	end
 
+
 	function CORE:PopStack(index)
 		if not self.Stack[index] then
 			return
@@ -178,28 +190,34 @@ do -- Core object
 		return self.Stack[index]:Top()
 	end
 
+
 	function CORE:PushColor(color)
 		self:PushStack("Color", color)
 		self:SetColor(color)
 	end
 
+
 	function CORE:PopColor()
 		self:SetColor(self:PopStack("Color") or defaultColor)
 	end
+
 
 	function CORE:PushFont(font)
 		self:PushStack("Font", font)
 		self:SetFont(font)
 	end
 
+
 	function CORE:PopFont()
 		self:SetFont(self:PopStack("Font") or defaultFont)
 	end
+
 
 	function CORE:PushComplex()
 		self:PushStack("Complex", self.Complex)
 		self.Complex = true
 	end
+
 
 	function CORE:PopComplex()
 		self.Complex = self:PopStack("Complex") or false
@@ -259,6 +277,7 @@ do -- Core object
 		self.Size.y = self.Caret.y
 	end
 
+
 	function CORE:PrintToConsole()
 		self.Buffer = {}
 		self.LastColor = color_white
@@ -271,13 +290,16 @@ do -- Core object
 		MsgC(unpack(self.Buffer))
 	end
 
+
 	function CORE:GetSize()
 		return self.Size.x, self.Size.y
 	end
 
+
 	function CORE:GetWide()
 		return self.Size.x
 	end
+
 
 	function CORE:GetTall()
 		return self.Size.y
@@ -285,6 +307,7 @@ do -- Core object
 
 	Core = CORE
 end
+
 
 do -- Base component
 	local COMPONENT = {}
@@ -294,6 +317,7 @@ do -- Base component
 		self.Handlers = {}
 	end
 
+
 	function COMPONENT:AddHandler(handler)
 		local index = #self.Context[handler] + 1
 
@@ -301,19 +325,24 @@ do -- Base component
 		self.Context[handler][index] = self
 	end
 
+
 	function COMPONENT:RemoveHandler(handler)
 		self.Context[handler][self.Handlers[handler]] = nil
 		self.Handlers[handler] = nil
 	end
 
+
 	function COMPONENT:AddCharHandler() self:AddHandler("CharModifiers") end
 	function COMPONENT:RemoveCharHandler() self:RemoveHandler("CharModifiers") end
+
 
 	function COMPONENT:Push() end
 	function COMPONENT:Pop() end
 
+
 	function COMPONENT:PreCharModify(part, data) end
 	function COMPONENT:PostCharModify(part, data) end
+
 
 	function COMPONENT:DrawText(text, x, y, effect)
 		if self.Context.Console and not effect then
@@ -344,10 +373,12 @@ do -- Text component
 		Name = {"text"}
 	}
 
+
 	function COMPONENT:New(ctx, str)
 		BaseClass.New(self, ctx)
 		self.Text = str:Unescape()
 	end
+
 
 	function COMPONENT:Draw()
 		local ctx = self.Context
@@ -397,6 +428,7 @@ do -- Text component
 
 		self:FlushBuffer()
 	end
+
 
 	function COMPONENT:FlushBuffer(newline)
 		local ctx = self.Context
@@ -490,15 +522,18 @@ do -- Text component
 	Register(COMPONENT)
 end
 
+
 do -- Font component
 	local COMPONENT = {
 		Name = {"f", "font"}
 	}
 
+
 	function COMPONENT:New(ctx, font)
 		BaseClass.New(self, ctx)
 		self.Font = font
 	end
+
 
 	function COMPONENT:Push() self.Context:PushFont(self.Font) end
 	function COMPONENT:Pop() self.Context:PopFont() end
@@ -506,10 +541,12 @@ do -- Font component
 	Register(COMPONENT)
 end
 
+
 do -- Color component
 	local COMPONENT = {
 		Name = {"c", "col", "color"}
 	}
+
 
 	function COMPONENT:New(ctx, color)
 		BaseClass.New(self, ctx)
@@ -519,20 +556,24 @@ do -- Color component
 		self.Color = Color(args[1], args[2], args[3], args[4])
 	end
 
+
 	function COMPONENT:Push() self.Context:PushColor(self.Color) end
 	function COMPONENT:Pop() self.Context:PopColor() end
 
 	Register(COMPONENT)
 end
+
 
 do -- Alpha component
 	local COMPONENT = {
 		Name = {"a", "alpha"}
 	}
 
+
 	function COMPONENT:New(ctx, alpha)
 		self.Color = ColorAlpha(ctx.Color, tonumber(alpha))
 	end
+
 
 	function COMPONENT:Push() self.Context:PushColor(self.Color) end
 	function COMPONENT:Pop() self.Context:PopColor() end
@@ -540,18 +581,22 @@ do -- Alpha component
 	Register(COMPONENT)
 end
 
+
 do -- Inset component
 	local COMPONENT = {
 		Name = {"iset", "inset"}
 	}
+
 
 	function COMPONENT:New(ctx, inset)
 		BaseClass.New(self, ctx)
 		self.Inset = tonumber(inset)
 	end
 
+
 	function COMPONENT:Push() self:AddCharHandler() end
 	function COMPONENT:Pop() self:RemoveCharHandler() end
+
 
 	function COMPONENT:PreCharModify(part, data)
 		if self.Context.Caret.x == 0 then
@@ -563,10 +608,12 @@ do -- Inset component
 	Register(COMPONENT)
 end
 
+
 do -- Reset component
 	local COMPONENT = {
 		Name = {"reset"}
 	}
+
 
 	function COMPONENT:Push()
 		self.Context:Reset()
@@ -578,10 +625,12 @@ do -- Reset component
 	Register(COMPONENT)
 end
 
+
 do -- Rainbow component
 	local COMPONENT = {
 		Name = {"rgb", "rainbow"}
 	}
+
 
 	function COMPONENT:New(ctx, args)
 		BaseClass.New(self, ctx)
@@ -597,6 +646,7 @@ do -- Rainbow component
 		end
 	end
 
+
 	function COMPONENT:Push()
 		self.SavedColor = self.Context.Color
 		self.Counter = 0
@@ -608,6 +658,7 @@ do -- Rainbow component
 		self:AddCharHandler()
 	end
 
+
 	function COMPONENT:Pop()
 		self:RemoveCharHandler()
 
@@ -617,6 +668,7 @@ do -- Rainbow component
 
 		self.Context:SetColor(self.SavedColor)
 	end
+
 
 	function COMPONENT:PreCharModify(part, data)
 		-- Something else has overwritten us
@@ -635,6 +687,7 @@ do -- Rainbow component
 		end
 	end
 
+
 	function COMPONENT:PostCharModify(part, data)
 		self.Counter = self.Counter + 1
 
@@ -647,11 +700,13 @@ do -- Rainbow component
 	Register(COMPONENT)
 end
 
+
 do -- Outline component
 	local black = Color(0, 0, 0)
 	local COMPONENT = {
 		Name = {"ol", "outline"}
 	}
+
 
 	function COMPONENT:New(ctx, args)
 		BaseClass.New(self, ctx)
@@ -659,13 +714,16 @@ do -- Outline component
 		self.Width = tonumber(args) or 1
 	end
 
+
 	function COMPONENT:Push()
 		self:AddCharHandler()
 	end
 
+
 	function COMPONENT:Pop()
 		self:RemoveCharHandler()
 	end
+
 
 	function COMPONENT:PreCharModify(part, data)
 		local color = self.Context.Color
@@ -692,11 +750,13 @@ do -- Outline component
 	Register(COMPONENT)
 end
 
+
 do -- Compound component
 	local COMPONENT = {
 		Name = {"compound"},
 		Components = {}
 	}
+
 
 	function COMPONENT:New(ctx, args)
 		BaseClass.New(self, ctx)
@@ -708,11 +768,13 @@ do -- Compound component
 		end
 	end
 
+
 	function COMPONENT:Push()
 		for _, component in SortedPairs(self._Components) do
 			component:Push()
 		end
 	end
+
 
 	function COMPONENT:Pop()
 		for _, component in SortedPairs(self._Components, true) do
@@ -723,6 +785,7 @@ do -- Compound component
 	Register(COMPONENT)
 end
 
+
 do -- ScribeLabel panel
 	local PANEL = {}
 
@@ -731,14 +794,17 @@ do -- ScribeLabel panel
 		self.AlignmentY = y
 	end
 
+
 	function PANEL:SetText(text)
 		self.Text = text
 		self:Rebuild()
 	end
 
+
 	function PANEL:GetText()
 		return self.Text or ""
 	end
+
 
 	function PANEL:Rebuild()
 		local text = self:GetText()
@@ -748,9 +814,11 @@ do -- ScribeLabel panel
 		end
 	end
 
+
 	function PANEL:PerformLayout()
 		self:Rebuild()
 	end
+
 
 	function PANEL:GetContentSize()
 		if self.Scribe then
@@ -759,6 +827,7 @@ do -- ScribeLabel panel
 			return 0, 0
 		end
 	end
+
 
 	function PANEL:Paint(w, h)
 		if self.Scribe then

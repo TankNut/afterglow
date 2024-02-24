@@ -4,11 +4,15 @@ function GM:SetupMove(ply, mv, cmd)
 	end
 end
 
+
 if CLIENT then
 	function GM:CreateClientsideRagdoll(ent, ragdoll)
 		Appearance.Copy(ent, ragdoll)
 	end
-else
+end
+
+
+if SERVER then
 	function GM:CreateEntityRagdoll(ent, ragdoll)
 		Appearance.Copy(ent, ragdoll)
 	end
