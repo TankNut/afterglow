@@ -86,6 +86,7 @@ if CLIENT then
 
 	function GM:ScoreboardHide()
 		CloseGroup("Scoreboard")
+		Close("BadgeList")
 	end
 else
 	function GM:ShowTeam(ply)
