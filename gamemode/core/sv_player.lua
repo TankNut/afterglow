@@ -33,7 +33,6 @@ function GM:PlayerSetup(ply)
 
 	ply:UpdateTeam()
 	ply:UpdateName()
-	ply:SetTeam(flag.Team)
 
 	ply:SetMaxHealth(health)
 	ply:SetHealth(math.ceil(healthFraction * health))

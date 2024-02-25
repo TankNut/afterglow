@@ -15,18 +15,15 @@ function Get(command)
 	return Lookup[command]
 end
 
-
 function GetName(command)
 	return Get(command)[2]
 end
-
 
 function GetUnknown(command)
 	local lang = Get(command)
 
 	return lang[3] or lang[2]
 end
-
 
 function GetOverride(command, index)
 	local override = Get(command)[4]
@@ -109,7 +106,6 @@ function GM:CanSpeakLanguage(ply, lang)
 	return ply:GetLanguages()[lang] == true
 end
 
-
 function GM:CanUnderstandLanguage(ply, lang)
 	return ply:GetLanguages()[lang] != nil
 end
@@ -119,7 +115,6 @@ if SERVER then
 	hook.Add("PostLoadCharacter", "Language", function(ply, id)
 		ply:CheckLanguage()
 	end)
-
 
 	hook.Add("PreCreateCharacter", "Language", function(ply, fields)
 		fields.languages = Config.Get("DefaultLanguages")
