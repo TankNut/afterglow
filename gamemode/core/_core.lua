@@ -24,6 +24,7 @@ IncludeFile("sh_language.lua")
 IncludeFile("sh_team.lua")
 IncludeFile("sh_badge.lua")
 IncludeFile("sh_template.lua")
+IncludeFile("sh_plugin.lua")
 
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")
