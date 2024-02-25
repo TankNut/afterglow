@@ -7,7 +7,7 @@ List = List or {}
 
 
 _G.TEMPLATE = Class
-IncludeFile("class/sh_template.lua")
+IncludeFile("class/base_template.lua")
 _G.TEMPLATE = nil
 
 

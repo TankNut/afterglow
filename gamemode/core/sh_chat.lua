@@ -17,7 +17,7 @@ Aliases = Aliases or {}
 
 
 _G.CLASS = Class
-IncludeFile("class/sh_chatcommand.lua")
+IncludeFile("class/base_chatcommand.lua")
 _G.CLASS = nil
 
 
