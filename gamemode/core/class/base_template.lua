@@ -1,4 +1,4 @@
-TEMPLATE.Name = ""
+TEMPLATE.Name = "Unnamed Character Template"
 
 TEMPLATE.Vars = {}
 TEMPLATE.Callbacks = {}
