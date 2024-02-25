@@ -1,3 +1,5 @@
+function GM:GetPlayerColor(ply) return ply:GetCharacterFlagAttribute("PlayerColor") end
+
 if SERVER then
 	function GM:GetBaseArmor(ply) return ply:GetCharacterFlagAttribute("Armor") end
 	function GM:GetPlayerTeam(ply) return ply:GetCharacterFlagAttribute("Team") end
