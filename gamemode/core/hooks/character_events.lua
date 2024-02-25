@@ -1,6 +1,10 @@
 function GM:CharacterNameChanged(ply)
 	if SERVER then
 		ply:UpdateName()
+
+		if not CHARACTER_LOADING then
+			Character.LoadList(ply)
+		end
 	end
 end
 
