@@ -20,7 +20,6 @@ give:AddParameter(console.Player())
 give:AddParameter(console.Badge({CustomOnly = true}))
 give:SetAccess(Command.IsSuperAdmin)
 
-
 local take = console.AddCommand("rpa_badge_take", function(ply, targets, badge)
 	local name = Badge.Get(badge).Name
 

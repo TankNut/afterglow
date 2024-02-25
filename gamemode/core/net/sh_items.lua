@@ -28,7 +28,9 @@ if CLIENT then
 	end)
 
 	netstream.Hook("InventoryRemoved", Inventory.Remove)
-else
+end
+
+if SERVER then
 	netstream.Hook("ItemAction", function(ply, payload)
 		local item = Item.Get(payload.ID)
 

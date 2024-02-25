@@ -1,12 +1,10 @@
 module("Database", package.seeall)
 
-
 function Initialize()
 	local config = GAMEMODE.Config.Database
 
 	mysql:Connect(config.Host, config.Username, config.Password, config.Database, config.Port)
 end
-
 
 LoadTables = coroutine.Bind(function()
 	local query
@@ -44,11 +42,9 @@ LoadTables = coroutine.Bind(function()
 	hook.Run("PostInitDatabase")
 end)
 
-
 function GM:DatabaseConnected()
 	Database.LoadTables()
 end
-
 
 function GM:PostInitDatabase()
 	Item.LoadWorldItems()

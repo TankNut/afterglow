@@ -2,7 +2,6 @@ local boolValues = {
 	f = false
 }
 
-
 console.Parser("Bool", function(ply, args, last, options)
 	local val = table.remove(args, 1)
 	local bool = boolValues[val]
@@ -14,11 +13,9 @@ console.Parser("Bool", function(ply, args, last, options)
 	return true, bool
 end)
 
-
 console.Parser("String", function(ply, args, last, options)
 	return true, last and table.concat(args, " ") or table.remove(args, 1)
 end)
-
 
 console.Parser("Number", function(ply, args, last, options)
 	local num = tonumber(table.remove(args, 1))
@@ -30,7 +27,6 @@ console.Parser("Number", function(ply, args, last, options)
 	return true, num
 end)
 
-
 console.Parser("Time", function(ply, args, last, options)
 	local duration = duration.Parse(table.remove(args, 1), options.Format)
 
@@ -41,13 +37,11 @@ console.Parser("Time", function(ply, args, last, options)
 	return true, duration
 end)
 
-
 console.Parser("Player", function(ply, args, last, options)
 	local match = last and table.concat(args, " ") or table.remove(args, 1)
 
 	return Command.FindPlayer(ply, match, options)
 end)
-
 
 console.Parser("Language", function(ply, args, last, options)
 	local lang = table.remove(args, 1):lower()
@@ -58,7 +52,6 @@ console.Parser("Language", function(ply, args, last, options)
 
 	return true, lang
 end)
-
 
 console.Parser("Badge", function(ply, args, last, options)
 	local badge = table.remove(args, 1):lower()
@@ -74,7 +67,6 @@ console.Parser("Badge", function(ply, args, last, options)
 
 	return true, badge
 end)
-
 
 console.Parser("UserGroup", function(ply, args, last, options)
 	local group = table.remove(args, 1):lower()
@@ -96,7 +88,6 @@ console.Parser("UserGroup", function(ply, args, last, options)
 	return true, group
 end)
 
-
 console.Parser("CharacterFlag", function(ply, args, last, options)
 	local flag = table.remove(args, 1):lower()
 
@@ -106,7 +97,6 @@ console.Parser("CharacterFlag", function(ply, args, last, options)
 
 	return true, flag
 end)
-
 
 console.Parser("Template", function(ply, args, last, options)
 	local template = table.remove(args, 1):lower()

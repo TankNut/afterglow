@@ -2,14 +2,12 @@ module("queue", package.seeall)
 
 local class = {}
 
-
 function class:Push(item)
 	local index = self.Last + 1
 
 	self.Last = index
 	self.Items[index] = item
 end
-
 
 function class:Pop()
 	local index = self.First
@@ -26,11 +24,9 @@ function class:Pop()
 	return item
 end
 
-
 function class:Count()
 	return self.Last - self.First + 1
 end
-
 
 function New()
 	return setmetatable({First = 0, Last = -1, Items = {}}, {__index = class})

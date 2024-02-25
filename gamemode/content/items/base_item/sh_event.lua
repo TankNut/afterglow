@@ -16,7 +16,6 @@ function ITEM:FireEvent(event, ...)
 	end
 end
 
-
 function ITEM:HandleEvent(event, ...)
 	-- Don't want these to propagate
 	if event == "ItemAdded" or event == "ItemRemoved" then

@@ -14,7 +14,6 @@ CLASS.Tabs = TAB_IC
 CLASS.Color = Color(255, 50, 50)
 CLASS.LanguageColor = Color(255, 167, 73)
 
-
 if CLIENT then
 	function CLASS:OnReceive(data)
 		if data.Form then -- We don't understand them
@@ -29,7 +28,6 @@ if CLIENT then
 	end
 end
 
-
 if SERVER then
 	function CLASS:FormatUnknownLanguage(str, lang)
 		local override = Language.GetOverride(lang, "Yell")
@@ -40,7 +38,6 @@ if SERVER then
 
 		return string.format("yells something in %s!", Language.GetUnknown(lang))
 	end
-
 
 	function CLASS:Parse(ply, lang, cmd, text)
 		local targets = self:GetTargets(ply)

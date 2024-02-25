@@ -6,7 +6,6 @@ if not mysqloo then
 	require("mysqloo")
 end
 
-
 local QUERY_SELECT = 1
 local QUERY_INSERT = 2
 local QUERY_INSERT_IGNORE = 3
@@ -20,7 +19,6 @@ local QUERY_ALTER = 10
 
 local QUERY = {}
 QUERY.__index = QUERY
-
 
 function QUERY:New(queryType, tableName)
 	return setmetatable({
@@ -37,7 +35,6 @@ function QUERY:New(queryType, tableName)
 		PrimaryKeyList = {}
 	}, QUERY)
 end
-
 
 function QUERY:Escape(str) return mysql:Escape(str) end
 function QUERY:Where(val) table.insert(self.WhereList, val) end
@@ -87,7 +84,6 @@ function QUERY:Drop(key) table.insert(self.AlterList, string.format("DROP COLUMN
 function QUERY:Limit(val) self.LimitVal = val end
 function QUERY:Offset(val) self.OffsetVal = val end
 
-
 function QUERY:BuildSelect()
 	local fields = #self.SelectList > 0 and table.concat(self.SelectList, ", ") or "*"
 	local where = #self.WhereList > 0 and " WHERE " .. table.concat(self.WhereList, " AND ") or ""
@@ -97,7 +93,6 @@ function QUERY:BuildSelect()
 
 	return string.format("SELECT %s FROM `%s`%s%s%s%s", fields, self.TableName, where, order, limit, offset)
 end
-
 
 function QUERY:BuildInsert(ignore)
 	local insert = ignore and "INSERT IGNORE INTO" or "INSERT INTO"
@@ -111,7 +106,6 @@ function QUERY:BuildInsert(ignore)
 	return string.format("%s `%s` (%s) VALUES (%s)", insert, self.TableName, table.concat(keys, ", "), table.concat(values, ", "))
 end
 
-
 function QUERY:BuildUpdate()
 	local values = table.Map(self.UpdateList, function(val) return string.format("%s = %s", val[1], val[2]) end)
 	local where = #self.WhereList > 0 and " WHERE " .. table.concat(self.WhereList, " AND ") or ""
@@ -119,14 +113,12 @@ function QUERY:BuildUpdate()
 	return string.format("UPDATE `%s` SET %s%s", self.TableName, table.concat(values, ", "), where)
 end
 
-
 function QUERY:BuildUpsert()
 	local insert = self:BuildInsert()
 	local values = table.Map(self.InsertList, function(val) return string.format("%s = %s", val[1], val[2]) end)
 
 	return string.format("%s ON DUPLICATE KEY UPDATE %s", insert, table.concat(values, ", "))
 end
-
 
 function QUERY:BuildDelete()
 	local where = #self.WhereList > 0 and " WHERE " .. table.concat(self.WhereList, " AND ") or ""
@@ -136,10 +128,8 @@ function QUERY:BuildDelete()
 	return string.format("DELETE FROM `%s`%s%s%s", self.TableName, where, order, limit)
 end
 
-
 function QUERY:BuildDrop() return string.format("DROP TABLE `%s`", self.TableName) end
 function QUERY:BuildTruncate() return string.format("TRUNCATE TABLE `%s`", self.TableName) end
-
 
 function QUERY:BuildCreate()
 	local columns = table.concat(self.CreateList, ", ") or ""
@@ -148,11 +138,9 @@ function QUERY:BuildCreate()
 	return string.format("CREATE TABLE IF NOT EXISTS `%s`(%s%s)", self.TableName, columns, primary)
 end
 
-
 function QUERY:BuildAlter()
 	return string.format("ALTER TABLE `%s` %s", self.TableName, table.concat(self.AlterList, ", "))
 end
-
 
 function QUERY:Execute(callback)
 	local query
@@ -184,7 +172,6 @@ function QUERY:Execute(callback)
 	end
 end
 
-
 function mysql:Select(tableName) return QUERY:New(QUERY_SELECT, tableName) end
 function mysql:Insert(tableName) return QUERY:New(QUERY_INSERT, tableName) end
 function mysql:InsertIgnore(tableName) return QUERY:New(QUERY_INSERT_IGNORE, tableName) end
@@ -196,13 +183,11 @@ function mysql:Truncate(tableName) return QUERY:New(QUERY_TRUNCATE, tableName) e
 function mysql:Create(tableName) return QUERY:New(QUERY_CREATE, tableName) end
 function mysql:Alter(tableName) return QUERY:New(QUERY_ALTER, tableName) end
 
-
 function mysql:Begin()
 	self.Transaction = {}
 
 	writeLog("Transaction: START")
 end
-
 
 local function startQuery(query, suppress, callback)
 	local cr = coroutine.running()
@@ -256,7 +241,6 @@ local function startQuery(query, suppress, callback)
 	end
 end
 
-
 function mysql:Commit(callback)
 	writeLog("Transaction: COMMIT")
 
@@ -290,7 +274,6 @@ function mysql:Commit(callback)
 	end
 end
 
-
 function mysql:Query(query, callback)
 	if self.Transaction then
 		table.insert(self.Transaction, query)
@@ -312,16 +295,13 @@ function mysql:Query(query, callback)
 	end
 end
 
-
 function mysql:Suppress()
 	self.SuppressState = true
 end
 
-
 function mysql:Escape(str)
 	return self.Connection:escape(str)
 end
-
 
 function mysql:Connect(host, username, password, database, port)
 	if self.Connection and self.Connection:ping() then
@@ -348,15 +328,12 @@ function mysql:Connect(host, username, password, database, port)
 	self.Connection:connect()
 end
 
-
 function mysql:Disconnect()
 	self.Connection:disconnect(true)
 end
 
-
 function GM:DatabaseConnected()
 end
-
 
 function GM:DatabaseConnectionFailed(err, host, username, database, port)
 	error(string.format("Failed to connect to '%s' at %s@%s:%s:\n  %s", database, username, host, port, err))

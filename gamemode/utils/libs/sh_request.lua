@@ -4,7 +4,6 @@ Requests = Requests or {}
 
 local writeLog = log.Category("Request")
 
-
 if CLIENT then
 	function Hook(name, callback)
 		netstream.Hook(name, function(payload)
@@ -16,7 +15,6 @@ if CLIENT then
 			})
 		end)
 	end
-
 
 	function Send(name, data)
 		local cr = coroutine.running()
@@ -37,7 +35,6 @@ if CLIENT then
 		return coroutine.yield()
 	end
 
-
 	netstream.Hook("Request", function(payload)
 		local cr = Requests[payload.Index]
 
@@ -51,7 +48,6 @@ if CLIENT then
 	end)
 end
 
-
 if SERVER then
 	function Hook(name, callback)
 		netstream.Hook(name, function(ply, payload)
@@ -63,7 +59,6 @@ if SERVER then
 			})
 		end)
 	end
-
 
 	function Send(name, ply, data)
 		local cr = coroutine.running()
@@ -87,7 +82,6 @@ if SERVER then
 
 		return coroutine.yield()
 	end
-
 
 	netstream.Hook("Request", function(ply, payload)
 		if not Requests[ply] then

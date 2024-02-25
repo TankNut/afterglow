@@ -5,7 +5,6 @@ local meta = FindMetaTable("Player")
 Vars = Vars or {}
 Fields = Fields or {}
 
-
 function Add(key, data)
 	Vars[key] = data
 
@@ -93,7 +92,6 @@ function Add(key, data)
 	end
 end
 
-
 if SERVER then
 	Load = coroutine.Bind(function(ply)
 		local query = mysql:Select("rp_player_data")
@@ -110,7 +108,6 @@ if SERVER then
 			end
 		end
 	end)
-
 
 	function Save(ply, field, value)
 		if value == nil then

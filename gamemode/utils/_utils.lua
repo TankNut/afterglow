@@ -6,18 +6,15 @@ local realms = {
 	sv = "server"
 }
 
-
 function string.GetRealmFromFilename(path)
 	return realms[path:GetFileFromFilename():match("^(%a-)_")] or "shared"
 end
-
 
 local includes = {
 	client = {true, CLIENT},
 	server = {false, SERVER},
 	shared = {true, true}
 }
-
 
 function IncludeFile(path, realm)
 	local addCS, doInclude = unpack(includes[realm or path:GetRealmFromFilename()])
@@ -31,7 +28,6 @@ function IncludeFile(path, realm)
 	end
 end
 
-
 function IncludeFolder(dir, baseDir)
 	baseDir = baseDir or engine.ActiveGamemode() .. "/gamemode/"
 
@@ -39,7 +35,6 @@ function IncludeFolder(dir, baseDir)
 		IncludeFile(baseDir .. dir .. "/" .. v)
 	end
 end
-
 
 IncludeFile("sh_memoize.lua")
 

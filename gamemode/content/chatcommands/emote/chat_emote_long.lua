@@ -12,7 +12,6 @@ CLASS.Tabs = TAB_IC
 
 CLASS.Color = Color(131, 196, 251)
 
-
 if CLIENT then
 	function CLASS:OnReceive(data)
 		local text = data.Text
@@ -24,7 +23,6 @@ if CLIENT then
 		return string.format("<c=%s>** %s%s", self.Color, data.Name, text), string.format("<c=%s>[L] ** %s%s", self.Color, data.Name, text)
 	end
 end
-
 
 if SERVER then
 	function CLASS:Parse(ply, lang, cmd, text)

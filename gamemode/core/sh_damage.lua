@@ -6,7 +6,6 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmg)
 	end
 end
 
-
 if SERVER then
 	function GM:EntityTakeDamage(ent, dmg)
 		local armor = ent:Armor()
@@ -25,10 +24,8 @@ if SERVER then
 		end
 	end
 
-
 	function GM:HandlePlayerArmorReduction(ply, dmg)
 	end
-
 
 	function GM:ScaleNPCDamage(npc, hitgroup, dmg)
 		local scale = Config.Get("DamageScale")[hitgroup]
@@ -38,7 +35,6 @@ if SERVER then
 		end
 	end
 
-
 	function GM:GetFallDamage(ply, speed)
 		if ply:GetCharacterFlagAttribute("NoFallDamage") then
 			return 0
@@ -46,7 +42,6 @@ if SERVER then
 
 		return (speed - 526.5) * (100 / 396)
 	end
-
 
 	function GM:DoPlayerDeath(ply, attacker, dmg)
 		local diff = 1 - math.abs(ply:GetPlayerScale())

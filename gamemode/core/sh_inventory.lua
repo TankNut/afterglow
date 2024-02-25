@@ -7,16 +7,13 @@ if SERVER then
 	Index = Index or 0
 end
 
-
 _G.CLASS = Class
 IncludeFile("class/inventory/shared.lua")
 _G.CLASS = nil
 
-
 function Get(id)
 	return All[id]
 end
-
 
 function Remove(id)
 	if not id or not All[id] then
@@ -29,7 +26,6 @@ function Remove(id)
 
 	All[id] = nil
 end
-
 
 function New(storeType, storeID, id)
 	if SERVER then
@@ -45,7 +41,6 @@ function New(storeType, storeID, id)
 
 	return instance
 end
-
 
 if SERVER then
 	if not Null then

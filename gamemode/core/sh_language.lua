@@ -5,11 +5,9 @@ local meta = FindMetaTable("Player")
 List = table.Copy(Config.Get("Languages"))
 Lookup = {}
 
-
 for _, v in pairs(List) do
 	Lookup[v[1]] = v
 end
-
 
 function Get(command)
 	return Lookup[command]
@@ -35,7 +33,6 @@ function GetOverride(command, index)
 	end
 end
 
-
 function FromConfig(data)
 	local langs = {}
 
@@ -46,7 +43,6 @@ function FromConfig(data)
 	return langs
 end
 
-
 function meta:CanSpeakLanguage(lang)
 	return hook.Run("CanSpeakLanguage", self, lang)
 end
@@ -54,7 +50,6 @@ end
 function meta:CanUnderstandLanguage(lang)
 	return hook.Run("CanUnderstandLanguage", self, lang)
 end
-
 
 if SERVER then
 	function meta:CheckLanguage()
@@ -101,7 +96,6 @@ if SERVER then
 	end
 end
 
-
 function GM:CanSpeakLanguage(ply, lang)
 	return ply:GetLanguages()[lang] == true
 end
@@ -109,7 +103,6 @@ end
 function GM:CanUnderstandLanguage(ply, lang)
 	return ply:GetLanguages()[lang] != nil
 end
-
 
 if SERVER then
 	hook.Add("PostLoadCharacter", "Language", function(ply, id)

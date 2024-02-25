@@ -1,10 +1,8 @@
 module("Animtable", package.seeall)
 
-
 Tables = Tables or {}
 Models = Models or {}
 Offsets = Offsets or {}
-
 
 function Define(name, normal, combat)
 	local tab = Tables[name]
@@ -28,7 +26,6 @@ function Define(name, normal, combat)
 	end
 end
 
-
 function Add(name, models, offset)
 	if not istable(models) then
 		models = {models}
@@ -43,7 +40,6 @@ function Add(name, models, offset)
 	end
 end
 
-
 function AddOffset(models, offset)
 	if not istable(models) then
 		models = {models}
@@ -54,16 +50,13 @@ function AddOffset(models, offset)
 	end
 end
 
-
 function Get(model)
 	return Models[model:lower()]
 end
 
-
 function GetOffset(model)
 	return Offsets[model:lower()] or Vector()
 end
-
 
 function GM:CalcMainActivity(ply, vel)
 	ply.CalcIdeal = ACT_MP_STAND_IDLE
@@ -97,7 +90,6 @@ function GM:CalcMainActivity(ply, vel)
 	return ply.CalcIdeal, ply.CalcSeqOverride
 end
 
-
 function GM:HandleNonPlayerModel(ply, vel)
 	local animtable = Get(ply:GetModel())
 
@@ -123,7 +115,6 @@ function GM:HandleNonPlayerModel(ply, vel)
 		end
 	end
 end
-
 
 function GM:UpdateAnimation(ply, vel, max)
 	if CLIENT then
@@ -152,7 +143,6 @@ function GM:UpdateAnimation(ply, vel, max)
 
 	self:RadioAnimation(ply)
 end
-
 
 function GM:RadioAnimation(ply)
 	ply.RadioWeight = ply.RadioWeight or 0

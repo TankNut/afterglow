@@ -8,7 +8,6 @@ PlayerVar.Add("CharacterList", {
 	end
 })
 
-
 PlayerVar.Add("Scale", {
 	Accessor = "PlayerScale",
 	Default = 1,

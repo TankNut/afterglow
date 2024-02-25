@@ -4,7 +4,6 @@ local meta = FindMetaTable("Player")
 
 Vars = Vars or {}
 
-
 function AddVar(key, data)
 	Vars[key] = data
 
@@ -89,7 +88,6 @@ function AddVar(key, data)
 	end
 end
 
-
 function Find(id)
 	for _, v in ipairs(player.GetAll()) do
 		if v:GetCharID() == id then
@@ -98,7 +96,6 @@ function Find(id)
 	end
 end
 
-
 function GetRules()
 	local rules = hook.Run("GetBaseCharacterRules")
 
@@ -106,7 +103,6 @@ function GetRules()
 
 	return rules
 end
-
 
 if SERVER then
 	Load = coroutine.Bind(function(ply, id, fields)
@@ -137,7 +133,6 @@ if SERVER then
 		hook.Run("PostLoadCharacter", ply, id)
 	end)
 
-
 	function Delete(id)
 		mysql:Begin()
 
@@ -151,7 +146,6 @@ if SERVER then
 
 		mysql:Commit()
 	end
-
 
 	function Unload(ply)
 		if ply:HasCharacter() then
@@ -171,7 +165,6 @@ if SERVER then
 		hook.Run("PostLoadCharacter", ply, -1)
 	end
 
-
 	LoadExternal = coroutine.Bind(function(ply, id)
 		local query = mysql:Select("rp_character_data")
 			query:Select("key")
@@ -181,7 +174,6 @@ if SERVER then
 
 		Load(ply, id, fields)
 	end)
-
 
 	LoadList = coroutine.Bind(function(ply)
 		local characters = {}
@@ -210,7 +202,6 @@ if SERVER then
 		ply:SetCharacterList(characters)
 	end)
 
-
 	Create = coroutine.Bind(function(steamid, fields)
 		local query = mysql:Insert("rp_characters")
 			query:Insert("steamid", steamid)
@@ -231,7 +222,6 @@ if SERVER then
 		return id
 	end)
 
-
 	function SaveVar(id, field, value)
 		if id <= 0 then
 			return
@@ -251,12 +241,10 @@ if SERVER then
 		end
 	end
 
-
 	function OnUnload(ply)
 		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end
 end
-
 
 function GM:GetVisibleName(ply)
 	return ply:GetCharacterFlagAttribute("CharacterName")

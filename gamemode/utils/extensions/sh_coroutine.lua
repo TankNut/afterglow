@@ -8,7 +8,6 @@ function coroutine.Bind(func)
 	end
 end
 
-
 function coroutine.Resume(cr, ...)
 	local yield = {coroutine.resume(cr, ...)}
 	local ok = table.remove(yield, 1)

@@ -26,7 +26,6 @@ ITEM.Internal = true
 ITEM.Amount = 1
 ITEM.Equipped = false
 
-
 IncludeFile("sh_actions.lua")
 IncludeFile("sh_cache.lua")
 IncludeFile("sh_equipment.lua")
@@ -35,21 +34,17 @@ IncludeFile("sh_getters.lua")
 IncludeFile("sh_inventory.lua")
 IncludeFile("sv_db.lua")
 
-
 function ITEM:IsTempItem()
 	return self.ID < 0
 end
-
 
 function ITEM:IsBasedOn(name)
 	return Item.IsBasedOn(self.ClassName, name)
 end
 
-
 function ITEM:GetParent()
 	return self:GetInventory()
 end
-
 
 function ITEM:GetProperty(key)
 	local val = self.CustomData[key]
@@ -57,11 +52,9 @@ function ITEM:GetProperty(key)
 	return val != nil and val or self[key]
 end
 
-
 function ITEM:GetClass()
 	return self.ClassName
 end
-
 
 function ITEM:SetProperty(key, val)
 	local old = self.CustomData[key]
@@ -74,7 +67,6 @@ function ITEM:SetProperty(key, val)
 		self:SaveData()
 	end
 end
-
 
 function ITEM:PropertyUpdated(key, old, val)
 	if key == "Equipped" then
@@ -90,7 +82,6 @@ function ITEM:PropertyUpdated(key, old, val)
 	end
 end
 
-
 if SERVER then
 	function ITEM:GetReceivers()
 		local inventory = self:GetInventory()
@@ -99,7 +90,6 @@ if SERVER then
 			return inventory:GetReceivers()
 		end
 	end
-
 
 	function ITEM:OnWorldUse(ply, ent)
 		if not ply:GetInventory() then
@@ -110,7 +100,6 @@ if SERVER then
 			self:SetInventory(ply:GetInventory())
 		end
 	end
-
 
 	function ITEM:CanPickup(ply)
 		if ply:IsTemplateCharacter() and not self:IsTempItem() then

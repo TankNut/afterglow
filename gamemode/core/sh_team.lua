@@ -2,7 +2,6 @@ module("Team", package.seeall)
 
 List = {}
 
-
 function Add(name, color, hidden)
 	return table.insert(List, {
 		Name = name,
@@ -11,11 +10,9 @@ function Add(name, color, hidden)
 	})
 end
 
-
 function Get(index)
 	return List[index]
 end
-
 
 function Find(name)
 	name = name:lower()
@@ -27,13 +24,11 @@ function Find(name)
 	end
 end
 
-
 if SERVER then
 	function GM:PlayerGetTeam(ply)
 		return ply:GetCharacterFlagAttribute("Team")
 	end
 end
-
 
 function GM:CreateTeams()
 	for k, v in pairs(List) do

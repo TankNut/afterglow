@@ -7,8 +7,8 @@ PlayerVar.Add("CharID", {
 	end
 })
 
-
 -- Identity
+
 Character.AddVar("Name", {
 	Private = true,
 	Default = "*INVALID*",
@@ -17,11 +17,9 @@ Character.AddVar("Name", {
 	end
 })
 
-
 PlayerVar.Add("VisibleName", {
 	Default = ""
 })
-
 
 Character.AddVar("Description", {
 	Private = true,
@@ -42,13 +40,12 @@ Character.AddVar("Description", {
 	end
 })
 
-
 PlayerVar.Add("ShortDescription", {
 	Default = ""
 })
 
-
 -- Appearance
+
 Character.AddVar("Model", {
 	ServerOnly = true,
 	Default = "models/player/skeleton.mdl",
@@ -58,7 +55,6 @@ Character.AddVar("Model", {
 		end
 	end
 })
-
 
 Character.AddVar("Skin", {
 	ServerOnly = true,
@@ -70,13 +66,11 @@ Character.AddVar("Skin", {
 	end
 })
 
-
 netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
 	Appearance.Apply(ent, appearance)
 
 	hook.Run("PostSetAppearance", ent)
 end)
-
 
 Character.AddVar("Flag", {
 	Default = "default",
@@ -87,17 +81,15 @@ Character.AddVar("Flag", {
 	end
 })
 
+-- Languages
 
-do -- Languages
-	Character.AddVar("ActiveLanguage", {
-		Private = true,
-		Accessor = "ActiveLanguage"
-	})
+Character.AddVar("ActiveLanguage", {
+	Private = true,
+	Accessor = "ActiveLanguage"
+})
 
-
-	Character.AddVar("Languages", {
-		Private = true,
-		Accessor = "Languages",
-		Default = {}
-	})
-end
+Character.AddVar("Languages", {
+	Private = true,
+	Accessor = "Languages",
+	Default = {}
+})

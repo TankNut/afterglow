@@ -4,7 +4,6 @@ Index = 1
 List = List or {}
 Lookup = Lookup or {}
 
-
 function Add(id, name, mat, callback)
 	local data = {
 		ID = id,
@@ -19,7 +18,6 @@ function Add(id, name, mat, callback)
 
 	Index = Index + 1
 end
-
 
 function Get(id)
 	return Lookup[id]

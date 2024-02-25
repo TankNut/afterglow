@@ -3,7 +3,6 @@ module("log", package.seeall)
 Categories = Categories or {}
 LogColor = LogColor or Color(200, 200, 200)
 
-
 function Category(name)
 	if Categories[name] then
 		return Categories[name]
@@ -22,7 +21,6 @@ function Category(name)
 
 	return func
 end
-
 
 function Write(category, text, ...)
 	MsgC(LogColor, string.format("[%s] " .. text, category, ...), "\n")

@@ -5,7 +5,6 @@ TAB_ADMIN	= 2^4
 TAB_PM		= 2^5
 TAB_RADIO	= 2^6
 
-
 module("Chat", package.seeall)
 
 Class = Class or {}
@@ -15,11 +14,9 @@ ConsoleCommands = ConsoleCommands or {}
 Commands = Commands or {}
 Aliases = Aliases or {}
 
-
 _G.CLASS = Class
 IncludeFile("class/base_chatcommand.lua")
 _G.CLASS = nil
-
 
 function Add(data)
 	List[data.Name] = setmetatable(data, {
@@ -35,7 +32,6 @@ function Add(data)
 	end
 end
 
-
 function AddFile(path)
 	_G.CLASS = {}
 
@@ -44,7 +40,6 @@ function AddFile(path)
 
 	_G.CLASS = nil
 end
-
 
 function AddFolder(basePath)
 	local recursive
@@ -68,7 +63,6 @@ function AddFolder(basePath)
 	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
-
 function AddConsoleCommand(names, command)
 	if not istable(names) then
 		names = {names}
@@ -78,7 +72,6 @@ function AddConsoleCommand(names, command)
 		ConsoleCommands[name] = command
 	end
 end
-
 
 function Process(ply, str)
 	for k, v in pairs(Aliases) do
@@ -107,7 +100,6 @@ function Process(ply, str)
 	return lang, command:lower(), args
 end
 
-
 function GetTargets(pos, range, muffledRange, withEntities)
 	local maxRange = math.max(range, muffledRange)
 	local targets = {}
@@ -128,7 +120,6 @@ function GetTargets(pos, range, muffledRange, withEntities)
 		end
 	end
 end
-
 
 function Parse(ply, str)
 	local lang, cmd, args = Process(ply, str)
@@ -154,17 +145,14 @@ function Parse(ply, str)
 	return ""
 end
 
-
 if CLIENT then
 	function Show()
 		Interface.GetGroup("Chat"):Show()
 	end
 
-
 	function Hide()
 		Interface.GetGroup("Chat"):Hide()
 	end
-
 
 	function Receive(name, data)
 		local command = List[name]
@@ -175,7 +163,6 @@ if CLIENT then
 		end
 	end
 end
-
 
 if SERVER then
 	function Send(name, data, targets)
@@ -189,24 +176,20 @@ if SERVER then
 	end
 end
 
-
 if CLIENT then
 	netstream.Hook("SendChat", function(payload)
 		Receive(payload.__Type, payload)
 	end)
 
-
 	hook.Add("InitPostEntity", "Chat", function()
 		Interface.OpenGroup("Chat", "Chat")
 	end)
-
 
 	hook.Add("OnReloaded", "Chat", function()
 		local buffer = Interface.GetGroup("Chat"):ExportBuffer()
 
 		Interface.OpenGroup("Chat", "Chat"):ImportBuffer(buffer)
 	end)
-
 
 	hook.Add("PlayerBindPress", "Chat", function(ply, bind, down)
 		if down and string.find(bind, "messagemode") then
@@ -216,7 +199,6 @@ if CLIENT then
 		end
 	end)
 end
-
 
 if SERVER then
 	netstream.Hook("ParseChat", Parse)

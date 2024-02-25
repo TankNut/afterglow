@@ -27,13 +27,11 @@ FLAG.NoFallDamage = false
 FLAG.BloodColor = BLOOD_COLOR_RED
 FLAG.AllowClothing = true
 
-
 function FLAG:GetAttribute(name, ply)
 	local func = self["Get" .. name]
 
 	return func and func(self, ply) or self[name]
 end
-
 
 if SERVER then
 	-- Overwrite if you want to keep equipment logic

@@ -4,14 +4,12 @@ ITEM_PLAYER = 2
 ITEM_CONTAINER = 3
 ITEM_ITEM = 4
 
-
 module("Item", package.seeall)
 
 List = List or {}
 All = All or setmetatable({}, {__mode = "v"})
 
 TempID = TempID or -1
-
 
 function Inherit(tab, base)
 	if not base then
@@ -31,7 +29,6 @@ function Inherit(tab, base)
 	return tab
 end
 
-
 function IsBasedOn(name, base)
 	if name == base then
 		return true
@@ -49,7 +46,6 @@ function IsBasedOn(name, base)
 
 	return IsBasedOn(item.Base, base)
 end
-
 
 function Add(name, data)
 	name = name:lower()
@@ -70,7 +66,6 @@ function Add(name, data)
 	List[name] = data
 end
 
-
 function AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
@@ -81,7 +76,6 @@ function AddFile(path, name)
 
 	_G.ITEM = nil
 end
-
 
 function AddFolder(basePath)
 	local recursive
@@ -121,7 +115,6 @@ function AddFolder(basePath)
 	end
 end
 
-
 function GetTable(name)
 	local item = List[name]
 
@@ -146,11 +139,9 @@ function GetTable(name)
 	return tab
 end
 
-
 function Get(id)
 	return All[id]
 end
-
 
 function Instance(name, id, data)
 	local item = GetTable(name)
@@ -163,7 +154,6 @@ function Instance(name, id, data)
 
 	return item
 end
-
 
 if CLIENT then
 	function GetOrInstance(name, id, data)
@@ -179,7 +169,6 @@ if CLIENT then
 		return item
 	end
 end
-
 
 if SERVER then
 	Create = coroutine.Bind(function(name, data)
@@ -232,13 +221,11 @@ if SERVER then
 	end)
 end
 
-
 hook.Add("OnReloaded", "Item", function()
 	for _, item in pairs(Item.All) do
 		item:InvalidateCache()
 	end
 end)
-
 
 function GM:GetItemDropLocation(ply)
 	local tr = util.TraceLine({
@@ -255,12 +242,10 @@ function GM:GetItemDropLocation(ply)
 	return tr.HitPos + tr.HitNormal * 10, ang
 end
 
-
 function GM:ItemEquipped(ply, item, loaded)
 	item:OnEquip()
 	item:FireEvent("EquipmentChanged")
 end
-
 
 function GM:ItemUnequipped(ply, item)
 	item:OnUnequip()

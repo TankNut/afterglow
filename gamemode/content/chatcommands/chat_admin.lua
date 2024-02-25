@@ -9,7 +9,6 @@ CLASS.Tabs = TAB_ADMIN
 CLASS.NameColor = Color(255, 107, 218)
 CLASS.TextColor = Color(255, 156, 230)
 
-
 if CLIENT then
 	function CLASS:OnReceive(data)
 		local prefix = LocalPlayer():IsAdmin() and "ADMIN" or "TO ADMINS"
@@ -17,7 +16,6 @@ if CLIENT then
 		return string.format("<c=%s>%s:</c> <c=%s>[%s] %s", self.NameColor, data.Name, self.TextColor, prefix, data.Text)
 	end
 end
-
 
 if SERVER then
 	function CLASS:GetTargets(ply, data)

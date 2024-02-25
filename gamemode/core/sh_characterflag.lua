@@ -2,7 +2,6 @@ module("CharacterFlag", package.seeall)
 
 List = List or {}
 
-
 function Add(name, data)
 	if name != "default" then
 		setmetatable(data, {__index = List.default})
@@ -12,7 +11,6 @@ function Add(name, data)
 
 	List[name] = data
 end
-
 
 function AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
@@ -24,7 +22,6 @@ function AddFile(path, name)
 
 	_G.FLAG = nil
 end
-
 
 function AddFolder(basePath)
 	basePath = engine.ActiveGamemode() .. "/gamemode/" .. basePath
@@ -52,11 +49,9 @@ function AddFolder(basePath)
 	recursive(basePath)
 end
 
-
 function Get(name)
 	return List[name]
 end
-
 
 function GetOrDefault(name)
 	return List[name] or List.default

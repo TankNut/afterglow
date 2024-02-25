@@ -5,11 +5,9 @@ local meta = FindMetaTable("Player")
 Class = Class or {}
 List = List or {}
 
-
 _G.TEMPLATE = Class
 IncludeFile("class/base_template.lua")
 _G.TEMPLATE = nil
-
 
 function Add(name, data)
 	name = name:lower()
@@ -53,7 +51,6 @@ function Add(name, data)
 	})
 end
 
-
 function AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
@@ -64,7 +61,6 @@ function AddFile(path, name)
 
 	_G.TEMPLATE = nil
 end
-
 
 function AddFolder(basePath)
 	local recursive
@@ -88,16 +84,13 @@ function AddFolder(basePath)
 	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
-
 function Get(id)
 	return List[id]
 end
 
-
 function meta:HasTemplate(template)
 	return self:GetTemplates()[template]
 end
-
 
 function meta:GetAvailableTemplates()
 	local tab = {}
@@ -110,7 +103,6 @@ function meta:GetAvailableTemplates()
 
 	return tab
 end
-
 
 if SERVER then
 	-- Don't have to bind here since Character.Load doesn't do any async calls on
@@ -149,7 +141,6 @@ if SERVER then
 		template:OnCreate(ply)
 	end
 
-
 	netstream.Hook("LoadTemplate", function(ply, id)
 		if not hook.Run("HasTemplateAccess", ply, id) then
 			return
@@ -157,7 +148,6 @@ if SERVER then
 
 		Load(ply, Get(id))
 	end)
-
 
 	function meta:GiveTemplate(template)
 		local templates = self:GetTemplates()
@@ -167,7 +157,6 @@ if SERVER then
 		self:SetTemplates(templates)
 	end
 
-
 	function meta:TakeTemplate(template)
 		local templates = self:GetTemplates()
 
@@ -176,7 +165,6 @@ if SERVER then
 		self:SetTemplates(templates)
 	end
 end
-
 
 function GM:HasTemplateAccess(ply, template)
 	return ply:IsSuperAdmin() or ply:HasTemplate(template)

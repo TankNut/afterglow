@@ -8,7 +8,6 @@ TickLimit = 200000 -- 0.2 MB/s
 
 local writeLog = log.Category("Netstream")
 
-
 function Split(data)
 	local encoded = Encode(data)
 	local length = #encoded
@@ -29,22 +28,18 @@ function Split(data)
 	return payload, length
 end
 
-
 function Encode(data)
 	return pack.Encode(data)
 end
-
 
 function Decode(data)
 	return pack.Decode(data)
 end
 
-
 function Hook(name, cb)
 	Hooks[name] = cb
 	Cache[name] = {}
 end
-
 
 if CLIENT then
 	function Send(name, data)
@@ -72,7 +67,6 @@ if CLIENT then
 		end
 	end
 
-
 	function Read(name)
 		local final = net.ReadBool()
 		local length = net.ReadUInt(15)
@@ -91,7 +85,6 @@ if CLIENT then
 		end
 	end
 
-
 	net.Receive("Netstream", function()
 		local name = net.ReadString()
 		local callback = Hooks[name]
@@ -109,7 +102,6 @@ if CLIENT then
 		end
 	end)
 
-
 	net.Receive("NetstreamNotify", function()
 		local name = net.ReadString()
 		local callback = Hooks[name]
@@ -124,7 +116,6 @@ if CLIENT then
 	end)
 end
 
-
 if SERVER then
 	util.AddNetworkString("Netstream")
 	util.AddNetworkString("NetstreamNotify")
@@ -132,7 +123,6 @@ if SERVER then
 	Queue = Queue or {}
 	Rate = Rate or {}
 	Ready = Ready or {}
-
 
 	function GetTargets(targets)
 		local result
@@ -149,7 +139,6 @@ if SERVER then
 
 		return result
 	end
-
 
 	function AddToQueue(name, final, payload, targets)
 		local data = {
@@ -168,11 +157,9 @@ if SERVER then
 		end
 	end
 
-
 	function Broadcast(name, data)
 		Send(name, nil, data)
 	end
-
 
 	function Send(name, targets, data)
 		targets = GetTargets(targets)
@@ -200,7 +187,6 @@ if SERVER then
 		end
 	end
 
-
 	function Read(name, ply)
 		local final = net.ReadBool()
 		local length = net.ReadUInt(15)
@@ -223,7 +209,6 @@ if SERVER then
 		end
 	end
 
-
 	net.Receive("Netstream", function(_, ply)
 		local name = net.ReadString()
 		local callback = Hooks[name]
@@ -243,7 +228,6 @@ if SERVER then
 		end
 	end)
 
-
 	net.Receive("NetstreamNotify", function(_, ply)
 		local name = net.ReadString()
 		local callback = Hooks[name]
@@ -258,7 +242,6 @@ if SERVER then
 
 		callback(ply)
 	end)
-
 
 	hook.Add("OnPlayerReady", "Netstream", function(ply)
 		Ready[ply] = true
@@ -275,7 +258,6 @@ if SERVER then
 			writeLog("Ready: %s", ply)
 		end
 	end)
-
 
 	hook.Add("Think", "Netstream", function()
 		for k, v in pairs(Queue) do

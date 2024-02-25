@@ -10,7 +10,6 @@ local autofill = {
 
 local writeLog = log.Category("Netvar")
 
-
 local function writePayload(payload, key, value)
 	if value == nil then
 		payload[TYPE_NIL] = payload[TYPE_NIL] or {}
@@ -21,7 +20,6 @@ local function writePayload(payload, key, value)
 
 	return payload
 end
-
 
 local function readPayload(payload, callback)
 	for key, value in pairs(payload) do
@@ -49,7 +47,6 @@ function Get(key, default)
 	return default
 end
 
-
 if CLIENT then
 	netstream.Hook("NetVar", function(payload)
 		readPayload(payload, function(key, value)
@@ -61,7 +58,6 @@ if CLIENT then
 			hook.Run("GlobalNetVarChanged", key, old, value)
 		end)
 	end)
-
 
 	hook.Add("InitPostEntity", "NetVar", function()
 		writeLog("Sync Request: Globals")
@@ -86,7 +82,6 @@ if SERVER then
 
 		netstream.Broadcast("NetVar", {writePayload({}, key, value)})
 	end
-
 
 	netstream.Hook("NetVar", function(ply)
 		writeLog("Global Sync Request from %s", ply)
@@ -117,7 +112,6 @@ local function GetEntry(ent)
 	return entry
 end
 
-
 function GetEntity(ent, key, default)
 	local tab = Entities[ent:EntIndex()]
 
@@ -133,7 +127,6 @@ function GetEntity(ent, key, default)
 		return tab[key].Value != nil and tab[key].Value or default
 	end
 end
-
 
 if CLIENT then
 	netstream.Hook("NetVarEntity", function(payload)
@@ -152,7 +145,6 @@ if CLIENT then
 		end
 	end)
 
-
 	SyncCache = SyncCache or {}
 
 	hook.Add("NetworkEntityCreated", "NetVar", function(ent)
@@ -164,7 +156,6 @@ if CLIENT then
 			SyncCache[ent] = true
 		end
 	end)
-
 
 	hook.Add("NotifyShouldTransmit", "NetVar", function(ent, should)
 		if ent:IsPlayer() or not should or not ent:GetNWBool("NetVarActive", false) then
@@ -178,7 +169,6 @@ if CLIENT then
 		SyncCache[ent] = true
 	end)
 
-
 	hook.Add("Tick", "NetVar", function()
 		local count = table.Count(SyncCache)
 
@@ -189,7 +179,6 @@ if CLIENT then
 		end
 	end)
 end
-
 
 if SERVER then
 	function SetEntity(ent, key, value, private)
@@ -217,7 +206,6 @@ if SERVER then
 
 		UpdateEntity(ent, key)
 	end
-
 
 	function SyncEntities(ply, entList)
 		writeLog("Sync Request for %s %s from %s", #entList > 1 and #entList or entList[1], #entList > 1 and "entities" or "", ply)
@@ -260,7 +248,6 @@ if SERVER then
 		end
 	end
 
-
 	function UpdateEntity(ent, key)
 		local index = ent:EntIndex()
 		local entry = Entities[index][key]
@@ -285,7 +272,6 @@ if SERVER then
 	netstream.Hook("NetVarEntity", SyncEntities)
 end
 
-
 hook.Add("EntityRemoved", "NetVar", function(ent, fullUpdate)
 	if fullUpdate then
 		return
@@ -309,26 +295,21 @@ end)
 GlobalHooks = GlobalHooks or setmetatable({}, autofill)
 EntityHooks = EntityHooks or setmetatable({}, autofill)
 
-
 function AddGlobalHook(key, identifier, callback)
 	GlobalHooks[key][identifier] = callback
 end
-
 
 function RemoveGlobalHook(key, identifier)
 	GlobalHooks[key][identifier] = nil
 end
 
-
 function AddEntityHook(key, identifier, callback)
 	EntityHooks[key][identifier] = callback
 end
 
-
 function RemoveEntityHook(key, identifier, callback)
 	EntityHooks[key][identifier] = nil
 end
-
 
 function GM:GlobalNetVarChanged(key, old, value)
 	for identifier, callback in pairs(GlobalHooks[key]) do
@@ -343,7 +324,6 @@ function GM:GlobalNetVarChanged(key, old, value)
 		end
 	end
 end
-
 
 function GM:EntityNetVarChanged(ent, key, old, value)
 	local name = "On" .. key .. "Changed"
@@ -370,17 +350,14 @@ end
 local entMeta = FindMetaTable("Entity")
 local plyMeta = FindMetaTable("Player")
 
-
 function entMeta:GetNetVar(key, fallback)
 	return GetEntity(self, key, fallback)
 end
-
 
 if SERVER then
 	function entMeta:SetNetVar(key, val)
 		SetEntity(self, key, val)
 	end
-
 
 	function plyMeta:SetPrivateNetVar(key, val)
 		SetEntity(self, key, val, true)

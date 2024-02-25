@@ -8,12 +8,10 @@ PlayerVar.Add("UserGroup", {
 	end
 })
 
-
 PlayerVar.Add("CustomBadges", {
 	Field = "badges",
 	Default = {}
 })
-
 
 PlayerVar.Add("Templates", {
 	Accessor = "Templates",

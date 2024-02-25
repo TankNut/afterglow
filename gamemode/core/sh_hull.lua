@@ -9,14 +9,12 @@ Default = {
 	View = {Vector(0, 0, 64), Vector(0, 0, 28)}
 }
 
-
 function Standard(size, height)
 	return {
 		Vector(-size, -size, 0),
 		Vector(size, size, height)
 	}
 end
-
 
 function Define(name, data)
 	local tab = Tables[name]
@@ -29,7 +27,6 @@ function Define(name, data)
 	table.Merge(tab, data)
 end
 
-
 function Add(name, models)
 	if not istable(models) then
 		models = {models}
@@ -39,7 +36,6 @@ function Add(name, models)
 		Models[v:lower()] = Tables[name]
 	end
 end
-
 
 if SERVER then
 	hook.Add("PostLoadCharacter", "Hull", function(ply)

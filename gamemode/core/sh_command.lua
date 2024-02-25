@@ -1,6 +1,5 @@
 module("Command", package.seeall)
 
-
 function AddFolder(basePath)
 	local recursive
 
@@ -19,21 +18,17 @@ function AddFolder(basePath)
 	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
-
 function IsAdmin(ply)
 	return ply:IsAdmin(), "You need to be an admin to do this."
 end
-
 
 function IsSuperAdmin(ply)
 	return ply:IsSuperAdmin(), "You need to be a superadmin to do this."
 end
 
-
 function IsDeveloper(ply)
 	return ply:IsDeveloper(), "You need to be a developer to do this."
 end
-
 
 function IsUserGroup(...)
 	local usergroups = {...}
@@ -48,7 +43,6 @@ function IsUserGroup(...)
 		return false
 	end
 end
-
 
 function FindPlayer(ply, str, options)
 	if not str or #str < 1 then
