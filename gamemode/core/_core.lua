@@ -29,6 +29,7 @@ IncludeFile("sh_plugin.lua")
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")
 
+IncludeFolder("core/hooks")
 IncludeFolder("core/vars")
 IncludeFolder("core/meta")
 

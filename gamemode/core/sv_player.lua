@@ -39,12 +39,7 @@ function GM:PlayerSetup(ply)
 
 	ply:UpdateAppearance()
 	ply:UpdateArmor()
-
-	ply:SetSlowWalkSpeed(flag:GetAttribute("SlowWalkSpeed"))
-	ply:SetWalkSpeed(flag:GetAttribute("WalkSpeed"))
-	ply:SetRunSpeed(flag:GetAttribute("RunSpeed"))
-	ply:SetJumpPower(flag:GetAttribute("JumpPower"))
-	ply:SetCrouchedWalkSpeed(flag:GetAttribute("CrouchSpeed"))
+	ply:UpdateSpeed()
 
 	ply:SetBloodColor(flag:GetAttribute("BloodColor"))
 
