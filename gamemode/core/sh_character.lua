@@ -345,6 +345,5 @@ end
 
 
 function GM:GetVisibleName(ply)
-	return "Test name"
-	--return ply:GetCharacterFlagAttribute("CharacterName")
+	return ply:GetCharacterFlagAttribute("CharacterName")
 end
