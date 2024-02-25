@@ -245,7 +245,3 @@ if SERVER then
 		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end
 end
-
-function GM:GetVisibleName(ply)
-	return ply:GetCharacterFlagAttribute("CharacterName")
-end
