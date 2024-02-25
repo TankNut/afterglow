@@ -1,5 +1,7 @@
 module("CharacterFlag", package.seeall)
 
+local meta = FindMetaTable("Player")
+
 List = List or {}
 
 function Add(name, data)
@@ -55,4 +57,14 @@ end
 
 function GetOrDefault(name)
 	return List[name] or List.default
+end
+
+function meta:GetCharacterFlagTable()
+	return GetOrDefault(self:GetCharacterFlag())
+end
+
+function meta:GetCharacterFlagAttribute(name)
+	local flag = self:GetCharacterFlagTable()
+
+	return flag:GetAttribute(name, self)
 end

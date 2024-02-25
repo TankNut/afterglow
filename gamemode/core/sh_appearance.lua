@@ -47,16 +47,7 @@ function Copy(from, to)
 	end
 end
 
--- Not a PlayerVar because we apply to both entities and players
-function meta:GetAppearance()
-	return self:GetNetVar("Appearance", {})
-end
-
 if SERVER then
-	function meta:SetAppearance(data)
-		self:SetNetVar("Appearance", data)
-	end
-
 	function Update(ply)
 		local data = table.Copy(Default)
 
@@ -92,18 +83,17 @@ if SERVER then
 	end)
 end
 
-function GM:PostSetAppearance(ent)
-	if ent:IsPlayer() then
-		ent:RefreshHull()
-	end
+-- Not a PlayerVar because we apply to both entities and players
+function meta:GetAppearance()
+	return self:GetNetVar("Appearance", {})
 end
 
 if SERVER then
-	function GM:GetAppearance(ply, data)
-		ply:GetCharacterFlagTable():GetAppearance(ply, data)
+	function meta:SetAppearance(data)
+		self:SetNetVar("Appearance", data)
 	end
 
-	function GM:PlayerSetHandsModel(ply, ent)
-		Appearance.Apply(ent, ply.HandsAppearance)
+	function meta:UpdateAppearance()
+		Appearance.QueueUpdate(self)
 	end
 end

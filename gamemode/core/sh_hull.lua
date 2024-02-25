@@ -1,5 +1,7 @@
 module("Hull", package.seeall)
 
+local meta = FindMetaTable("Player")
+
 Tables = Tables or {}
 Models = Models or {}
 
@@ -40,5 +42,20 @@ end
 if SERVER then
 	hook.Add("PostLoadCharacter", "Hull", function(ply)
 		ply:SetPlayerScale(1)
+	end)
+end
+
+function meta:RefreshHull()
+	local data = Hull.Models[self:GetModel():lower()] or Hull.Default
+	local scale = self:GetPlayerScale()
+
+	self:SetModelScale(scale, 0.0001)
+
+	timer.Simple(0, function()
+		self:SetHull(data.Hull[1] * scale, data.Hull[2] * scale)
+		self:SetHullDuck(data.DuckHull[1] * scale, data.DuckHull[2] * scale)
+
+		self:SetViewOffset(data.View[1] * scale)
+		self:SetViewOffsetDucked(data.View[2] * scale)
 	end)
 end

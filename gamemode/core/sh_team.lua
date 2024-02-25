@@ -1,5 +1,7 @@
 module("Team", package.seeall)
 
+local meta = FindMetaTable("Player")
+
 List = {}
 
 function Add(name, color, hidden)
@@ -25,13 +27,7 @@ function Find(name)
 end
 
 if SERVER then
-	function GM:PlayerGetTeam(ply)
-		return ply:GetCharacterFlagAttribute("Team")
-	end
-end
-
-function GM:CreateTeams()
-	for k, v in pairs(List) do
-		team.SetUp(k, v.Name, v.Color, false)
+	function meta:UpdateTeam()
+		self:SetTeam(hook.Run("GetPlayerTeam", self))
 	end
 end

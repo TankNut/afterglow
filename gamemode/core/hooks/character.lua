@@ -4,6 +4,18 @@ function GM:GetCharacterName(ply) return ply:GetCharacterFlagAttribute("Characte
 function GM:CanChangeCharacterName(ply) return not tobool(hook.Run("GetCharacterName", ply)) end
 function GM:CanChangeCharacterDescription(ply) return true end
 
+function GM:CanSpeakLanguage(ply, lang)
+	return ply:GetLanguages()[lang] == true
+end
+
+function GM:CanUnderstandLanguage(ply, lang)
+	return ply:GetLanguages()[lang] != nil
+end
+
+function GM:HasTemplateAccess(ply, template)
+	return ply:IsSuperAdmin() or ply:HasTemplate(template)
+end
+
 if SERVER then
 	-- Database fields to use when fetching data for the character list
 	-- TODO: Replace with character vars and translate internally

@@ -1,17 +1,15 @@
-function GM:SetupMove(ply, mv, cmd)
-	if cmd:GetForwardMove() <= 0 then
-		mv:SetMaxClientSpeed(math.min(Lerp(0.6, ply:GetWalkSpeed(), ply:GetRunSpeed()), mv:GetMaxClientSpeed()))
-	end
-end
+local meta = FindMetaTable("Player")
 
-if CLIENT then
-	function GM:CreateClientsideRagdoll(ent, ragdoll)
-		Appearance.Copy(ent, ragdoll)
-	end
+function meta:GetPlayerColor()
+	return hook.Run("GetPlayerColor", self)
 end
 
 if SERVER then
-	function GM:CreateEntityRagdoll(ent, ragdoll)
-		Appearance.Copy(ent, ragdoll)
+	function meta:UpdateSpeed()
+		self:SetSlowWalkSpeed(hook.Run("GetSlowWalkSpeed", self))
+		self:SetWalkSpeed(hook.Run("GetWalkSpeed", self))
+		self:SetRunSpeed(hook.Run("GetRunSpeed", self))
+		self:SetJumpPower(hook.Run("GetJumpPower", self))
+		self:SetCrouchedWalkSpeed(hook.Run("GetCrouchedWalkSpeed", self))
 	end
 end

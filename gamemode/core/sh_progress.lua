@@ -182,9 +182,9 @@ if SERVER then
 		return item:CanInteract(ply)
 	end
 
+	hook.Add("Think", "Progress", Think)
+
 	function meta:WaitFor(time, text, checklist, notify, notifyText)
 		return Start(self, time, text, checklist, notify, notifyText)
 	end
-
-	hook.Add("Think", "Progress", Think)
 end

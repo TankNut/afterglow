@@ -43,6 +43,16 @@ function FromConfig(data)
 	return langs
 end
 
+if SERVER then
+	hook.Add("PostLoadCharacter", "Language", function(ply, id)
+		ply:CheckLanguage()
+	end)
+
+	hook.Add("PreCreateCharacter", "Language", function(ply, fields)
+		fields.languages = Config.Get("DefaultLanguages")
+	end)
+end
+
 function meta:CanSpeakLanguage(lang)
 	return hook.Run("CanSpeakLanguage", self, lang)
 end
@@ -94,22 +104,4 @@ if SERVER then
 			self:CheckLanguage()
 		end
 	end
-end
-
-function GM:CanSpeakLanguage(ply, lang)
-	return ply:GetLanguages()[lang] == true
-end
-
-function GM:CanUnderstandLanguage(ply, lang)
-	return ply:GetLanguages()[lang] != nil
-end
-
-if SERVER then
-	hook.Add("PostLoadCharacter", "Language", function(ply, id)
-		ply:CheckLanguage()
-	end)
-
-	hook.Add("PreCreateCharacter", "Language", function(ply, fields)
-		fields.languages = Config.Get("DefaultLanguages")
-	end)
 end

@@ -245,3 +245,17 @@ if SERVER then
 		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end
 end
+
+function meta:HasCharacter()
+	return self:GetCharID() != -1
+end
+
+function meta:IsTemplateCharacter()
+	return self:GetCharID() == 0
+end
+
+if SERVER then
+	function meta:UpdateName()
+		self:SetVisibleName(hook.Run("GetCharacterName", self) or self:GetCharacterName())
+	end
+end

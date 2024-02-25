@@ -1,5 +1,7 @@
 module("Inventory", package.seeall)
 
+local entity = FindMetaTable("Entity")
+
 Class = Class or {}
 All = All or {}
 
@@ -50,4 +52,40 @@ if SERVER then
 	hook.Add("PlayerDisconnected", "Inventory", function(ply)
 		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end)
+end
+
+function entity:GetInventory()
+	return Inventory.Get(self:GetNetVar("InventoryID"))
+end
+
+function entity:GetItems(class, allowChildren)
+	return self:GetInventory():GetItems(class, allowChildren)
+end
+
+function entity:GetFirstItem(class, allowChildren)
+	return self:GetInventory():GetFirstItem(class, allowChildren)
+end
+
+function entity:GetItemAmount(class)
+	return self:GetInventory():GetAmount(class)
+end
+
+function entity:HasItem(class, amount)
+	return self:GetInventory():HasItem(class, amount)
+end
+
+function entity:InventoryWeight()
+	return self:GetInventory():GetWeight()
+end
+
+function entity:InventoryMaxWeight()
+	local weight = self:GetCharacterFlagAttribute("MaxWeight")
+
+	return weight
+end
+
+if SERVER then
+	function entity:SetInventory(inventory)
+		self:SetNetVar("InventoryID", inventory.ID)
+	end
 end

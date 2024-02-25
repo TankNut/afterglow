@@ -7,6 +7,9 @@ TAB_RADIO	= 2^6
 
 module("Chat", package.seeall)
 
+local entity = FindMetaTable("Entity")
+local meta = FindMetaTable("Player")
+
 Class = Class or {}
 List = List or {}
 
@@ -203,4 +206,25 @@ end
 if SERVER then
 	netstream.Hook("ParseChat", Parse)
 	hook.Add("PlayerSay", "Chat", Parse)
+end
+
+function entity:CanHear(pos)
+	return util.TraceLine({
+		start = self:IsPlayer() and self:EyePos() or self:WorldSpaceCenter(),
+		endpos = pos,
+		filter = self,
+		mask = MASK_OPAQUE
+	}).Fraction == 1
+end
+
+function meta:SendChat(name, data)
+	if CLIENT then
+		if self != LocalPlayer() then
+			error("Attempt to SendChat to a non-local player")
+		end
+
+		Receive(name, data)
+	else
+		Send(name, data, self)
+	end
 end

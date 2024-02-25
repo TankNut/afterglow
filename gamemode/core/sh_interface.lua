@@ -1,5 +1,7 @@
 module("Interface", package.seeall)
 
+local meta = FindMetaTable("Player")
+
 if CLIENT then
 	Types = Types or {}
 	Instances = Instances or {}
@@ -69,23 +71,12 @@ if CLIENT then
 	end)
 end
 
-if CLIENT then
-	function GM:ScoreboardShow()
-		OpenGroup("Scoreboard", "Scoreboard")
-	end
-
-	function GM:ScoreboardHide()
-		CloseGroup("Scoreboard")
-		Close("BadgeList")
-	end
-end
-
 if SERVER then
-	function GM:ShowTeam(ply)
-		ply:OpenGroupedInterface("CharacterSelect", "F2")
+	function meta:OpenInterface(name, ...)
+		netstream.Send("OpenInterface", self, {Name = name, Args = {...}})
 	end
 
-	function GM:ShowSpare1(ply)
-		ply:OpenGroupedInterface("PlayerMenu", "F3")
+	function meta:OpenGroupedInterface(name, group, ...)
+		netstream.Send("OpenInterface", self, {Name = name, Group = group, Args = {...}})
 	end
 end
