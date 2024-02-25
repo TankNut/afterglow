@@ -9,6 +9,10 @@ if CLIENT then
 	function GM:CreateClientsideRagdoll(ent, ragdoll)
 		Appearance.Copy(ent, ragdoll)
 	end
+
+	function GM:GetPlayerColor(ply)
+		return ply:GetCharacterFlagAttribute("PlayerColor")
+	end
 end
 
 

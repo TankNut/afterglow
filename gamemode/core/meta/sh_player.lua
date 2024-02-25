@@ -15,3 +15,10 @@ if SERVER then
 		self:SetNetVar("Armor", val)
 	end
 end
+
+
+if CLIENT then
+	function meta:GetPlayerColor()
+		return hook.Run("GetPlayerColor", self)
+	end
+end

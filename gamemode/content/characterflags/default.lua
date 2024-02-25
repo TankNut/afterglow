@@ -1,6 +1,8 @@
 FLAG.Name = "Citizen"
 FLAG.Team = TEAM_CITIZEN
 
+FLAG.PlayerColor = Color(15, 71, 93):ToVector()
+
 FLAG.BaseLanguage = "eng"
 FLAG.DefaultLanguages = {
 	eng = true
