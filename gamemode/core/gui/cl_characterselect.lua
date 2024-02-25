@@ -23,28 +23,28 @@ function PANEL:Populate()
 
 	local ply = LocalPlayer()
 
-	for k, v in SortedPairs(ply:GetCharacterList()) do
+	for id, name in SortedPairs(ply:GetCharacterList()) do
 		local button = self:Add("DButton")
 
 		button:DockMargin(0, 0, 0, 5)
 		button:Dock(TOP)
-		button:SetText(v.name)
+		button:SetText(name)
 
 		button.DoClick = function(pnl)
 			if self.DeleteMode then
-				netstream.Send("DeleteCharacter", k)
+				netstream.Send("DeleteCharacter", id)
 			else
-				netstream.Send("SelectCharacter", k)
+				netstream.Send("SelectCharacter", id)
 
 				button:SetDisabled(true)
 			end
 		end
 
-		if k == ply:GetCharID() then
+		if id == ply:GetCharID() then
 			button:SetDisabled(true)
 		end
 
-		button.ID = k
+		button.ID = id
 
 		table.insert(self.Buttons, button)
 	end

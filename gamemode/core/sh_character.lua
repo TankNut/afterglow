@@ -201,11 +201,10 @@ if SERVER then
 				query:Select("value")
 				query:WhereEqual("id", v.id)
 				query:WhereIn("key", fields)
+
 			local data = table.DBKeyValues(query:Execute())
 
-			data.name = hook.Run("GetCharacterListName", data) or data.name or "*UNNAMED CHARACTER*"
-
-			characters[v.id] = data
+			characters[v.id] = hook.Run("GetCharacterListName", data)
 		end
 
 		ply:SetCharacterList(characters)
@@ -262,15 +261,6 @@ end
 if SERVER then
 	function GM:PostLoadCharacter(ply, id)
 		ply:Spawn()
-	end
-
-
-	function GM:GetCharacterListFields(fields)
-		table.insert(fields, "name")
-	end
-
-
-	function GM:GetCharacterListName(id, fields)
 	end
 
 
