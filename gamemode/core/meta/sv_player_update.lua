@@ -26,7 +26,7 @@ end
 
 
 function meta:UpdateName()
-	self:SetVisibleName(hook.Run("GetVisibleName", self))
+	self:SetVisibleName(hook.Run("GetCharacterName", self) or self:GetCharacterName())
 end
 
 

@@ -1,6 +1,7 @@
 FLAG.Name = "Citizen"
 FLAG.Team = TEAM_CITIZEN
 
+FLAG.CharacterName = nil
 FLAG.PlayerColor = Color(15, 71, 93):ToVector()
 
 FLAG.BaseLanguage = "eng"
@@ -41,7 +42,6 @@ if SERVER then
 		data.Skin = ply:GetCharacterSkin()
 	end
 
-
 	-- Overwrite if you want full control over player appearance
 	function FLAG:GetAppearance(ply, data)
 		self:GetBaseAppearance(ply, data)
@@ -51,12 +51,6 @@ if SERVER then
 			item:GetModelData(ply, data)
 		end
 	end
-
-
-	function FLAG:GetCharacterName(ply)
-		return ply:GetCharacterName()
-	end
-
 
 	function FLAG:OnSpawn(ply)
 	end

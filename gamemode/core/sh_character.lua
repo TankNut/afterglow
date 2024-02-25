@@ -326,9 +326,9 @@ function GM:ModifyCharacterRules(rules)
 end
 
 
--- TODO: Find a better way of doing this?
+-- Returns false if our name is being overwritten by *anything*
 function GM:CanChangeCharacterName(ply)
-	return ply:GetVisibleName() == ply:GetCharacterName()
+	return not tobool(hook.Run("GetCharacterName", LocalPlayer()))
 end
 
 
