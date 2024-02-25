@@ -1,6 +1,5 @@
 local meta = FindMetaTable("Player")
 
-
 function meta:CheckUserGroup(group)
 	local usergroup = self:GetUserGroup()
 
@@ -23,16 +22,13 @@ function meta:CheckUserGroup(group)
 	return false
 end
 
-
 function meta:IsAdmin()
 	return self:CheckUserGroup("admin")
 end
 
-
 function meta:IsSuperAdmin()
 	return self:CheckUserGroup("superadmin")
 end
-
 
 function meta:IsDeveloper()
 	return self:CheckUserGroup("developer")

@@ -8,7 +8,6 @@ function GM:CharacterNameChanged(ply)
 	end
 end
 
-
 if SERVER then
 	function GM:PreCreateCharacter(ply, fields)
 	end

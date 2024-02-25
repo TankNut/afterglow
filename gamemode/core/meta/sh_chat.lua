@@ -1,7 +1,6 @@
 local entity = FindMetaTable("Entity")
 local meta = FindMetaTable("Player")
 
-
 function entity:CanHear(pos)
 	return util.TraceLine({
 		start = self:IsPlayer() and self:EyePos() or self:WorldSpaceCenter(),
@@ -10,7 +9,6 @@ function entity:CanHear(pos)
 		mask = MASK_OPAQUE
 	}).Fraction == 1
 end
-
 
 function meta:SendChat(name, data)
 	if CLIENT then

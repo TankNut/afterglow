@@ -1,6 +1,5 @@
 local meta = FindMetaTable("Player")
 
-
 function meta:GetBadges()
 	local custom = self:GetCustomBadges()
 	local badges = {}
@@ -14,7 +13,6 @@ function meta:GetBadges()
 	return badges
 end
 
-
 function meta:HasBadge(id)
 	local badge = Get(id)
 
@@ -24,7 +22,6 @@ function meta:HasBadge(id)
 		return tobool(self:GetBadges()[id])
 	end
 end
-
 
 if SERVER then
 	function meta:GiveBadge(id)
@@ -40,7 +37,6 @@ if SERVER then
 
 		self:SetCustomBadges(badges)
 	end
-
 
 	function meta:TakeBadge(id)
 		local badge = Get(id)

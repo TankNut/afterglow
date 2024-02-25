@@ -5,7 +5,6 @@ Components = Components or {}
 local defaultFont = "afterglow.labelbig"
 local defaultColor = color_white
 
-
 function Register(component, base)
 	base = Components[base] or BaseComponent
 
@@ -29,7 +28,6 @@ function Register(component, base)
 	end
 end
 
-
 function Parse(str, maxWidth)
 	local instance = setmetatable({}, {
 		__index = Core
@@ -39,7 +37,6 @@ function Parse(str, maxWidth)
 
 	return instance
 end
-
 
 do -- Core object
 	local CORE = {}
@@ -308,7 +305,6 @@ do -- Core object
 	Core = CORE
 end
 
-
 do -- Base component
 	local COMPONENT = {}
 
@@ -522,7 +518,6 @@ do -- Text component
 	Register(COMPONENT)
 end
 
-
 do -- Font component
 	local COMPONENT = {
 		Name = {"f", "font"}
@@ -540,7 +535,6 @@ do -- Font component
 
 	Register(COMPONENT)
 end
-
 
 do -- Color component
 	local COMPONENT = {
@@ -563,7 +557,6 @@ do -- Color component
 	Register(COMPONENT)
 end
 
-
 do -- Alpha component
 	local COMPONENT = {
 		Name = {"a", "alpha"}
@@ -580,7 +573,6 @@ do -- Alpha component
 
 	Register(COMPONENT)
 end
-
 
 do -- Inset component
 	local COMPONENT = {
@@ -608,7 +600,6 @@ do -- Inset component
 	Register(COMPONENT)
 end
 
-
 do -- Reset component
 	local COMPONENT = {
 		Name = {"reset"}
@@ -624,7 +615,6 @@ do -- Reset component
 
 	Register(COMPONENT)
 end
-
 
 do -- Rainbow component
 	local COMPONENT = {
@@ -700,7 +690,6 @@ do -- Rainbow component
 	Register(COMPONENT)
 end
 
-
 do -- Outline component
 	local black = Color(0, 0, 0)
 	local COMPONENT = {
@@ -750,7 +739,6 @@ do -- Outline component
 	Register(COMPONENT)
 end
 
-
 do -- Compound component
 	local COMPONENT = {
 		Name = {"compound"},
@@ -784,7 +772,6 @@ do -- Compound component
 
 	Register(COMPONENT)
 end
-
 
 do -- ScribeLabel panel
 	local PANEL = {}

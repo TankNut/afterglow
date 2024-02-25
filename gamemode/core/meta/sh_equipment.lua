@@ -1,6 +1,5 @@
 local meta = FindMetaTable("Player")
 
-
 function meta:GetEquipment(slot, class, allowChildren)
 	if slot then
 		for _, item in pairs(self:GetItems(class, allowChildren)) do
@@ -22,7 +21,6 @@ function meta:GetEquipment(slot, class, allowChildren)
 		return equipment
 	end
 end
-
 
 function meta:EquipmentHook(name)
 	for _, item in pairs(self:GetEquipment()) do
