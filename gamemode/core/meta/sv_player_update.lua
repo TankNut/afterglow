@@ -2,11 +2,9 @@ local meta = FindMetaTable("Player")
 
 
 function meta:UpdateArmor()
-	local armor = 0
+	local armor = hook.Run("GetBaseArmor", self)
 
 	if self:HasCharacter() then
-		armor = self:GetCharacterFlagAttribute("Armor")
-
 		for _, v in pairs(self:GetEquipment()) do
 			if v:IsBasedOn("base_clothing") then
 				armor = math.max(armor, v:GetArmor())
@@ -21,7 +19,7 @@ end
 
 
 function meta:UpdateTeam()
-	self:SetTeam(hook.Run("PlayerGetTeam", self))
+	self:SetTeam(hook.Run("GetPlayerTeam", self))
 end
 
 

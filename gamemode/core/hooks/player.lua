@@ -1,5 +1,7 @@
-
 if SERVER then
+	function GM:GetBaseArmor(ply) return ply:GetCharacterFlagAttribute("Armor") end
+	function GM:GetPlayerTeam(ply) return ply:GetCharacterFlagAttribute("Team") end
+
 	function GM:GetSlowWalkSpeed(ply) return ply:GetCharacterFlagAttribute("SlowWalkSpeed") end
 	function GM:GetWalkSpeed(ply) return ply:GetCharacterFlagAttribute("WalkSpeed") end
 	function GM:GetRunSpeed(ply) return ply:GetCharacterFlagAttribute("RunSpeed") end
