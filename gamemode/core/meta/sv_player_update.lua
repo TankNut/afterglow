@@ -1,6 +1,5 @@
 local meta = FindMetaTable("Player")
 
-
 function meta:UpdateArmor()
 	local armor = hook.Run("GetBaseArmor", self)
 
@@ -17,21 +16,12 @@ function meta:UpdateArmor()
 	end
 end
 
-
-function meta:UpdateTeam()
-	self:SetTeam(hook.Run("GetPlayerTeam", self))
-end
-
-
-function meta:UpdateName()
-	self:SetVisibleName(hook.Run("GetCharacterName", self) or self:GetCharacterName())
-end
-
+function meta:UpdateTeam() self:SetTeam(hook.Run("GetPlayerTeam", self)) end
+function meta:UpdateName() self:SetVisibleName(hook.Run("GetCharacterName", self) or self:GetCharacterName()) end
 
 function meta:UpdateAppearance()
 	Appearance.QueueUpdate(self)
 end
-
 
 function meta:UpdateSpeed()
 	self:SetSlowWalkSpeed(hook.Run("GetSlowWalkSpeed", self))
