@@ -11,6 +11,8 @@ function Add(name, data)
 		Default = data
 	end
 
+	data.ID = name
+
 	List[name] = data
 end
 
