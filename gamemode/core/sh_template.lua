@@ -114,8 +114,12 @@ if SERVER then
 			fields[field] = val
 		end
 
+		local data = {}
+
+		template:OnCreate(ply, data)
+
 		for field, func in pairs(template.Callbacks) do
-			local val = template[func](template, ply)
+			local val = template[func](template, ply, data)
 
 			if val != nil then
 				fields[field] = val
@@ -126,19 +130,19 @@ if SERVER then
 
 		local inventory = ply:GetInventory()
 
-		for _, class in pairs(template.Items) do
-			local data
+		for _, class in pairs(template:GetItems(ply, data)) do
+			local itemData
 
 			if istable(class) then
-				class, data = class[1], class[2]
+				class, itemData = class[1], class[2]
 			end
 
-			local item = Item.CreateTemp(class, data)
+			local item = Item.CreateTemp(class, itemData)
 
 			item:SetInventory(inventory)
 		end
 
-		template:OnCreate(ply)
+		template:OnLoad(ply, data)
 	end
 
 	netstream.Hook("LoadTemplate", function(ply, id)

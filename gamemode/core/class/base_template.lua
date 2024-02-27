@@ -5,5 +5,12 @@ TEMPLATE.Callbacks = {}
 
 TEMPLATE.Items = {}
 
-function TEMPLATE:OnCreate(ply)
+function TEMPLATE:GetItems(ply, data)
+	return self.Items
+end
+
+function TEMPLATE:OnCreate(ply, data)
+end
+
+function TEMPLATE:OnLoad(ply, data)
 end
