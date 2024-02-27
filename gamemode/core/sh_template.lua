@@ -46,8 +46,12 @@ function Add(name, data)
 		data.Callbacks = callbacks
 	end
 
+	local base = data.Base
+
 	List[name] = setmetatable(data, {
-		__index = Class
+		__index = function(_, index)
+			return base and Get(base)[index] or Class[index]
+		end
 	})
 end
 

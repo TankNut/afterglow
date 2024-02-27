@@ -1,4 +1,5 @@
 TEMPLATE.Name = "Unnamed Character Template"
+TEMPLATE.Base = nil
 
 TEMPLATE.Vars = {}
 TEMPLATE.Callbacks = {}
