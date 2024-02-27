@@ -29,4 +29,6 @@ function Load()
 			IncludeFile(finalPath)
 		end
 	end
+
+	hook.Run("LoadPluginContent")
 end

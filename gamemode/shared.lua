@@ -18,5 +18,3 @@ IncludeFile("core/_core.lua")
 IncludeFile("content/_content.lua")
 
 Plugin.Load()
-
--- Call hook to load custom content types?
