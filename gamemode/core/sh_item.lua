@@ -226,3 +226,9 @@ hook.Add("OnReloaded", "Item", function()
 		item:InvalidateCache()
 	end
 end)
+
+if SERVER then
+	hook.Add("PostInitDatabase", "Item", function()
+		LoadWorldItems()
+	end)
+end

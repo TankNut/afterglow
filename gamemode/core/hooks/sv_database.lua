@@ -3,5 +3,4 @@ function GM:DatabaseConnected()
 end
 
 function GM:PostInitDatabase()
-	Item.LoadWorldItems()
 end
