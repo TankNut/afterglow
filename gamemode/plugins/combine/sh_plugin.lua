@@ -1,5 +1,8 @@
 module("Combine", package.seeall)
 
+DefaultTeam = TEAM_COMBINE
+
+IncludeFile("sh_combineflag.lua")
 IncludeFile("sh_vars.lua")
 
 function GetCID(seed)
@@ -15,3 +18,7 @@ function GetCID(seed)
 
 	return str
 end
+
+hook.Add("LoadPluginContent", "Plugin.Combine", function()
+	Combine.Flag.AddFolder("content/combineflags")
+end)
