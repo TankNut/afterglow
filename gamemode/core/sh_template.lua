@@ -165,7 +165,3 @@ if SERVER then
 		self:SetTemplates(templates)
 	end
 end
-
-function GM:HasTemplateAccess(ply, template)
-	return ply:IsSuperAdmin() or ply:HasTemplate(template)
-end

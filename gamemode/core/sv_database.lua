@@ -41,11 +41,3 @@ LoadTables = coroutine.Bind(function()
 
 	hook.Run("PostInitDatabase")
 end)
-
-function GM:DatabaseConnected()
-	Database.LoadTables()
-end
-
-function GM:PostInitDatabase()
-	Item.LoadWorldItems()
-end
