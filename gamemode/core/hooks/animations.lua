@@ -31,7 +31,7 @@ function GM:CalcMainActivity(ply, vel)
 end
 
 function GM:HandleNonPlayerModel(ply, vel)
-	local animtable = Get(ply:GetModel())
+	local animtable = Animtable.Get(ply:GetModel())
 
 	if not animtable then
 		return
@@ -64,7 +64,7 @@ function GM:UpdateAnimation(ply, vel, max)
 	self.BaseClass:UpdateAnimation(ply, vel, max)
 
 	if CLIENT then
-		if Models[ply:GetModel():lower()] then
+		if Animtable.Get(ply:GetModel():lower()) then
 			ply:SetIK(false)
 		else
 			ply:SetIK(true)
