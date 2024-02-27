@@ -1,27 +1,14 @@
 TEMPLATE.Name = "Nova Prospekt Guard"
-
-TEMPLATE.Vars = {
-	Flag = "combine_soldier"
-}
-
-TEMPLATE.Callbacks = {
-	"Name"
-}
+TEMPLATE.Base = "overwatch_soldier"
 
 TEMPLATE.Items = {
 	"overwatch_prison"
 }
 
-function TEMPLATE:GetName(ply)
-	local id = ""
-
-	for i = 1, 5 do
-		id = id .. math.random(0, 9)
-	end
-
-	return "COTA.HELIX-OWS." .. id
+function TEMPLATE:GetName(ply, data)
+	return "COTA.HELIX-OWS." .. data.CID
 end
 
-function TEMPLATE:OnCreate(ply)
+function TEMPLATE:OnLoad(ply, data)
 	ply:GetFirstItem("overwatch_prison"):Equip("Uniform")
 end

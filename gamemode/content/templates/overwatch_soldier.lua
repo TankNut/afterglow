@@ -5,23 +5,25 @@ TEMPLATE.Vars = {
 }
 
 TEMPLATE.Callbacks = {
-	"Name"
+	"Name", "CID"
 }
 
 TEMPLATE.Items = {
 	"overwatch_soldier"
 }
 
-function TEMPLATE:GetName(ply)
-	local id = ""
-
-	for i = 1, 5 do
-		id = id .. math.random(0, 9)
-	end
-
-	return "COTA.ECHO-OWS." .. id
+function TEMPLATE:OnCreate(ply, data)
+	data.CID = Combine.GetCID()
 end
 
-function TEMPLATE:OnCreate(ply)
+function TEMPLATE:GetName(ply, data)
+	return "COTA.ECHO-OWS." .. data.CID
+end
+
+function TEMPLATE:GetCID(ply, data)
+	return data.CID
+end
+
+function TEMPLATE:OnLoad(ply, data)
 	ply:GetFirstItem("overwatch_soldier"):Equip("Uniform")
 end
