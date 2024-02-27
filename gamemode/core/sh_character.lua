@@ -7,7 +7,7 @@ Vars = Vars or {}
 function AddVar(key, data)
 	Vars[key] = data
 
-	data.Key = "Character" .. (data.Key or key:FirstToUpper())
+	data.Key = "C_" .. key:FirstToUpper()
 	data.Accessor = data.Accessor or "Character" .. key:FirstToUpper()
 	data.Field = data.Field or key:lower()
 

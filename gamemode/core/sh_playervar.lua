@@ -8,7 +8,7 @@ Fields = Fields or {}
 function Add(key, data)
 	Vars[key] = data
 
-	data.Key = "Player" .. (data.Key or key:FirstToUpper())
+	data.Key = "P_" .. key:FirstToUpper()
 	data.Accessor = data.Accessor or key:FirstToUpper()
 
 	if data.Field then
