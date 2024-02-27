@@ -4,10 +4,6 @@ local meta = FindMetaTable("Player")
 meta.Armor = nil
 meta.SetArmor = nil
 
-function meta:GetPlayerColor()
-	return hook.Run("GetPlayerColor", self)
-end
-
 function entity:Armor()
 	return self:GetNetVar("Armor", 0)
 end
