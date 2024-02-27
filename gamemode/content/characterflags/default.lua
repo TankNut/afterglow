@@ -27,10 +27,13 @@ FLAG.NoFallDamage = false
 FLAG.BloodColor = BLOOD_COLOR_RED
 FLAG.AllowClothing = true
 
-function FLAG:GetAttribute(name, ply)
-	local func = self["Get" .. name]
+FLAG.AttributeBlacklist = table.Lookup({
+	"Name", "ID", -- Internal values
+	"Attribute", -- Infinite loop avoidance
+})
 
-	return func and func(self, ply) or self[name]
+function FLAG:GetAttribute(ply, name)
+	return hook.Run("GetCharacterFlagAttribute", self, ply, name)
 end
 
 if SERVER then

@@ -45,7 +45,7 @@ if SERVER then
 		local flag = ply:GetCharacterFlagTable()
 
 		local healthFraction = ply:Health() / ply:GetMaxHealth()
-		local health = flag:GetAttribute("Health")
+		local health = flag:GetAttribute(ply, "Health")
 
 		ply:UpdateTeam()
 		ply:UpdateName()
@@ -57,7 +57,7 @@ if SERVER then
 		ply:UpdateArmor()
 		ply:UpdateSpeed()
 
-		ply:SetBloodColor(flag:GetAttribute("BloodColor"))
+		ply:SetBloodColor(flag:GetAttribute(ply, "BloodColor"))
 
 		ply:StripWeapons()
 		ply:RemoveAllAmmo()
@@ -66,7 +66,7 @@ if SERVER then
 		ply:Give("gmod_camera")
 		ply:Give("weapon_physgun")
 
-		local weaponList = flag:GetAttribute("Weapons", ply)
+		local weaponList = flag:GetAttribute(ply, "Weapons")
 
 		for _, class in pairs(weaponList) do
 			ply:Give(class)

@@ -68,5 +68,5 @@ end
 function meta:GetCharacterFlagAttribute(name)
 	local flag = self:GetCharacterFlagTable()
 
-	return flag:GetAttribute(name, self)
+	return flag:GetAttribute(self, name)
 end
