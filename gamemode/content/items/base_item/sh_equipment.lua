@@ -36,16 +36,32 @@ if SERVER then
 	end
 
 	function ITEM:Equip(slot)
-		local existing = self.Player:GetEquipment(slot)
+		local ply = self.Player
+		local existing = ply:GetEquipment(slot)
 
 		if existing then
-			existing:Unequip()
+			existing:Unequip(true)
 		end
+
+		local equipment = ply:GetEquipmentCache()
+			equipment[slot] = self.ID
+
+		ply:SetEquipmentCache(equipment)
 
 		self:SetProperty("Equipped", slot)
 	end
 
-	function ITEM:Unequip()
+	function ITEM:Unequip(noEquipmentCache)
+		local ply = self.Player
+		local slot = self:IsEquipped()
+
+		if not noEquipmentCache then
+			local equipment = ply:GetEquipmentCache()
+				equipment[slot] = nil
+
+			ply:SetEquipmentCache(equipment)
+		end
+
 		self:SetProperty("Equipped", nil)
 	end
 

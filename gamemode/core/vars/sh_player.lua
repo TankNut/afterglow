@@ -15,3 +15,7 @@ PlayerVar.Add("Scale", {
 		ply:RefreshHull()
 	end
 })
+
+PlayerVar.Add("EquipmentCache", {
+	Default = {}
+})

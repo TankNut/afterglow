@@ -126,6 +126,7 @@ if SERVER then
 
 		if not ply:IsTemplateCharacter() then
 			inventory:LoadItems()
+			ply:UpdateEquipmentCache()
 		end
 
 		_G.CHARACTER_LOADING = nil

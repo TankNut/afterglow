@@ -1,21 +1,15 @@
 local meta = FindMetaTable("Player")
 
-function meta:GetEquipment(slot, class, allowChildren)
+function meta:GetEquipment(slot)
 	if slot then
-		for _, item in pairs(self:GetItems(class, allowChildren)) do
-			if item:GetProperty("Equipped") == slot then
-				return item
-			end
-		end
+		local id = self:GetEquipmentCache()[slot]
+
+		return id and Item.Get(id)
 	else
 		local equipment = {}
 
-		for _, item in pairs(self:GetItems(class, allowChildren)) do
-			local usedSlot = item:GetProperty("Equipped")
-
-			if usedSlot then
-				equipment[usedSlot] = item
-			end
+		for itemSlot, id in pairs(self:GetEquipmentCache()) do
+			equipment[itemSlot] = Item.Get(id)
 		end
 
 		return equipment
@@ -38,3 +32,18 @@ function meta:EquipmentHook(name)
 	end
 end
 
+if SERVER then
+	function meta:UpdateEquipmentCache()
+		local equipment = {}
+
+		for _, item in pairs(self:GetItems()) do
+			local slot = item:IsEquipped()
+
+			if slot then
+				equipment[slot] = item.ID
+			end
+		end
+
+		self:SetEquipmentCache(equipment)
+	end
+end
