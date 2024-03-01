@@ -60,7 +60,7 @@ Character.AddVar("CombineFlag", {
 	Accessor = "CombineFlag",
 	Default = "",
 	Callback = function(ply, old, new)
-		if SERVER and not CHARACTER_LOADING then
+		if SERVER and not CHARACTER_LOADING and ply:GetCombineFlagged() then
 			if new == "" then
 				ply:SetCombineFlagged(false)
 			else
