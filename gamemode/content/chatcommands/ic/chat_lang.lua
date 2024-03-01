@@ -18,7 +18,7 @@ if SERVER then
 		if not ply:CanSpeakLanguage(lang) then
 			ply:SendChat("ERROR", "You don't speak this language!")
 
-			return true
+			return
 		end
 
 		ply:SetActiveLanguage(lang)
