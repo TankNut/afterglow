@@ -4,7 +4,9 @@ function GM:SetupMove(ply, mv, cmd)
 	end
 end
 
-function GM:GetPlayerColor(ply) return ply:GetCharacterFlagAttribute("PlayerColor") end
+function GM:GetPlayerColor(ply) return
+	ply:GetAppearance().PlayerColor or team.GetVecColor(ply:Team())
+end
 
 if SERVER then
 	function GM:GetBaseArmor(ply) return ply:GetCharacterFlagAttribute("Armor") end
