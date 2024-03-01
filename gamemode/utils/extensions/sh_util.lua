@@ -9,3 +9,7 @@ function util.GetModelSkins(mdl)
 
 	return info and info.SkinCount or 1
 end
+
+util.IsFemaleModel = Memoize(function(mdl)
+	return tobool(hook.Run("IsFemaleModel", mdl))
+end)
