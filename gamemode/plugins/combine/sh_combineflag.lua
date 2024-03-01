@@ -88,6 +88,10 @@ hook.Add("GetCharacterFlagAttribute", "Plugin.Combine", function(flag, ply, name
 	return ply:GetCombineFlagAttribute(name)
 end)
 
+function meta:HasCombineFlag()
+	return self:GetCombineFlag() != ""
+end
+
 function meta:GetCombineFlagTable()
 	return GetOrDefault(self:GetCombineFlag())
 end
