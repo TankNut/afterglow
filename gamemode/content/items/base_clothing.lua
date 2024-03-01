@@ -14,10 +14,10 @@ function ITEM:GetArmor()
 	return self:GetProperty("Armor")
 end
 
-function ITEM:OnEquip()
-	BaseClass.OnEquip(self)
+function ITEM:OnEquip(loaded)
+	BaseClass.OnEquip(self, loaded)
 
-	if SERVER and self:GetArmor() > 0 then
+	if SERVER and not loaded and self:GetArmor() > 0 then
 		self.Player:UpdateArmor()
 	end
 end

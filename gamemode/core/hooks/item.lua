@@ -14,7 +14,7 @@ function GM:GetItemDropLocation(ply)
 end
 
 function GM:ItemEquipped(ply, item, loaded)
-	item:OnEquip()
+	item:OnEquip(loaded)
 	item:FireEvent("EquipmentChanged")
 end
 

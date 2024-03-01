@@ -19,8 +19,8 @@ end
 
 local stub = ITEM.GetModelData
 
-function ITEM:OnEquip()
-	if SERVER and self.GetModelData != stub then
+function ITEM:OnEquip(loaded)
+	if SERVER and not loaded and self.GetModelData != stub then
 		self.Player:UpdateAppearance()
 	end
 end
