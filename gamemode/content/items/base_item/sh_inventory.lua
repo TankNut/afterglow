@@ -12,8 +12,7 @@ function ITEM:SetInventory(inventory, loaded)
 
 	if old then
 		if self:IsEquipped() then
-			hook.Run("ItemUnequipped", self.Player, self)
-			self:SetProperty("Equipped", nil)
+			self:Unequip()
 		end
 
 		old:RemoveItem(self)
