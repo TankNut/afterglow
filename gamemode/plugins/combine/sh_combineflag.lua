@@ -56,30 +56,6 @@ function GetOrDefault(name)
 	return List[name] or Class
 end
 
-Character.AddVar("CombineFlag", {
-	Accessor = "CombineFlag",
-	Default = "",
-	Callback = function(ply, old, new)
-		if SERVER and not CHARACTER_LOADING and ply:GetCombineFlagged() then
-			if new == "" then
-				ply:SetCombineFlagged(false)
-			else
-				hook.Run("PlayerSetup", ply)
-			end
-		end
-	end
-})
-
-Character.AddVar("CombineFlagged", {
-	Accessor = "CombineFlagged",
-	Default = false,
-	Callback = function(ply, old, new)
-		if SERVER and not CHARACTER_LOADING then
-			hook.Run("PlayerSetup", ply)
-		end
-	end
-})
-
 hook.Add("GetCharacterFlagAttribute", "Plugin.Combine", function(flag, ply, name)
 	if not ply:GetCombineFlagged() then
 		return
