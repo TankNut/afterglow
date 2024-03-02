@@ -1,7 +1,7 @@
 function GM:GetCharacterName(ply) return ply:GetCharacterFlagAttribute("CharacterName") end
 
 -- Returns false if our name is being overwritten by *anything*
-function GM:CanChangeCharacterName(ply) return not tobool(hook.Run("GetCharacterName", ply)) end
+function GM:CanChangeCharacterName(ply) return not ply:HasForcedCharacterName() end
 function GM:CanChangeCharacterDescription(ply) return true end
 
 function GM:CanSpeakLanguage(ply, lang)

@@ -255,6 +255,10 @@ function meta:IsTemplateCharacter()
 	return self:GetCharID() == 0
 end
 
+function meta:HasForcedCharacterName()
+	return tobool(hook.Run("GetCharacterName", self))
+end
+
 if SERVER then
 	function meta:UpdateName()
 		self:SetVisibleName(hook.Run("GetCharacterName", self) or self:GetCharacterName())
