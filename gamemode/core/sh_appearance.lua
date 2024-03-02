@@ -52,7 +52,7 @@ if SERVER then
 		local data = table.Copy(Default)
 
 		if ply:HasCharacter() then
-			hook.Run("GetAppearance", ply, data)
+			hook.Run("GetCharacterAppearance", ply, data)
 		end
 
 		if table.IsEmpty(data.Hands) then
@@ -82,6 +82,12 @@ if SERVER then
 		table.Empty(UpdateList)
 	end)
 end
+
+netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
+	Appearance.Apply(ent, appearance)
+
+	hook.Run("PostSetAppearance", ent)
+end)
 
 -- Not a PlayerVar because we apply to both entities and players
 function meta:GetAppearance()

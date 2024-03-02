@@ -5,7 +5,7 @@ function GM:PostSetAppearance(ent)
 end
 
 if SERVER then
-	function GM:GetAppearance(ply, data)
+	function GM:GetCharacterAppearance(ply, data)
 		ply:GetCharacterFlagTable():GetAppearance(ply, data)
 	end
 
