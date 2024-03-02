@@ -1,7 +1,7 @@
 CLASS.Name = "Flag up"
 CLASS.Description = "Sets you as on-duty if you have a combine flag."
 
-CLASS.Commands = {"flag", "cp"}
+CLASS.Commands = {"flag", "cp", "combine"}
 
 if SERVER then
 	function CLASS:Parse(ply, lang, cmd, text)
