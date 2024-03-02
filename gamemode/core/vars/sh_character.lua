@@ -55,12 +55,6 @@ Character.AddVar("Skin", {
 	end
 })
 
-netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
-	Appearance.Apply(ent, appearance)
-
-	hook.Run("PostSetAppearance", ent)
-end)
-
 Character.AddVar("Flag", {
 	Default = "default",
 	Callback = function(ply, old, new)
