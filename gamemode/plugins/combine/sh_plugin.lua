@@ -21,4 +21,7 @@ end
 
 hook.Add("LoadPluginContent", "Plugin.Combine", function()
 	Combine.Flag.AddFolder("content/combineflags")
+
+	Chat.AddFolder("plugins/combine/chatcommands")
+	Command.AddFolder("plugins/combine/commands")
 end)
