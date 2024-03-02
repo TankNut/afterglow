@@ -1,6 +1,5 @@
 function GM:GetCharacterName(ply) return ply:GetCharacterFlagAttribute("CharacterName") end
 
--- Returns false if our name is being overwritten by *anything*
 function GM:CanChangeCharacterName(ply) return not ply:HasForcedCharacterName() end
 function GM:CanChangeCharacterDescription(ply) return true end
 
@@ -12,8 +11,18 @@ function GM:CanUnderstandLanguage(ply, lang)
 	return ply:GetLanguages()[lang] != nil
 end
 
-function GM:HasTemplateAccess(ply, template)
-	return ply:IsSuperAdmin() or ply:HasTemplate(template)
+function GM:HasCharacterTemplateAccess(ply, id, template)
+	return ply:IsSuperAdmin() or ply:HasTemplate(id)
+end
+
+function GM:GetCharacterFlagAttribute(flag, ply, name)
+	if flag.AttributeBlacklist[name] then
+		error("Attempt to FLAG:GetAttribute blacklisted key " .. name)
+	end
+
+	local func = flag["Get" .. name]
+
+	return func and func(flag, ply) or flag[name]
 end
 
 if SERVER then

@@ -100,7 +100,7 @@ function meta:GetAvailableTemplates()
 	local tab = {}
 
 	for id, data in pairs(List) do
-		if hook.Run("HasTemplateAccess", self, id) then
+		if hook.Run("HasCharacterTemplateAccess", self, id, data) then
 			table.insert(tab, data)
 		end
 	end
@@ -150,11 +150,13 @@ if SERVER then
 	end
 
 	netstream.Hook("LoadTemplate", function(ply, id)
-		if not hook.Run("HasTemplateAccess", ply, id) then
+		local template = Get(id)
+
+		if not template or not hook.Run("HasCharacterTemplateAccess", ply, id, template) then
 			return
 		end
 
-		Load(ply, Get(id))
+		Load(ply, template)
 	end)
 
 	function meta:GiveTemplate(template)
