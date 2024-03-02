@@ -4,6 +4,7 @@ DefaultTeam = TEAM_COMBINE
 
 IncludeFile("sh_combineflag.lua")
 IncludeFile("sh_vars.lua")
+IncludeFile("sh_hooks.lua")
 
 function GetCID(seed)
 	if seed then

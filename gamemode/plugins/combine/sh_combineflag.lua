@@ -64,6 +64,20 @@ hook.Add("GetCharacterFlagAttribute", "Plugin.Combine", function(flag, ply, name
 	return ply:GetCombineFlagAttribute(name)
 end)
 
+if SERVER then
+	hook.Add("PostLoadCharacter", "Plugin.Combine", function(ply, id)
+		if ply:GetCombineFlagged() then
+			hook.Run("OnCombineFlag", ply, true)
+		end
+	end)
+
+	hook.Add("UnloadCharacter", "Plugin.Combine", function(ply, id)
+		if ply:GetCombineFlagged() then
+			hook.Run("OnCombineUnflag", ply, true)
+		end
+	end)
+end
+
 function meta:HasCombineFlag()
 	return self:GetCombineFlag() != ""
 end

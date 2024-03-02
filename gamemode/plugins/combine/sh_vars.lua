@@ -28,6 +28,7 @@ Character.AddVar("CombineFlagged", {
 	Callback = function(ply, old, new)
 		if SERVER and not CHARACTER_LOADING then
 			hook.Run("PlayerSetup", ply)
+			hook.Run(new and "OnCombineFlag" or "OnCombineUnflag", ply)
 		end
 	end
 })
