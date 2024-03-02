@@ -25,4 +25,7 @@ if SERVER then
 	function GM:PostLoadCharacter(ply, id)
 		ply:Spawn()
 	end
+
+	function GM:UnloadCharacter(ply, id)
+	end
 end

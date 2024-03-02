@@ -107,7 +107,7 @@ end
 if SERVER then
 	Load = coroutine.Bind(function(ply, id, fields)
 		if ply:HasCharacter() then
-			OnUnload(ply)
+			hook.Run("UnloadCharacter", ply, ply:GetCharID())
 		end
 
 		_G.CHARACTER_LOADING = true
@@ -150,7 +150,7 @@ if SERVER then
 
 	function Unload(ply)
 		if ply:HasCharacter() then
-			OnUnload(ply)
+			hook.Run("UnloadCharacter", ply, ply:GetCharID())
 		end
 
 		_G.CHARACTER_LOADING = true
@@ -240,10 +240,6 @@ if SERVER then
 				query:Insert("value", pack.Encode(value))
 			query:Execute(true)
 		end
-	end
-
-	function OnUnload(ply)
-		Inventory.Remove(ply:GetNetVar("InventoryID"))
 	end
 end
 

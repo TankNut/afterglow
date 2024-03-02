@@ -49,9 +49,12 @@ if SERVER then
 		Null = New(ITEM_NULL, 0)
 	end
 
-	hook.Add("PlayerDisconnected", "Inventory", function(ply)
-		Inventory.Remove(ply:GetNetVar("InventoryID"))
-	end)
+	local function unload(ply)
+		Remove(ply:GetNetVar("InventoryID"))
+	end
+
+	hook.Add("PlayerDisconnected", "Inventory", unload)
+	hook.Add("UnloadCharacter", "Inventory", unload)
 end
 
 function entity:GetInventory()
