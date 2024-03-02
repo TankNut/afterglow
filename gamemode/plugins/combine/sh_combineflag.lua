@@ -3,14 +3,14 @@ module("Combine.Flag", package.seeall)
 local meta = FindMetaTable("Player")
 
 List = List or {}
-Class = Class or {}
+Default = Default or {}
 
-_G.FLAG = Class
+_G.FLAG = Default
 IncludeFile("class/base_combineflag.lua")
 _G.FLAG = nil
 
 function Add(name, data)
-	List[name] = setmetatable(data, {__index = Class})
+	List[name] = setmetatable(data, {__index = Default})
 end
 
 function AddFile(path, name)
@@ -53,7 +53,7 @@ function Get(name)
 end
 
 function GetOrDefault(name)
-	return List[name] or Class
+	return List[name] or Default
 end
 
 hook.Add("GetCharacterFlagAttribute", "Plugin.Combine", function(flag, ply, name)
