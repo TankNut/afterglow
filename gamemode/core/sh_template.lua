@@ -129,7 +129,9 @@ if SERVER then
 			end
 		end
 
-		ply:LoadCharacter(0, fields)
+		ply:LoadCharacter(Character.TempID, fields)
+
+		Character.TempID = Character.TempID - 1
 
 		local inventory = ply:GetInventory()
 
