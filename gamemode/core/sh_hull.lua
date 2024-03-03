@@ -43,10 +43,16 @@ if SERVER then
 	hook.Add("PostLoadCharacter", "Hull", function(ply)
 		ply:SetPlayerScale(1)
 	end)
+
+	hook.Add("PostSetAppearance", "Hull", function(ent)
+		if ent:IsPlayer() then
+			ent:UpdateHull()
+		end
+	end)
 end
 
-function meta:RefreshHull()
-	local data = Hull.Models[self:GetModel():lower()] or Hull.Default
+function meta:UpdateHull()
+	local data = Models[self:GetModel():lower()] or Default
 	local scale = self:GetPlayerScale()
 
 	self:SetModelScale(scale, 0.0001)

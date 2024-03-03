@@ -1,7 +1,4 @@
 function GM:PostSetAppearance(ent)
-	if ent:IsPlayer() then
-		ent:RefreshHull()
-	end
 end
 
 if SERVER then

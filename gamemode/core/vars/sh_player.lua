@@ -12,7 +12,7 @@ PlayerVar.Add("Scale", {
 	Accessor = "PlayerScale",
 	Default = 1,
 	Callback = function(ply, old, new)
-		ply:RefreshHull()
+		ply:UpdateHull()
 	end
 })
 
