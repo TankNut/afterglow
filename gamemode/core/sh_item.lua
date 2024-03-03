@@ -9,8 +9,6 @@ module("Item", package.seeall)
 List = List or {}
 All = All or setmetatable({}, {__mode = "v"})
 
-TempID = TempID or -1
-
 function Inherit(tab, base)
 	if not base then
 		return tab
@@ -171,6 +169,8 @@ if CLIENT then
 end
 
 if SERVER then
+	TempID = TempID or -1
+
 	Create = coroutine.Bind(function(name, data)
 		local query = mysql:Insert("rp_items")
 			query:Insert("class", name)

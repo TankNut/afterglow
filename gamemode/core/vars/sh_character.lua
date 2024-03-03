@@ -1,7 +1,7 @@
 PlayerVar.Add("CharID", {
-	Default = -1,
+	Default = CHARACTER_NONE,
 	Callback = function(ply, old, new)
-		if CLIENT and ply == LocalPlayer() and new > -1 then
+		if CLIENT and ply == LocalPlayer() and new != CHARACTER_NONE then
 			Interface.CloseGroup("F2")
 		end
 	end

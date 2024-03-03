@@ -1,3 +1,5 @@
+CHARACTER_NONE = 0
+
 module("Character", package.seeall)
 
 local meta = FindMetaTable("Player")
@@ -105,36 +107,17 @@ function GetRules()
 end
 
 if SERVER then
-	Load = coroutine.Bind(function(ply, id, fields)
-		if ply:HasCharacter() then
-			hook.Run("UnloadCharacter", ply, ply:GetCharID())
-		end
-
-		_G.CHARACTER_LOADING = true
-
-		ply:SetCharID(id)
-
-		for k, v in pairs(Vars) do
-			local val = fields[v.Field] or nil
-
-			ply["Set" .. v.Accessor](ply, val, true)
-		end
-
-		local inventory = Inventory.New(ITEM_PLAYER, id)
-
-		ply:SetInventory(inventory)
-
-		if not ply:IsTemplateCharacter() then
-			inventory:LoadItems()
-			ply:UpdateEquipmentCache()
-		end
-
-		_G.CHARACTER_LOADING = nil
-
-		hook.Run("PostLoadCharacter", ply, id)
-	end)
+	TempID = TempID or -1
 
 	function Delete(id)
+		assert(id > CHARACTER_NONE, "Attempt to delete invalid CharID")
+
+		local ply = Find(id)
+
+		if IsValid(ply) then
+			ply:UnloadCharacter()
+		end
+
 		mysql:Begin()
 
 		local query = mysql:Delete("rp_characters")
@@ -148,59 +131,13 @@ if SERVER then
 		mysql:Commit()
 	end
 
-	function Unload(ply)
-		if ply:HasCharacter() then
-			hook.Run("UnloadCharacter", ply, ply:GetCharID())
-		end
-
-		_G.CHARACTER_LOADING = true
-
-		ply:SetCharID(nil)
-
-		for k, v in pairs(Vars) do
-			ply["Set" .. v.Accessor](ply, nil, true)
-		end
-
-		_G.CHARACTER_LOADING = nil
-
-		hook.Run("PostLoadCharacter", ply, -1)
-	end
-
-	LoadExternal = coroutine.Bind(function(ply, id)
+	Fetch = coroutine.Bind(function(id)
 		local query = mysql:Select("rp_character_data")
 			query:Select("key")
 			query:Select("value")
 			query:WhereEqual("id", id)
-		local fields = table.DBKeyValues(query:Execute())
 
-		Load(ply, id, fields)
-	end)
-
-	LoadList = coroutine.Bind(function(ply)
-		local characters = {}
-
-		local query = mysql:Select("rp_characters")
-			query:Select("id")
-			query:WhereEqual("steamid", ply:SteamID())
-		local ids = query:Execute()
-
-		local fields = {}
-
-		hook.Run("GetCharacterListFields", fields)
-
-		for _, v in pairs(ids) do
-			query = mysql:Select("rp_character_data")
-				query:Select("key")
-				query:Select("value")
-				query:WhereEqual("id", v.id)
-				query:WhereIn("key", fields)
-
-			local data = table.DBKeyValues(query:Execute())
-
-			characters[v.id] = hook.Run("GetCharacterListName", data)
-		end
-
-		ply:SetCharacterList(characters)
+		return table.DBKeyValues(query:Execute())
 	end)
 
 	Create = coroutine.Bind(function(steamid, fields)
@@ -224,7 +161,7 @@ if SERVER then
 	end)
 
 	function SaveVar(id, field, value)
-		if id <= 0 then
+		if id <= CHARACTER_NONE then
 			return
 		end
 
@@ -244,11 +181,11 @@ if SERVER then
 end
 
 function meta:HasCharacter()
-	return self:GetCharID() != -1
+	return self:GetCharID() != CHARACTER_NONE
 end
 
 function meta:IsTemplateCharacter()
-	return self:GetCharID() == 0
+	return self:GetCharID() < CHARACTER_NONE
 end
 
 function meta:HasForcedCharacterName()
@@ -256,6 +193,82 @@ function meta:HasForcedCharacterName()
 end
 
 if SERVER then
+	-- Using bind here because of inventory:LoadItems()
+	meta.LoadCharacter = coroutine.Bind(function(self, id, fields)
+		if self:HasCharacter() then
+			hook.Run("UnloadCharacter", self, self:GetCharID())
+		end
+
+		_G.CHARACTER_LOADING = true
+
+		self:SetCharID(id)
+
+		for k, v in pairs(Vars) do
+			local val = fields[v.Field] or nil
+
+			self["Set" .. v.Accessor](self, val, true)
+		end
+
+		local inventory = Inventory.New(ITEM_PLAYER, id)
+
+		self:SetInventory(inventory)
+
+		if not self:IsTemplateCharacter() then
+			inventory:LoadItems()
+			self:UpdateEquipmentCache()
+		end
+
+		_G.CHARACTER_LOADING = nil
+
+		hook.Run("PostLoadCharacter", self, id)
+	end)
+
+	function meta:UnloadCharacter()
+		if self:HasCharacter() then
+			hook.Run("UnloadCharacter", self, self:GetCharID())
+		end
+
+		_G.CHARACTER_LOADING = true
+
+		self:SetCharID(nil)
+
+		for k, v in pairs(Vars) do
+			self["Set" .. v.Accessor](self, nil, true)
+		end
+
+		_G.CHARACTER_LOADING = nil
+
+		hook.Run("PostLoadCharacter", self, CHARACTER_NONE)
+	end
+
+	meta.LoadCharacterList = coroutine.Bind(function(self)
+		local characters = {}
+
+		local query = mysql:Select("rp_characters")
+			query:Select("id")
+			query:WhereEqual("steamid", self:SteamID())
+		local ids = query:Execute()
+
+		local fields = {}
+
+		hook.Run("GetCharacterListFields", fields)
+
+		for _, v in pairs(ids) do
+			query = mysql:Select("rp_character_data")
+				query:Select("key")
+				query:Select("value")
+				query:WhereEqual("id", v.id)
+				query:WhereIn("key", fields)
+
+			local data = table.DBKeyValues(query:Execute())
+
+			characters[v.id] = hook.Run("GetCharacterListName", data)
+		end
+
+		self:SetCharacterList(characters)
+	end)
+
+	-- Move this somewhere else?
 	function meta:UpdateName()
 		self:SetVisibleName(hook.Run("GetCharacterName", self) or self:GetCharacterName())
 	end

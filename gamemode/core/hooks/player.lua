@@ -27,7 +27,7 @@ if SERVER then
 
 		coroutine.wrap(function()
 			PlayerVar.Load(ply)
-			Character.LoadList(ply)
+			ply:LoadCharacterList()
 		end)()
 	end
 

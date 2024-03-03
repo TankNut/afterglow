@@ -1,7 +1,7 @@
 if SERVER then
 	netstream.Hook("SelectCharacter", function(ply, id)
 		if ply:GetCharacterList()[id] then
-			Character.LoadExternal(ply, id)
+			ply:LoadCharacter(id, Character.Fetch(id))
 		end
 	end)
 
@@ -25,10 +25,10 @@ if SERVER then
 		hook.Run("PreCreateCharacter", ply, fields)
 
 		coroutine.wrap(function()
-			Character.LoadExternal(ply, Character.Create(ply:SteamID(), fields))
+			ply:LoadCharacter(Character.Create(ply:SteamID(), fields), fields)
 		end)()
 
-		Character.LoadList(ply)
+		ply:LoadCharacterList()
 	end)
 
 	netstream.Hook("DeleteCharacter", function(ply, id)
@@ -36,12 +36,8 @@ if SERVER then
 			return
 		end
 
-		if ply:GetCharID() == id then
-			Character.Unload(ply)
-		end
-
 		Character.Delete(id)
-		Character.LoadList(ply)
+		ply:LoadCharacterList()
 	end)
 
 	local function addCharacterHook(name, callback)

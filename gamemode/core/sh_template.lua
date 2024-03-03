@@ -109,8 +109,7 @@ function meta:GetAvailableTemplates()
 end
 
 if SERVER then
-	-- Don't have to bind here since Character.Load doesn't do any async calls on
-	-- template character loads
+	-- Don't have to bind here since ply:LoadCharacter doesn't do any async calls on template character loads
 	function Load(ply, template)
 		local fields = {}
 
@@ -130,7 +129,7 @@ if SERVER then
 			end
 		end
 
-		Character.Load(ply, 0, fields)
+		ply:LoadCharacter(0, fields)
 
 		local inventory = ply:GetInventory()
 
