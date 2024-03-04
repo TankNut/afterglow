@@ -1,21 +1,27 @@
+local meta = FindMetaTable("Player")
+
 function GM:OnPlayerReady(ply)
+end
+
+function meta:IsClientReady()
+	return net.Ready[self]
 end
 
 if CLIENT then
 	hook.Add("InitPostEntity", "PlayerReady", function()
-		hook.Remove("InitPostEntity", "player_ready")
-		hook.Run("OnPlayerReady")
+		net.Start("PlayerReady")
+		net.SendToServer()
+
+		hook.Run("OnPlayerReady", LocalPlayer())
 	end)
 end
 
 if SERVER then
+	util.AddNetworkString("PlayerReady")
+
 	net.Ready = net.Ready or {}
 
-	gameevent.Listen("OnRequestFullUpdate")
-
-	hook.Add("OnRequestFullUpdate", "PlayerReady", function(data)
-		local ply = Player(data.userid)
-
+	net.Receive("PlayerReady", function(_, ply)
 		if net.Ready[ply] then
 			return
 		end
