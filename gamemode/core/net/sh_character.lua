@@ -77,4 +77,14 @@ if SERVER then
 
 		ply:SetCharacterName(new)
 	end)
+
+	request.Hook("Examine", function(ply, target)
+		target.ExamineCache = target.ExamineCache or {}
+
+		if not target.ExamineCache[ply] then
+			target.ExamineCache[ply] = true
+
+			return target:GetCharacterDescription()
+		end
+	end)
 end

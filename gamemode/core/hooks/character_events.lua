@@ -7,6 +7,8 @@ end
 
 function GM:CharacterDescriptionChanged(ply, old, new)
 	if SERVER then
+		ply.ExamineCache = nil
+
 		local short = string.match(new, "^[^\r\n]*")
 		local config = Config.Get("ShortDescriptionLength")
 

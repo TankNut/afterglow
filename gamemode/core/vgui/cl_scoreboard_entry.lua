@@ -22,6 +22,12 @@ function PANEL:Init()
 	self.ExamineButton:Dock(FILL)
 	self.ExamineButton:SetText("")
 	self.ExamineButton.Paint = function() end
+
+	self.ExamineButton.DoClick = function()
+		if IsValid(self.Player) then
+			self.Player:Examine()
+		end
+	end
 end
 
 function PANEL:PerformLayout(w, h)
