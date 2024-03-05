@@ -11,10 +11,6 @@ function GM:CanUnderstandLanguage(ply, lang)
 	return ply:GetLanguages()[lang] != nil
 end
 
-function GM:HasCharacterTemplateAccess(ply, id, template)
-	return ply:IsSuperAdmin() or ply:HasTemplate(id)
-end
-
 function GM:GetCharacterFlagAttribute(flag, ply, name)
 	if flag.AttributeBlacklist[name] then
 		error("Attempt to FLAG:GetAttribute blacklisted key " .. name)

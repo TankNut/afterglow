@@ -9,10 +9,7 @@ _G.TEMPLATE = Class
 IncludeFile("class/base_template.lua")
 _G.TEMPLATE = nil
 
-function Add(name, data)
-	name = name:lower()
-	data.ID = name
-
+function ProcessTemplate(data)
 	-- Rewrite fields and callbacks so they're in the proper load format
 	if data.Vars then
 		local vars = {}
@@ -48,11 +45,18 @@ function Add(name, data)
 
 	local base = data.Base
 
-	List[name] = setmetatable(data, {
+	return setmetatable(data, {
 		__index = function(_, index)
 			return base and Get(base)[index] or Class[index]
 		end
 	})
+end
+
+function Add(name, data)
+	name = name:lower()
+	data.ID = name
+
+	List[name] = ProcessTemplate(data)
 end
 
 function AddFile(path, name)
@@ -92,15 +96,15 @@ function Get(id)
 	return List[id]
 end
 
-function meta:HasTemplate(template)
-	return self:GetTemplates()[template]
+function meta:CanAccessTemplate(id)
+	return hook.Run("CanAccessTemplate", self, id)
 end
 
 function meta:GetAvailableTemplates()
 	local tab = {}
 
 	for id, data in pairs(List) do
-		if hook.Run("HasCharacterTemplateAccess", self, id, data) then
+		if self:CanAccessTemplate(id) then
 			table.insert(tab, data)
 		end
 	end
@@ -110,7 +114,7 @@ end
 
 if SERVER then
 	-- Don't have to bind here since ply:LoadCharacter doesn't do any async calls on template character loads
-	function Load(ply, template)
+	function meta:LoadTemplate(template)
 		local fields = {}
 
 		for field, val in pairs(template.Vars) do
@@ -119,23 +123,23 @@ if SERVER then
 
 		local data = {}
 
-		template:OnCreate(ply, data)
+		template:OnCreate(self, data)
 
 		for field, func in pairs(template.Callbacks) do
-			local val = template[func](template, ply, data)
+			local val = template[func](template, self, data)
 
 			if val != nil then
 				fields[field] = val
 			end
 		end
 
-		ply:LoadCharacter(Character.TempID, fields)
+		self:LoadCharacter(Character.TempID, fields)
 
 		Character.TempID = Character.TempID - 1
 
-		local inventory = ply:GetInventory()
+		local inventory = self:GetInventory()
 
-		for _, class in pairs(template:GetItems(ply, data)) do
+		for _, class in pairs(template:GetItems(self, data)) do
 			local itemData
 
 			if istable(class) then
@@ -147,31 +151,31 @@ if SERVER then
 			item:SetInventory(inventory)
 		end
 
-		template:OnLoad(ply, data)
+		template:OnLoad(self, data)
 	end
 
 	netstream.Hook("LoadTemplate", function(ply, id)
 		local template = Get(id)
 
-		if not template or not hook.Run("HasCharacterTemplateAccess", ply, id, template) then
+		if not template or not ply:CanAccessTemplate(id) then
 			return
 		end
 
-		Load(ply, template)
+		ply:LoadTemplate(template)
 	end)
 
-	function meta:GiveTemplate(template)
+	function meta:GiveTemplate(id)
 		local templates = self:GetTemplates()
 
-		templates[template] = true
+		templates[id] = true
 
 		self:SetTemplates(templates)
 	end
 
-	function meta:TakeTemplate(template)
+	function meta:TakeTemplate(id)
 		local templates = self:GetTemplates()
 
-		templates[template] = nil
+		templates[id] = nil
 
 		self:SetTemplates(templates)
 	end

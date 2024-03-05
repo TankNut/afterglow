@@ -8,6 +8,10 @@ function GM:GetPlayerColor(ply) return
 	ply:GetAppearance().PlayerColor or team.GetVecColor(ply:Team())
 end
 
+function GM:CanAccessTemplate(ply, id)
+	return ply:IsSuperAdmin() or ply:GetTemplates()[id]
+end
+
 if SERVER then
 	function GM:GetBaseArmor(ply) return ply:GetCharacterFlagAttribute("Armor") end
 	function GM:GetPlayerTeam(ply) return ply:GetCharacterFlagAttribute("Team") end
