@@ -94,9 +94,9 @@ else
 		local query = mysql:Select("rp_items")
 			query:Select("id")
 			query:Select("class")
-			query:Select("customdata")
-			query:WhereEqual("storetype", self.StoreType)
-			query:WhereEqual("storeid", self.StoreID)
+			query:Select("custom_data")
+			query:WhereEqual("store_type", self.StoreType)
+			query:WhereEqual("store_id", self.StoreID)
 		local data = query:Execute()
 
 		for _, v in pairs(data) do
@@ -104,7 +104,7 @@ else
 				continue
 			end
 
-			local item = Item.Instance(v.class, v.id, pack.Decode(v.customdata))
+			local item = Item.Instance(v.class, v.id, pack.Decode(v.custom_data))
 
 			item:SetInventory(self, true)
 		end

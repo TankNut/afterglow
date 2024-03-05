@@ -67,6 +67,7 @@ Character.AddVar("Flag", {
 -- Languages
 
 Character.AddVar("ActiveLanguage", {
+	Field = "active_language",
 	Private = true,
 	Accessor = "ActiveLanguage"
 })

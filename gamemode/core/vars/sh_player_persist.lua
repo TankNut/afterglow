@@ -14,8 +14,7 @@ PlayerVar.Add("CustomBadges", {
 })
 
 PlayerVar.Add("Templates", {
-	Accessor = "Templates",
-	Field = "templates",
+	Field = "character_templates",
 	Default = {},
 	Private = true
 })

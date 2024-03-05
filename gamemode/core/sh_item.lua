@@ -174,7 +174,7 @@ if SERVER then
 	Create = coroutine.Bind(function(name, data)
 		local query = mysql:Insert("rp_items")
 			query:Insert("class", name)
-			query:Insert("customdata", pack.Encode(data))
+			query:Insert("custom_data", pack.Encode(data))
 		local _, id = query:Execute()
 
 		return Instance(name, id, data)
@@ -192,10 +192,10 @@ if SERVER then
 		local query = mysql:Select("rp_items")
 			query:Select("id")
 			query:Select("class")
-			query:Select("customdata")
-			query:Select("worldpos")
-			query:WhereEqual("storetype", ITEM_WORLD)
-			query:WhereEqual("worldmap", game.GetMap())
+			query:Select("custom_data")
+			query:Select("world_position")
+			query:WhereEqual("store_type", ITEM_WORLD)
+			query:WhereEqual("world_map", game.GetMap())
 		local data = query:Execute()
 
 		for _, v in pairs(data) do
@@ -203,8 +203,8 @@ if SERVER then
 				continue
 			end
 
-			local item = items.Instance(v.class, v.id, pack.Decode(v.customdata))
-			local worldPos = pack.Decode(v.worldpos)
+			local item = items.Instance(v.class, v.id, pack.Decode(v.custom_data))
+			local worldPos = pack.Decode(v.world_pos)
 
 			local ent = item:SetWorldPos(worldPos.Pos, worldPos.Ang, true)
 
