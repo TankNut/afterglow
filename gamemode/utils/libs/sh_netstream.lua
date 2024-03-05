@@ -98,7 +98,7 @@ if CLIENT then
 		if data then
 			writeLog("Incoming: '%s' (%s) from SERVER", name, string.NiceSize(len))
 
-			callback(data)
+			coroutine.wrap(callback)(data)
 		end
 	end)
 
@@ -112,7 +112,7 @@ if CLIENT then
 
 		writeLog("Incoming: '%s' (NOTIFY) from SERVER", name)
 
-		callback()
+		coroutine.wrap(callback)()
 	end)
 end
 
@@ -224,7 +224,7 @@ if SERVER then
 		if data then
 			writeLog("Incoming: '%s' (%s) from %s", name, string.NiceSize(len), ply)
 
-			callback(ply, data)
+			coroutine.wrap(callback)(ply, data)
 		end
 	end)
 
@@ -240,7 +240,7 @@ if SERVER then
 
 		writeLog("Incoming: %s (NOTIFY) from %s", name, ply)
 
-		callback(ply)
+		coroutine.wrap(callback)(ply)
 	end)
 
 	hook.Add("OnPlayerReady", "Netstream", function(ply)
