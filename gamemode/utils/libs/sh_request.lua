@@ -25,7 +25,7 @@ if CLIENT then
 
 		local index = table.insert(Requests, cr)
 
-		writeLog("Query: #%s (%s) to SERVER", index, name)
+		writeLog("Query: #%s '%s' to SERVER", index, name)
 
 		netstream.Send(name, {
 			Index = index,
