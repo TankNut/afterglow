@@ -128,6 +128,14 @@ function PANEL:SetModel(mdl)
 	self.ModelPanel:SetModel(mdl)
 	self.ModelPanel:SetSkin(1)
 
+	local color = CharacterFlag.Default.PlayerColor
+
+	if color then
+		self.ModelPanel.Entity.GetPlayerColor = function(ent)
+			return color
+		end
+	end
+
 	self:RebuildSkins()
 	self:Validate()
 end
