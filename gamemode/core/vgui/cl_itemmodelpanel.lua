@@ -79,10 +79,6 @@ end
 
 local developer = GetConVar("developer")
 
-function PANEL:PreDrawModel(ent)
-	cam.IgnoreZ(true)
-end
-
 function PANEL:Paint(w, h)
 	if developer:GetBool() then
 		local ang = Angle(self.aLookAngle)
@@ -96,14 +92,12 @@ function PANEL:Paint(w, h)
 	surface.SetDrawColor(0, 0, 0, 70)
 	surface.DrawRect(0, 0, w, h)
 
+	render.ClearDepth()
+
 	DModelPanel.Paint(self, w, h)
 
 	surface.SetDrawColor(self:GetSkin().Colors.Border)
 	surface.DrawLine(0, h - 1, w, h - 1)
-end
-
-function PANEL:PostDrawModel(ent)
-	cam.IgnoreZ(false)
 end
 
 derma.DefineControl("RPItemModelPanel", "Model display for item panels", PANEL, "DModelPanel")

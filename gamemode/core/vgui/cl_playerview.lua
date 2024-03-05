@@ -73,22 +73,38 @@ function PANEL:GetTargets()
 	return self.Entity:GetPos() + pos, self.Entity:GetPos() + look
 end
 
-function PANEL:PreDrawModel()
-	local ent = self.Entity
+function PANEL:Paint(w, h)
+	if not IsValid(self.Entity) then
+		return
+	end
 
-	render.SuppressEngineLighting(true)
-	render.ResetModelLighting(0.3, 0.3, 0.3)
+	local x, y = self:LocalToScreen(0, 0)
 
-	render.SetModelLighting(BOX_FRONT, 1, 1, 1)
-	render.SetModelLighting(BOX_TOP, 1, 1, 1)
+	self:LayoutEntity(self.Entity)
 
-	render.SetColorModulation(1, 1, 1)
+	local ang = self.aLookAngle
 
-	ent:DrawModel()
+	if not ang then
+		ang = (self.vLookatPos - self.vCamPos):Angle()
+	end
 
-	render.SuppressEngineLighting(false)
+	cam.Start3D(self.vCamPos, ang, self.fFOV, x, y, w, h, 5, self.FarZ)
+		render.SuppressEngineLighting(true)
+		render.ResetModelLighting(0.3, 0.3, 0.3)
 
-	return false
+		render.SetModelLighting(BOX_FRONT, 1, 1, 1)
+		render.SetModelLighting(BOX_TOP, 1, 1, 1)
+
+		render.SetColorModulation(1, 1, 1)
+
+		render.ClearDepth()
+
+		self.Entity:DrawModel()
+
+		render.SuppressEngineLighting(false)
+	cam.End3D()
+
+	self.LastPaint = RealTime()
 end
 
-derma.DefineControl("RPPlayerView", "Deprecated?", PANEL, "RPModelPanel")
+derma.DefineControl("RPPlayerView", "Panel for viewing a non-live version of a player", PANEL, "RPModelPanel")
