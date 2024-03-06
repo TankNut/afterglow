@@ -1,3 +1,7 @@
+function GM:EntityIsDoor(ent)
+	return tobool(Door.Types[ent:GetClass()])
+end
+
 if CLIENT then
 	function GM:CreateClientsideRagdoll(ent, ragdoll)
 		Appearance.Copy(ent, ragdoll)
