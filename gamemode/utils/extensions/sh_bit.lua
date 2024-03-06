@@ -1,4 +1,4 @@
-function bit.Has(val, flag)
+function bit.Check(val, flag)
 	return bit.band(val, flag) == flag
 end
 
