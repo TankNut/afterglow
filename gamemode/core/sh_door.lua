@@ -14,9 +14,7 @@ Groups = Groups or {}
 
 function AddFunction(name, callback)
 	entity[name] = function(self, ...)
-		if not self:IsDoor() then
-			return
-		end
+		assert(self:IsDoor(), "Door function called on non-door entity")
 
 		return callback(self, ...)
 	end
