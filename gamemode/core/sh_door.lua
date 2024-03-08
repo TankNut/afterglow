@@ -11,6 +11,11 @@ Types = Types or table.Lookup({
 
 All = All or {}
 Groups = Groups or {}
+Vars = Vars or {}
+
+function AddSaveVar(name, callback)
+	Vars[name] = callback
+end
 
 function AddFunction(name, callback)
 	entity[name] = function(self, ...)
@@ -63,7 +68,7 @@ if SERVER then
 		for door, class in Iterator() do
 			local open = IsOpenCallbacks[class](door)
 
-			if door:IsDoorOpen() != open then
+			if door:GetDoorOpen() != open then
 				door:SetNWBool("DoorOpen", open)
 			end
 		end
@@ -89,9 +94,8 @@ if SERVER then
 		key = key:lower()
 
 		if key == "spawnflags" then
-			if not ent._DoorSetup then
+			if not Initialized then
 				ent:SetNWBool("DoorLocked", bit.Check(value, 2048))
-				ent._DoorSetup = true
 			end
 
 			ent:SetNWBool("DoorUsable", ent:IsPropDoor() or bit.Check(value, 256))
@@ -106,8 +110,22 @@ if SERVER then
 			ent:SetNWFloat("DoorSpeed", tonumber(value))
 		elseif key == "dmg" then
 			ent:SetNWFloat("DoorDamage", tonumber(value))
-		elseif key == "forceclose" then
+		elseif key == "forceclosed" then
 			ent:SetNWBool("DoorForce", tobool(value))
+		end
+	end)
+
+	hook.Add("InitPostEntity", "Door", function()
+		Initialized = true
+
+		for door in Iterator() do
+			local values = {}
+
+			for key, callback in pairs(Vars) do
+				values[key] = callback(door)
+			end
+
+			door._InitialDoorValues = values
 		end
 	end)
 end
@@ -117,6 +135,7 @@ function entity:IsDoor()
 end
 
 AddFunction("IsPropDoor", function(self) return self:GetClass() == "prop_door_rotating" end)
+AddFunction("IsMapDoor", function(self) return self:MapCreationID() != -1 end)
 
 AddFunction("GetMasterDoor", function(self)
 	if self:GetClass() == "prop_door_rotating" then
@@ -138,17 +157,29 @@ AddFunction("GetOtherDoor", function(self)
 	end
 end)
 
-AddFunction("IsDoorOpen", function(self) return self:GetNWBool("DoorOpen", false) end)
-AddFunction("IsDoorLocked", function(self) return self:GetMasterDoor():GetNWBool("DoorLocked", false) end)
-AddFunction("IsDoorUsable", function(self) return self:GetMasterDoor():GetNWBool("DoorUsable", false) end)
-AddFunction("IsDoorToggled", function(self) return self:GetMasterDoor():GetNWBool("DoorToggle", false) end)
-AddFunction("IsDoorOpenable", function(self) return self:IsDoorUsable() and not self:IsDoorLocked() end)
+AddSaveVar("Locked", function(self) return self:GetDoorLocked() end)
+AddSaveVar("Usable", function(self) return self:GetDoorUsable() end)
+AddSaveVar("Toggled", function(self) return self:GetDoorToggled() end)
+AddSaveVar("Openable", function(self) return self:GetDoorOpenable() end)
+AddSaveVar("AutoClose", function(self) return self:GetDoorAutoClose() end)
+AddSaveVar("Speed", function(self) return self:GetDoorSpeed() end)
+AddSaveVar("Damage", function(self) return self:GetDoorDamage() end)
+AddSaveVar("ForceMove", function(self) return self:GetDoorForceMove() end)
+
+AddFunction("GetDoorOpen", function(self) return self:GetNWBool("DoorOpen", false) end)
+AddFunction("GetDoorLocked", function(self) return self:GetMasterDoor():GetNWBool("DoorLocked", false) end)
+AddFunction("GetDoorUsable", function(self) return self:GetMasterDoor():GetNWBool("DoorUsable", false) end)
+AddFunction("GetDoorToggled", function(self) return self:GetMasterDoor():GetNWBool("DoorToggle", false) end)
+AddFunction("GetDoorOpenable", function(self) return self:GetDoorUsable() and not self:GetDoorLocked() end)
 
 AddFunction("GetDoorAutoClose", function(self) return self:GetMasterDoor():GetNWFloat("DoorAutoClose", -1) end)
+AddFunction("GetDoorSpeed", function(self) return self:GetNWFloat("DoorSpeed", 0) end)
+AddFunction("GetDoorDamage", function(self) return self:GetNWFloat("DoorDamage", 0) end)
+AddFunction("GetDoorForceMove", function(self) return self:GetNWBool("DoorForce", false) end)
 
 if SERVER then
 	local function wrap(ent, force, name, param, activator)
-		if force and ent:IsDoorLocked() then
+		if force and ent:GetDoorLocked() then
 			ent:UnlockDoor()
 			ent:GetMasterDoor():Fire(name, param, 0, activator)
 			ent:LockDoor()
@@ -204,10 +235,52 @@ if SERVER then
 			local door = self:GetMasterDoor()
 
 			door:SetKeyValue("returndelay", time)
-			door:SetNWFloat("DoorSpeed", time)
+			door:SetNWFloat("DoorAutoClose", time)
 		else
 			self:SetKeyValue("wait", time)
-			self:SetNWFloat("DoorSpeed", time)
+			self:SetNWFloat("DoorAutoClose", time)
+		end
+	end)
+
+	AddFunction("SetDoorSpeed", function(self, speed, single)
+		self:SetKeyValue("speed", speed)
+		self:SetNWFloat("DoorSpeed", speed)
+
+		if self:IsPropDoor() and not single then
+			local other = self:GetOtherDoor()
+
+			if IsValid(other) then
+				other:SetKeyValue("speed", speed)
+				other:SetNWFloat("DoorSpeed", speed)
+			end
+		end
+	end)
+
+	AddFunction("SetDoorDamage", function(self, damage, single)
+		self:SetKeyValue("dmg", damage)
+		self:SetNWFloat("DoorDamage", damage)
+
+		if self:IsPropDoor() and not single then
+			local other = self:GetOtherDoor()
+
+			if IsValid(other) then
+				other:SetKeyValue("dmg", damage)
+				other:SetNWFloat("DoorDamage", damage)
+			end
+		end
+	end)
+
+	AddFunction("SetDoorForceMove", function(self, bool, single)
+		self:SetKeyValue("forceclosed", bool and 1 or 0)
+		self:SetNWBool("DoorForce", bool)
+
+		if self:IsPropDoor() and not single then
+			local other = self:GetOtherDoor()
+
+			if IsValid(other) then
+				other:SetKeyValue("forceclosed", bool and 1 or 0)
+				other:SetNWBool("DoorForce", bool)
+			end
 		end
 	end)
 end
