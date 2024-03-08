@@ -1,5 +1,5 @@
 function GM:DatabaseConnected()
-	Database.LoadTables()
+	Data.LoadTables()
 end
 
 function GM:PostInitDatabase()

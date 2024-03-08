@@ -1,4 +1,4 @@
-module("Database", package.seeall)
+module("Data", package.seeall)
 
 function Initialize()
 	local config = GAMEMODE.Config.Database
@@ -39,5 +39,47 @@ LoadTables = coroutine.Bind(function()
 		query:Create("custom_data", "TEXT NOT NULL")
 	query:Execute()
 
+	query = mysql:Create("rp_map_data")
+		query:Create("map", "VARCHAR(255) NOT NULL", true)
+		query:Create("key", "VARCHAR(255) NOT NULL", true)
+		query:Create("value", "TEXT NOT NULL")
+	query:Execute()
+
 	hook.Run("PostInitDatabase")
+end)
+
+GetMapData = coroutine.Bind(function(key, fallback)
+	local query = mysql:Select("rp_map_data")
+		query:Select("value")
+		query:WhereEqual("map", game.GetMap())
+		query:WhereEqual("key", key)
+
+	local data = query:Execute()[1]
+
+	if data then
+		return pack.Decode(data.value)
+	end
+
+	return fallback
+end)
+
+SetMapData = coroutine.Bind(function(key, value)
+	local query = mysql:Upsert("rp_map_data")
+		query:Insert("map", game.GetMap())
+		query:Insert("key", key)
+		query:Insert("value", pack.Encode(value))
+	query:Execute()
+end)
+
+DeleteMapData = coroutine.Bind(function(key)
+	local query = mysql:Delete("rp_map_data")
+		query:WhereEqual("map", game.GetMap())
+		query:WhereEqual("key", key)
+	query:Execute()
+end)
+
+ClearAllMapData = coroutine.Bind(function()
+	local query = mysql:Delete("rp_map_data")
+		query:WhereEqual("map", game.GetMap())
+	query:Execute()
 end)

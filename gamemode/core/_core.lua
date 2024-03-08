@@ -48,7 +48,7 @@ end
 
 function GM:Initialize()
 	if SERVER then
-		Database.Initialize()
+		Data.Initialize()
 	end
 end
 
