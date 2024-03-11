@@ -10,28 +10,62 @@ Types = Types or table.Lookup({
 })
 
 All = All or {}
-Groups = Groups or {}
 Vars = Vars or {}
 
-function AddSaveVar(name, callback)
-	Vars[name] = callback
-end
-
-function AddFunction(name, callback)
-	entity[name] = function(self, ...)
-		assert(self:IsDoor(), name .. " called on non-door entity")
-
-		return callback(self, ...)
-	end
+function AddSaveVar(name, get, set)
+	Vars[name] = {
+		Get = get,
+		Set = set
+	}
 end
 
 function Iterator()
 	return pairs(All)
 end
 
+if SERVER then
+	function QueueSave()
+		if not Initialized then
+			return
+		end
+
+		timer.Create("DoorSave", 10, 1, function()
+			SaveData()
+		end)
+	end
+
+	function SaveData()
+		timer.Remove("DoorSave")
+
+		local data = {}
+
+		for door in Iterator() do
+			local id = door:MapCreationID()
+
+			if id != -1 then
+				local doorData = {}
+
+				for key, value in pairs(door.DoorValues) do
+					if door.InitialDoorValues[key] == value then
+						continue
+					end
+
+					doorData[key] = value
+				end
+
+				if not table.IsEmpty(doorData) then
+					data[id] = doorData
+				end
+			end
+		end
+
+		Data.SetMapData("doors", data)
+	end
+end
+
 hook.Add("OnEntityCreated", "Door", function(ent)
 	if hook.Run("EntityIsDoor", ent) then
-		ent._Door = true
+		ent._IsDoor = true
 		All[ent] = ent:GetClass()
 
 		if SERVER then
@@ -115,29 +149,79 @@ if SERVER then
 		end
 	end)
 
-	hook.Add("InitPostEntity", "Door", function()
+	hook.Add("InitPostEntity", "Door", coroutine.Bind(function()
 		Initialized = true
 
+		local data = Data.GetMapData("doors", {})
+
 		for door in Iterator() do
+			local initial = {}
 			local values = {}
 
-			for key, callback in pairs(Vars) do
-				values[key] = callback(door)
+			local id = door:MapCreationID()
+
+			for key, callbacks in pairs(Vars) do
+				initial[key] = callbacks.Get(door)
 			end
 
-			door._InitialDoorValues = values
+			if id != -1 and data[id] then
+				for index, value in pairs(data[id]) do
+					values[index] = value
+					Vars[index].Set(door, value)
+				end
+			end
+
+			door.InitialDoorValues = initial
+			door.DoorValues = values
 		end
-	end)
+	end))
 end
 
-function entity:IsDoor()
-	return tobool(self._Door)
+function entity:IsDoor() return tobool(self._IsDoor) end
+function entity:IsPropDoor() return self:GetClass() == "prop_door_rotating" end
+function entity:IsMasterDoor() return not IsValid(self:GetOwner()) end
+
+if SERVER then
+	function entity:GetInitialDoorValue(key)
+		return self.InitialDoorValues[key]
+	end
+
+	function entity:ResetDoorValues(save)
+		for key, value in pairs(self.InitialDoorValues) do
+			Vars[key].Set(self, value)
+		end
+
+		if save then
+			table.Empty(self.DoorValues)
+
+			QueueSave()
+		end
+	end
+
+	function entity:ResetDoorSaveValue(key)
+		self:SetDoorSaveValue(key, self:GetInitialDoorValue(key))
+	end
+
+	function entity:SetDoorSaveValue(key, value)
+		if not self:CreatedByMap() then
+			return
+		end
+
+		local ent = self:GetMasterDoor()
+
+		Vars[key].Set(ent, value)
+
+		if value == self:GetInitialDoorValue(key) then
+			ent.DoorValues[key] = nil
+		else
+			ent.DoorValues[key] = value
+		end
+
+		QueueSave()
+	end
 end
 
-AddFunction("IsPropDoor", function(self) return self:GetClass() == "prop_door_rotating" end)
-AddFunction("IsMapDoor", function(self) return self:MapCreationID() != -1 end)
-
-AddFunction("GetMasterDoor", function(self)
+function entity:GetMasterDoor()
 	if self:GetClass() == "prop_door_rotating" then
 		local owner = self:GetOwner()
 
@@ -145,9 +229,9 @@ AddFunction("GetMasterDoor", function(self)
 	else
 		return self
 	end
-end)
+end
 
-AddFunction("GetOtherDoor", function(self)
+function entity:GetOtherDoor()
 	if self:GetClass() == "prop_door_rotating" then
 		local owner = self:GetOwner()
 
@@ -155,27 +239,18 @@ AddFunction("GetOtherDoor", function(self)
 	else
 		return self
 	end
-end)
+end
 
-AddSaveVar("Locked", function(self) return self:GetDoorLocked() end)
-AddSaveVar("Usable", function(self) return self:GetDoorUsable() end)
-AddSaveVar("Toggled", function(self) return self:GetDoorToggled() end)
-AddSaveVar("Openable", function(self) return self:GetDoorOpenable() end)
-AddSaveVar("AutoClose", function(self) return self:GetDoorAutoClose() end)
-AddSaveVar("Speed", function(self) return self:GetDoorSpeed() end)
-AddSaveVar("Damage", function(self) return self:GetDoorDamage() end)
-AddSaveVar("ForceMove", function(self) return self:GetDoorForceMove() end)
+function entity:GetDoorOpen() return self:GetNWBool("DoorOpen", false) end
+function entity:GetDoorLocked() return self:GetMasterDoor():GetNWBool("DoorLocked", false) end
+function entity:GetDoorUsable() return self:GetMasterDoor():GetNWBool("DoorUsable", false) end
+function entity:GetDoorToggled() return self:GetMasterDoor():GetNWBool("DoorToggle", false) end
+function entity:GetDoorOpenable() return self:GetDoorUsable() and not self:GetDoorLocked() end
 
-AddFunction("GetDoorOpen", function(self) return self:GetNWBool("DoorOpen", false) end)
-AddFunction("GetDoorLocked", function(self) return self:GetMasterDoor():GetNWBool("DoorLocked", false) end)
-AddFunction("GetDoorUsable", function(self) return self:GetMasterDoor():GetNWBool("DoorUsable", false) end)
-AddFunction("GetDoorToggled", function(self) return self:GetMasterDoor():GetNWBool("DoorToggle", false) end)
-AddFunction("GetDoorOpenable", function(self) return self:GetDoorUsable() and not self:GetDoorLocked() end)
-
-AddFunction("GetDoorAutoClose", function(self) return self:GetMasterDoor():GetNWFloat("DoorAutoClose", -1) end)
-AddFunction("GetDoorSpeed", function(self) return self:GetNWFloat("DoorSpeed", 0) end)
-AddFunction("GetDoorDamage", function(self) return self:GetNWFloat("DoorDamage", 0) end)
-AddFunction("GetDoorForceMove", function(self) return self:GetNWBool("DoorForce", false) end)
+function entity:GetDoorAutoClose() return self:GetMasterDoor():GetNWFloat("DoorAutoClose", -1) end
+function entity:GetDoorSpeed() return self:GetNWFloat("DoorSpeed", 0) end
+function entity:GetDoorDamage() return self:GetNWFloat("DoorDamage", 0) end
+function entity:GetDoorForceMove() return self:GetNWBool("DoorForce", false) end
 
 if SERVER then
 	local function wrap(ent, force, name, param, activator)
@@ -188,20 +263,18 @@ if SERVER then
 		end
 	end
 
-	AddFunction("SetDoorOpen", function(self, bool, force, awayFrom) if bool then self:OpenDoor(force, awayFrom) else self:CloseDoor(force) end end)
-	AddFunction("OpenDoor", function(self, force, awayFrom) wrap(self, force, "open", awayFrom and "!activator" or "", awayFrom) end)
-	AddFunction("CloseDoor", function(self, force) wrap(self, force, "close") end)
-	AddFunction("ToggleDoor", function(self, force) wrap(self, force, "toggle") end)
+	function entity:SetDoorOpen(bool, force, awayFrom) if bool then self:OpenDoor(force, awayFrom) else self:CloseDoor(force) end end
+	function entity:OpenDoor(force, awayFrom) wrap(self, force, "open", awayFrom and "!activator" or "", awayFrom) end
+	function entity:CloseDoor(force) wrap(self, force, "close") end
+	function entity:ToggleDoor(force) wrap(self, force, "toggle") end
 
-	AddFunction("SetDoorLock", function(self, bool) if bool then self:LockDoor() else self:UnlockDoor() end end)
-	AddFunction("LockDoor", function(self) self:GetMasterDoor():Fire("lock") end)
-	AddFunction("UnlockDoor", function(self) self:GetMasterDoor():Fire("unlock") end)
-	AddFunction("ToggleDoorLock", function(self) if self:IsDoorLocked() then self:UnlockDoor() else self:LockDoor() end end)
+	function entity:SetDoorLocked(bool) if bool then self:LockDoor() else self:UnlockDoor() end end
+	function entity:LockDoor() self:GetMasterDoor():Fire("lock") end
+	function entity:UnlockDoor() self:GetMasterDoor():Fire("unlock") end
+	function entity:ToggleDoorLock() self:SetDoorLocked(not self:GetDoorLocked()) end
 
-	AddFunction("SetDoorUsable", function(self, bool)
-		assert(not self:IsPropDoor(), "prop_door_rotating cannot have it's usable state changed")
-
-		if self:IsDoorUsable() == bool then
+	function entity:SetDoorUsable(bool)
+		if self:IsPropDoor() then
 			return
 		end
 
@@ -210,12 +283,10 @@ if SERVER then
 		else
 			self:SetKeyValue("spawnflags", bit.UnsetFlag(self:GetSpawnFlags(), 256))
 		end
-	end)
+	end
 
-	AddFunction("SetDoorToggled", function(self, bool)
-		assert(not self:IsPropDoor(), "prop_door_rotating cannot have it's toggle state changed")
-
-		if self:IsDoorToggled() == bool then
+	function entity:SetDoorToggled(bool)
+		if self:IsPropDoor() then
 			return
 		end
 
@@ -224,9 +295,9 @@ if SERVER then
 		else
 			self:SetKeyValue("spawnflags", bit.UnsetFlag(self:GetSpawnFlags(), 32))
 		end
-	end)
+	end
 
-	AddFunction("SetDoorAutoClose", function(self, time)
+	function entity:SetDoorAutoClose(time)
 		if not time then
 			time = -1
 		end
@@ -240,13 +311,13 @@ if SERVER then
 			self:SetKeyValue("wait", time)
 			self:SetNWFloat("DoorAutoClose", time)
 		end
-	end)
+	end
 
-	AddFunction("SetDoorSpeed", function(self, speed, single)
+	function entity:SetDoorSpeed(speed)
 		self:SetKeyValue("speed", speed)
 		self:SetNWFloat("DoorSpeed", speed)
 
-		if self:IsPropDoor() and not single then
+		if self:IsPropDoor() then
 			local other = self:GetOtherDoor()
 
 			if IsValid(other) then
@@ -254,13 +325,13 @@ if SERVER then
 				other:SetNWFloat("DoorSpeed", speed)
 			end
 		end
-	end)
+	end
 
-	AddFunction("SetDoorDamage", function(self, damage, single)
+	function entity:SetDoorDamage(damage)
 		self:SetKeyValue("dmg", damage)
 		self:SetNWFloat("DoorDamage", damage)
 
-		if self:IsPropDoor() and not single then
+		if self:IsPropDoor() then
 			local other = self:GetOtherDoor()
 
 			if IsValid(other) then
@@ -268,13 +339,13 @@ if SERVER then
 				other:SetNWFloat("DoorDamage", damage)
 			end
 		end
-	end)
+	end
 
-	AddFunction("SetDoorForceMove", function(self, bool, single)
+	function entity:SetDoorForceMove(bool)
 		self:SetKeyValue("forceclosed", bool and 1 or 0)
 		self:SetNWBool("DoorForce", bool)
 
-		if self:IsPropDoor() and not single then
+		if self:IsPropDoor() then
 			local other = self:GetOtherDoor()
 
 			if IsValid(other) then
@@ -282,5 +353,14 @@ if SERVER then
 				other:SetNWBool("DoorForce", bool)
 			end
 		end
-	end)
+	end
 end
+
+AddSaveVar("Locked", function(self) return self:GetDoorLocked() end, function(self, val) self:SetDoorLocked(val) end)
+AddSaveVar("Usable", function(self) return self:GetDoorUsable() end, function(self, val) self:SetDoorUsable(val) end)
+
+AddSaveVar("Toggled", function(self) return self:GetDoorToggled() end, function(self, val) self:SetDoorToggled(val) end)
+AddSaveVar("AutoClose", function(self) return self:GetDoorAutoClose() end, function(self, val) self:SetDoorAutoClose(val) end)
+AddSaveVar("Speed", function(self) return self:GetDoorSpeed() end, function(self, val) self:SetDoorSpeed(val) end)
+AddSaveVar("Damage", function(self) return self:GetDoorDamage() end, function(self, val) self:SetDoorDamage(val) end)
+AddSaveVar("ForceMove", function(self) return self:GetDoorForceMove() end, function(self, val) self:SetDoorForceMove(val) end)
