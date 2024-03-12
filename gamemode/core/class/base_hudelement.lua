@@ -9,7 +9,7 @@ function CLASS:IsValid()
 	return Hud.ActiveLookup[self.ID] == self
 end
 
-function CLASS:Initialize(ply, ...)
+function CLASS:Initialize()
 end
 
 function CLASS:OnEvent(event, ...)

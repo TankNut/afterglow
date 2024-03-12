@@ -94,18 +94,20 @@ function FireEvent(event, ...)
 	end
 end
 
-function Add(id, ...)
+function Add(id)
 	if GetActive(id) then
 		Remove(id)
 	end
 
 	local data = Get(id)
-	local element = setmetatable({}, {__index = data})
+	local element = setmetatable({
+		Player = LocalPlayer()
+	}, {__index = data})
 
 	table.insert(ActiveElements, element)
 	ActiveLookup[id] = element
 
-	element:Initialize(LocalPlayer(), ...)
+	element:Initialize()
 
 	table.SortByMember(ActiveElements, "DrawOrder")
 
@@ -168,19 +170,17 @@ hook.Add("HUDShouldDraw", "Hud", function(name)
 end)
 
 hook.Add("HUDPaint", "Hud", function()
-	local ply = LocalPlayer()
 	local w, h = ScrW(), ScrH()
 
 	for _, element in ipairs(ActiveElements) do
-		element:Paint(ply, w, h)
+		element:Paint(w, h)
 	end
 end)
 
 hook.Add("HUDPaintBackground", "Hud", function()
-	local ply = LocalPlayer()
 	local w, h = ScrW(), ScrH()
 
 	for _, element in ipairs(ActiveElements) do
-		element:PaintBackground(ply, w, h)
+		element:PaintBackground(w, h)
 	end
 end)

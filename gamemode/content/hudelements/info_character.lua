@@ -3,11 +3,13 @@ CLASS.Name = "Character Info"
 CLASS.Optional = true
 CLASS.Default = true
 
-function CLASS:Initialize(ply)
-	self:UpdateInfo(ply, true)
+function CLASS:Initialize()
+	self:UpdateInfo(true)
 end
 
-function CLASS:UpdateInfo(ply, force)
+function CLASS:UpdateInfo(force)
+	local ply = self.Player
+
 	if not force and self.LastName == ply:GetVisibleName() and self.LastTeam == ply:Team() then
 		return
 	end
@@ -21,7 +23,9 @@ function CLASS:UpdateInfo(ply, force)
 	self.Team = scribe.Parse(string.format("<giant><ol><c=%s>%s", color, team.GetName(self.LastTeam)))
 end
 
-function CLASS:Paint(ply, w, h)
+function CLASS:Paint(w, h)
+	local ply = self.Player
+
 	self:UpdateInfo(ply)
 
 	local offset = 20
