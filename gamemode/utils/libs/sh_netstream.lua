@@ -46,7 +46,7 @@ if CLIENT then
 		if not data then
 			writeLog("Outgoing: '%s' (NOTIFY) to SERVER", name)
 
-			net.Start("NetstreamNotify")
+			net.Start("Netstream_Notify")
 				net.WriteString(name)
 			net.SendToServer()
 
@@ -102,7 +102,7 @@ if CLIENT then
 		end
 	end)
 
-	net.Receive("NetstreamNotify", function()
+	net.Receive("Netstream_Notify", function()
 		local name = net.ReadString()
 		local callback = Hooks[name]
 
@@ -118,7 +118,7 @@ end
 
 if SERVER then
 	util.AddNetworkString("Netstream")
-	util.AddNetworkString("NetstreamNotify")
+	util.AddNetworkString("Netstream_Notify")
 
 	Queue = Queue or {}
 	Rate = Rate or {}
@@ -228,7 +228,7 @@ if SERVER then
 		end
 	end)
 
-	net.Receive("NetstreamNotify", function(_, ply)
+	net.Receive("Netstream_Notify", function(_, ply)
 		local name = net.ReadString()
 		local callback = Hooks[name]
 
