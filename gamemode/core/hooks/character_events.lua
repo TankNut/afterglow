@@ -28,6 +28,6 @@ if SERVER then
 		ply:Spawn()
 	end
 
-	function GM:UnloadCharacter(ply, id)
+	function GM:UnloadCharacter(ply, id, loadingNew)
 	end
 end

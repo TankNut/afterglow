@@ -196,7 +196,7 @@ if SERVER then
 	-- Using bind here because of inventory:LoadItems()
 	meta.LoadCharacter = coroutine.Bind(function(self, id, fields)
 		if self:HasCharacter() then
-			hook.Run("UnloadCharacter", self, self:GetCharID())
+			hook.Run("UnloadCharacter", self, self:GetCharID(), true)
 		end
 
 		_G.CHARACTER_LOADING = true
@@ -225,7 +225,7 @@ if SERVER then
 
 	function meta:UnloadCharacter()
 		if self:HasCharacter() then
-			hook.Run("UnloadCharacter", self, self:GetCharID())
+			hook.Run("UnloadCharacter", self, self:GetCharID(), false)
 		end
 
 		_G.CHARACTER_LOADING = true

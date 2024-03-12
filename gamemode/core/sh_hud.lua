@@ -46,8 +46,10 @@ if SERVER then
 		netstream.Send("HudRebuild", ply)
 	end)
 
-	hook.Add("UnloadCharacter", "Hud", function(ply)
-		netstream.Send("HudClear", ply)
+	hook.Add("UnloadCharacter", "Hud", function(ply, id, loadingNew)
+		if not loadingNew then
+			netstream.Send("HudClear", ply)
+		end
 	end)
 
 	return
