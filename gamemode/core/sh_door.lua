@@ -356,11 +356,11 @@ if SERVER then
 	end
 end
 
-AddSaveVar("Locked", function(self) return self:GetDoorLocked() end, function(self, val) self:SetDoorLocked(val) end)
-AddSaveVar("Usable", function(self) return self:GetDoorUsable() end, function(self, val) self:SetDoorUsable(val) end)
+AddSaveVar("Locked", entity.GetDoorLocked, entity.SetDoorLocked)
+AddSaveVar("Usable", entity.GetDoorUsable, entity.SetDoorUsable)
 
-AddSaveVar("Toggled", function(self) return self:GetDoorToggled() end, function(self, val) self:SetDoorToggled(val) end)
-AddSaveVar("AutoClose", function(self) return self:GetDoorAutoClose() end, function(self, val) self:SetDoorAutoClose(val) end)
-AddSaveVar("Speed", function(self) return self:GetDoorSpeed() end, function(self, val) self:SetDoorSpeed(val) end)
-AddSaveVar("Damage", function(self) return self:GetDoorDamage() end, function(self, val) self:SetDoorDamage(val) end)
-AddSaveVar("ForceMove", function(self) return self:GetDoorForceMove() end, function(self, val) self:SetDoorForceMove(val) end)
+AddSaveVar("Toggled", entity.GetDoorToggled, entity.SetDoorToggled)
+AddSaveVar("AutoClose", entity.GetDoorAutoClose, entity.SetDoorAutoClose)
+AddSaveVar("Speed", entity.GetDoorSpeed, entity.SetDoorSpeed)
+AddSaveVar("Damage", entity.GetDoorDamage, entity.SetDoorDamage)
+AddSaveVar("ForceMove", entity.GetDoorForceMove, entity.SetDoorForceMove)

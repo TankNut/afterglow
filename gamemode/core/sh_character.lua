@@ -215,7 +215,6 @@ if SERVER then
 
 		if not self:IsTemplateCharacter() then
 			inventory:LoadItems()
-			self:UpdateEquipmentCache()
 		end
 
 		_G.CHARACTER_LOADING = nil

@@ -1,18 +1,18 @@
-function CLASS:GetReceivers()
+function CLASS:GetReceivers(lookup)
 	local receivers = self.Receivers
 
 	if self.StoreType == ITEM_PLAYER then
-		receivers[Character.Find(self.StoreID)] = true
+		receivers[self:GetParent()] = true
 	elseif self.StoreType == ITEM_ITEM then
-		table.Merge(receivers, Item.Get(self.StoreID):GetInventory():GetReceivers())
+		table.Merge(receivers, self:GetParent():GetInventory():GetReceivers(true))
 	end
 
-	return table.GetKeys(receivers)
+	return lookup and receivers or table.GetKeys(receivers)
 end
 
 -- Get the receivers we don't have compared to other
 function CLASS:DiffReceivers(other)
-	local receivers = table.Lookup(self:GetReceivers())
+	local receivers = self:GetReceivers(true)
 	local tab = {}
 
 	for _, v in pairs(other:GetReceivers()) do
@@ -28,10 +28,19 @@ function CLASS:SendFullUpdate(targets)
 	local payload = {}
 
 	for _, v in pairs(self.Items) do
-		table.insert(payload, {Name = v.ClassName, ID = v.ID, Data = v.CustomData})
+		table.insert(payload, {
+			Name = v.ClassName,
+			ID = v.ID,
+			Data = v.CustomData
+		})
 	end
 
-	netstream.Send("InventoryCreated", targets, {ID = self.ID, StoreType = self.StoreType, StoreID = self.StoreID, Items = payload})
+	netstream.Send("InventoryCreated", targets, {
+		ID = self.ID,
+		StoreType = self.StoreType,
+		StoreID = self.StoreID,
+		Items = payload
+	})
 end
 
 function CLASS:AddReceiver(ply)

@@ -15,7 +15,7 @@ function AddFile(path, name)
 
 		_G.CLASS = nil
 	else
-		IncludeFile(path, "client")
+		AddCSLuaFile(path)
 	end
 end
 

@@ -83,11 +83,11 @@ function ITEM:PropertyUpdated(key, old, val)
 end
 
 if SERVER then
-	function ITEM:GetReceivers()
+	function ITEM:GetReceivers(lookup)
 		local inventory = self:GetInventory()
 
 		if inventory then
-			return inventory:GetReceivers()
+			return inventory:GetReceivers(lookup)
 		end
 	end
 
