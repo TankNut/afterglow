@@ -25,6 +25,7 @@ hook.Add("LoadPluginContent", "Plugin.Combine", function()
 
 	Chat.AddFolder("plugins/combine/chatcommands")
 	Command.AddFolder("plugins/combine/commands")
+	Hud.AddFolder("plugins/combine/hudelements")
 end)
 
 if SERVER then
