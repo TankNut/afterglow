@@ -45,6 +45,10 @@ if SERVER then
 		end
 
 		hook.Run("PlayerSetup", ply)
+		hook.Run("PostPlayerSpawn", ply)
+	end
+
+	function GM:PostPlayerSpawn(ply)
 	end
 
 	function GM:PlayerSetup(ply)
