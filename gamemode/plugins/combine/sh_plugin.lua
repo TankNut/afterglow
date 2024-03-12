@@ -26,3 +26,9 @@ hook.Add("LoadPluginContent", "Plugin.Combine", function()
 	Chat.AddFolder("plugins/combine/chatcommands")
 	Command.AddFolder("plugins/combine/commands")
 end)
+
+if SERVER then
+	hook.Add("PreCreateCharacter", "Plugin.Combine", function(ply, fields)
+		fields.cid = GetCID()
+	end)
+end
