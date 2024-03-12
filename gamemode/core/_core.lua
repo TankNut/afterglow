@@ -29,6 +29,7 @@ IncludeFile("sh_plugin.lua")
 
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")
+IncludeFile("sh_hud.lua")
 
 IncludeFolder("core/hooks")
 IncludeFolder("core/vars")
@@ -53,7 +54,9 @@ function GM:Initialize()
 end
 
 function GM:OnReloaded()
-	if SERVER then
+	if CLIENT then
+		Hud.Rebuild()
+	else
 		for _, ply in player.Iterator() do
 			if ply:HasCharacter() then
 				ply:UpdateAppearance()
