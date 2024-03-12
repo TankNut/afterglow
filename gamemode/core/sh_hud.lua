@@ -145,8 +145,10 @@ end
 function Rebuild()
 	Clear()
 
+	local ply = LocalPlayer()
+
 	for id, element in pairs(List) do
-		if element.Default then
+		if element:IsDefaultElement(ply) then
 			Add(id)
 		end
 	end

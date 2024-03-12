@@ -9,6 +9,10 @@ function CLASS:IsValid()
 	return Hud.ActiveLookup[self.ID] == self
 end
 
+function CLASS:IsDefaultElement(ply)
+	return self.Default
+end
+
 function CLASS:Initialize()
 end
 
