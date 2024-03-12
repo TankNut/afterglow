@@ -28,11 +28,11 @@ function IncludeFile(path, realm)
 	end
 end
 
-function IncludeFolder(dir, baseDir)
+function IncludeFolder(dir, baseDir, realm)
 	baseDir = baseDir or engine.ActiveGamemode() .. "/gamemode/"
 
 	for _, v in pairs(file.Find(baseDir .. dir .. "/*.lua", "LUA")) do
-		IncludeFile(baseDir .. dir .. "/" .. v)
+		IncludeFile(baseDir .. dir .. "/" .. v, realm)
 	end
 end
 
