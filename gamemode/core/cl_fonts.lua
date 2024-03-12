@@ -53,7 +53,7 @@ scribe.Register({
 	Name = {"chat"},
 	Components = {
 		{"big"},
-		{"outline"}
+		{"outline", "1"}
 	}
 }, "compound")
 

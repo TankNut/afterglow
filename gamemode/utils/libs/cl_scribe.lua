@@ -700,7 +700,7 @@ do -- Outline component
 	function COMPONENT:New(ctx, args)
 		BaseClass.New(self, ctx)
 
-		self.Width = tonumber(args) or 1
+		self.Width = tonumber(args) or true
 	end
 
 
@@ -717,19 +717,23 @@ do -- Outline component
 	function COMPONENT:PreCharModify(part, data)
 		local color = self.Context.Color
 
-		data.w = data.w + self.Width * 2
-		data.h = data.h + self.Width * 2
-
-		data.x = data.x + self.Width
-		data.y = data.y + self.Width
-
 		self.Context:SetColor(black)
 
-		local steps = math.max((self.Width * 2) / 3, 1)
+		if self.Width == true then
+			self:DrawText(data.Text, data.x + 1, data.y + 1, true)
+		else
+			data.w = data.w + self.Width * 2
+			data.h = data.h + self.Width * 2
 
-		for _x = -self.Width, self.Width, steps do
-			for _y = -self.Width, self.Width, steps do
-				self:DrawText(data.Text, data.x + _x, data.y + _y, true)
+			data.x = data.x + self.Width
+			data.y = data.y + self.Width
+
+			local steps = math.max((self.Width * 2) / 3, 1)
+
+			for _x = -self.Width, self.Width, steps do
+				for _y = -self.Width, self.Width, steps do
+					self:DrawText(data.Text, data.x + _x, data.y + _y, true)
+				end
 			end
 		end
 
