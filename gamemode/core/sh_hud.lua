@@ -100,10 +100,10 @@ function Add(id, ...)
 	local data = Get(id)
 	local element = setmetatable({}, {__index = data})
 
-	element:Initialize(LocalPlayer(), ...)
-
 	table.insert(ActiveElements, element)
 	ActiveLookup[id] = element
+
+	element:Initialize(LocalPlayer(), ...)
 
 	table.SortByMember(ActiveElements, "DrawOrder")
 
