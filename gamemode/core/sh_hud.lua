@@ -116,12 +116,6 @@ function Rebuild()
 
 	local ply = LocalPlayer()
 
-	for id, element in pairs(List) do
-		if element:IsDefaultElement(ply) then
-			Add(id)
-		end
-	end
-
 	hook.Run("GetHudElements", ply)
 
 	local elements = Rebuilding
