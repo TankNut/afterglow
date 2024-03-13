@@ -353,7 +353,7 @@ do -- Base component
 			else
 				buffer[#buffer] = buffer[#buffer] .. text
 			end
-		else
+		elseif not self.Context.DryRun then
 			surface.SetTextPos(x, y)
 			surface.DrawText(text)
 		end
