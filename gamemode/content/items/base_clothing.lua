@@ -17,7 +17,11 @@ end
 function ITEM:OnEquip(loaded)
 	BaseClass.OnEquip(self, loaded)
 
-	if SERVER and not loaded and self:GetArmor() > 0 then
+	if loaded then
+		return
+	end
+
+	if SERVER and self:GetArmor() > 0 then
 		self.Player:UpdateArmor()
 	end
 end
