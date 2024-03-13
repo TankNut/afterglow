@@ -19,22 +19,20 @@ function CLASS:UpdateInfo(force)
 
 	local color = Hud.Skin.Text.Normal
 
-	self.Name = scribe.Parse(string.format("<giant><ol><c=%s>%s", color, self.LastName))
-	self.Team = scribe.Parse(string.format("<giant><ol><c=%s>%s", color, team.GetName(self.LastTeam)))
+	self.NameScribe = scribe.Parse(string.format("<giant><ol><c=%s>%s", color, self.LastName))
+	self.TeamScribe = scribe.Parse(string.format("<giant><ol><c=%s>%s", color, team.GetName(self.LastTeam)))
 end
 
 function CLASS:Paint(w, h)
-	local ply = self.Player
-
-	self:UpdateInfo(ply)
+	self:UpdateInfo()
 
 	local offset = 20
 	local margin = 2
 
 	local x, y = offset, h - offset
 
-	local scribeW = math.max(self.Name:GetWide(), self.Team:GetWide())
-	local scribeH = self.Name:GetTall() + self.Team:GetTall()
+	local scribeW = math.max(self.NameScribe:GetWide(), self.TeamScribe:GetWide())
+	local scribeH = self.NameScribe:GetTall() + self.TeamScribe:GetTall()
 
 	local boxW = math.max(scribeW + margin * 2, 220)
 	local boxH = scribeH + margin * 2
@@ -42,6 +40,6 @@ function CLASS:Paint(w, h)
 	surface.SetDrawColor(ColorAlpha(Hud.Skin.Colors.FillDark, 200))
 	self:DrawAlignedRect(x, y, boxW, boxH, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 
-	self.Name:Draw(x + boxW - margin, y - boxH + margin, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
-	self.Team:Draw(x + boxW - margin, y - margin, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+	self.NameScribe:Draw(x + boxW - margin, y - boxH + margin, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP)
+	self.TeamScribe:Draw(x + boxW - margin, y - margin, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
 end
