@@ -5,6 +5,10 @@ ITEM.Tags = {
 	"Overwatch"
 }
 
+ITEM.HudElements = {
+	"overlay_combine"
+}
+
 ITEM.Flags = table.Lookup({
 	"combine_soldier"
 })
