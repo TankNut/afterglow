@@ -32,7 +32,15 @@ function meta:EquipmentHook(name)
 	end
 end
 
-if SERVER then
+if CLIENT then
+	hook.Add("GetHudElements", "Equipment", function(ply)
+		for _, item in pairs(ply:GetEquipment()) do
+			for _, id in ipairs(item:GetHudElements()) do
+				Hud.Add(id)
+			end
+		end
+	end)
+else
 	function meta:UpdateEquipmentCache()
 		local equipment = {}
 

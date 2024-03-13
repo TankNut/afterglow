@@ -14,6 +14,7 @@ ITEM.Skin = 0
 ITEM.Bodygroups = {}
 
 ITEM.Equipment = {}
+ITEM.HudElements = {}
 
 ITEM.InspectAngle = Angle(11, 175)
 ITEM.InspectFOV = 14

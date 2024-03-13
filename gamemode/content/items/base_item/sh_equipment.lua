@@ -20,18 +20,44 @@ end
 local stub = ITEM.GetModelData
 
 function ITEM:OnEquip(loaded)
-	if SERVER and not loaded and self.GetModelData != stub then
-		self.Player:UpdateAppearance()
+	if loaded then
+		return
+	end
+
+	if CLIENT then
+		self:CheckHud()
+	else
+		self:CheckAppearance()
 	end
 end
 
 function ITEM:OnUnequip()
-	if SERVER and self.GetModelData != stub then
-		self.Player:UpdateAppearance()
+	if CLIENT then
+		self:CheckHud()
+	else
+		self:CheckAppearance()
 	end
 end
 
-if SERVER then
+if CLIENT then
+	function ITEM:CheckHud()
+		if self.Player != LocalPlayer() or #self:GetHudElements() < 1 then
+			return
+		end
+
+		Hud.Rebuild()
+	end
+
+	function ITEM:GetHudElements()
+		return self:GetProperty("HudElements")
+	end
+else
+	function ITEM:CheckAppearance()
+		if self.GetModelData != stub then
+			self.Player:UpdateAppearance()
+		end
+	end
+
 	function ITEM:OnSpawn()
 	end
 
