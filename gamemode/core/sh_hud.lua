@@ -95,42 +95,11 @@ function FireEvent(event, ...)
 end
 
 function Add(id)
-	if GetActive(id) then
-		Remove(id)
-	end
-
-	local data = Get(id)
-	local element = setmetatable({
-		Player = LocalPlayer()
-	}, {__index = data})
-
-	table.insert(ActiveElements, element)
-	ActiveLookup[id] = element
-
-	element:Initialize()
-
-	table.SortByMember(ActiveElements, "DrawOrder")
-
-	return element
-end
-
-function Remove(id)
-	local element = GetActive(id)
-
-	if not element then
+	if not Get(id) or not Rebuilding then
 		return
 	end
 
-	element:OnRemove()
-
-	for index, v in pairs(ActiveElements) do
-		if v == element then
-			table.remove(ActiveElements, index)
-			break;
-		end
-	end
-
-	ActiveLookup[id] = nil
+	Rebuilding[id] = true
 end
 
 function Clear()
@@ -143,7 +112,7 @@ function Clear()
 end
 
 function Rebuild()
-	Clear()
+	Rebuilding = {}
 
 	local ply = LocalPlayer()
 
@@ -153,7 +122,43 @@ function Rebuild()
 		end
 	end
 
-	hook.Run("OnHudRebuild")
+	hook.Run("GetHudElements", ply)
+
+	local elements = Rebuilding
+
+	Rebuilding = nil
+
+	for id in pairs(elements) do
+		if not ActiveLookup[id] then
+			local data = Get(id)
+			local element = setmetatable({
+				Player = LocalPlayer()
+			}, {__index = data})
+
+			table.insert(ActiveElements, element)
+			ActiveLookup[id] = element
+
+			element:Initialize()
+		end
+	end
+
+	for id, element in pairs(ActiveLookup) do
+		if not elements[id] then
+			element:OnRemove()
+
+			for index, v in pairs(ActiveElements) do
+				if v == element then
+					table.remove(ActiveElements, index)
+
+					break
+				end
+			end
+
+			ActiveLookup[id] = nil
+		end
+	end
+
+	table.SortByMember(ActiveElements, "DrawOrder")
 end
 
 netstream.Hook("HudRebuild", function() Rebuild() end)
