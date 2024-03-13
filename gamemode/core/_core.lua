@@ -55,6 +55,7 @@ end
 
 function GM:OnReloaded()
 	if CLIENT then
+		Hud.Clear()
 		Hud.Rebuild()
 	else
 		for _, ply in player.Iterator() do
