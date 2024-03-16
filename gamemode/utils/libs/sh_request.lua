@@ -1,33 +1,32 @@
-module("request", package.seeall)
+Request = Request or {}
+Request.Active = Request.Active or {}
 
-Requests = Requests or {}
-
-local writeLog = log.Category("Request")
+local writeLog = Log.Category("Request")
 
 if CLIENT then
-	function Hook(name, callback)
-		netstream.Hook(name, function(payload)
+	function Request.Hook(name, callback)
+		Netstream.Hook(name, function(payload)
 			writeLog("Request: #%s (%s) from SERVER", payload.Index, name)
 
-			netstream.Send("Request", {
+			Netstream.Send("Request", {
 				Index = payload.Index,
 				Payload = callback(payload.Data)
 			})
 		end)
 	end
 
-	function Send(name, data)
+	function Request.Send(name, data)
 		local cr = coroutine.running()
 
 		if not cr then
 			error("Cannot request.Send outside of a coroutine environment")
 		end
 
-		local index = table.insert(Requests, cr)
+		local index = table.insert(Request.Active, cr)
 
 		writeLog("Query: #%s '%s' to SERVER", index, name)
 
-		netstream.Send(name, {
+		Netstream.Send(name, {
 			Index = index,
 			Data = data
 		})
@@ -35,12 +34,12 @@ if CLIENT then
 		return coroutine.yield()
 	end
 
-	netstream.Hook("Request", function(payload)
-		local cr = Requests[payload.Index]
+	Netstream.Hook("Request", function(payload)
+		local cr = Request.Active[payload.Index]
 
 		writeLog("Response: #%s from SERVER", payload.Index)
 
-		Requests[payload.Index] = nil
+		Request.Active[payload.Index] = nil
 
 		if cr then
 			coroutine.Resume(cr, payload.Data)
@@ -49,33 +48,33 @@ if CLIENT then
 end
 
 if SERVER then
-	function Hook(name, callback)
-		netstream.Hook(name, function(ply, payload)
+	function Request.Hook(name, callback)
+		Netstream.Hook(name, function(ply, payload)
 			writeLog("Request: #%s (%s) from %s", payload.Index, name, ply)
 
-			netstream.Send("Request", ply, {
+			Netstream.Send("Request", ply, {
 				Index = payload.Index,
 				Data = callback(ply, payload.Data)
 			})
 		end)
 	end
 
-	function Send(name, ply, data)
+	function Request.Send(name, ply, data)
 		local cr = coroutine.running()
 
 		if not cr then
 			error("Cannot request.Send outside of a coroutine environment")
 		end
 
-		if not Requests[ply] then
-			Requests[ply] = {}
+		if not Request.Active[ply] then
+			Request.Active[ply] = {}
 		end
 
-		local index = table.insert(Requests[ply], cr)
+		local index = table.insert(Request.Active[ply], cr)
 
 		writeLog("Query: #%s (%s) to %s", index, name, ply)
 
-		netstream.Send(name, ply, {
+		Netstream.Send(name, ply, {
 			Index = index,
 			Data = data
 		})
@@ -83,16 +82,16 @@ if SERVER then
 		return coroutine.yield()
 	end
 
-	netstream.Hook("Request", function(ply, payload)
-		if not Requests[ply] then
+	Netstream.Hook("Request", function(ply, payload)
+		if not Request.Active[ply] then
 			return
 		end
 
-		local cr = Requests[ply][payload.Index]
+		local cr = Request.Active[ply][payload.Index]
 
 		writeLog("Response: #%s from %s", payload.Index, ply)
 
-		Requests[ply][payload.Index] = nil
+		Request.Active[ply][payload.Index] = nil
 
 		if cr then
 			coroutine.Resume(cr, payload.Data)

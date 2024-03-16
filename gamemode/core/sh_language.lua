@@ -1,30 +1,29 @@
-module("Language", package.seeall)
+Language = Language or {}
+Language.List = table.Copy(Config.Get("Languages"))
+Language.Lookup = {}
+
+for _, v in pairs(Language.List) do
+	Language.Lookup[v[1]] = v
+end
 
 local meta = FindMetaTable("Player")
 
-List = table.Copy(Config.Get("Languages"))
-Lookup = {}
-
-for _, v in pairs(List) do
-	Lookup[v[1]] = v
+function Language.Get(command)
+	return Language.Lookup[command]
 end
 
-function Get(command)
-	return Lookup[command]
+function Language.GetName(command)
+	return Language.Get(command)[2]
 end
 
-function GetName(command)
-	return Get(command)[2]
-end
-
-function GetUnknown(command)
-	local lang = Get(command)
+function Language.GetUnknown(command)
+	local lang = Language.Get(command)
 
 	return lang[3] or lang[2]
 end
 
-function GetOverride(command, index)
-	local override = Get(command)[4]
+function Language.GetOverride(command, index)
+	local override = Language.Get(command)[4]
 
 	if override and override[index] then
 		override = override[index]
@@ -33,7 +32,7 @@ function GetOverride(command, index)
 	end
 end
 
-function FromConfig(data)
+function Language.FromConfig(data)
 	local langs = {}
 
 	for _, lang in pairs(data) do
@@ -66,7 +65,7 @@ if SERVER then
 		local languages = self:GetLanguages()
 		local active = self:GetActiveLanguage()
 
-		if not Lookup[active] or not languages[active] then
+		if not Language.Lookup[active] or not languages[active] then
 			for _, v in pairs(Config.Get("Languages")) do
 				if languages[v[1]] then
 					self:SetActiveLanguage(v[1])

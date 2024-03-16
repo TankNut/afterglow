@@ -1,30 +1,30 @@
-module("duration", package.seeall)
+Duration = Duration or {}
 
-Formats = Formats or {}
+Duration.Formats = Duration.Formats or {}
 
-function AddFormat(ratio, ...)
+function Duration.AddFormat(ratio, ...)
 	for _, format in pairs({...}) do
-		Formats[format:lower()] = ratio
+		Duration.Formats[format:lower()] = ratio
 	end
 end
 
-AddFormat(1 / 1000, "ms", "miliseconds")
-AddFormat(1, "", "s", "secs", "seconds")
-AddFormat(60, "m", "mins", "minutes")
-AddFormat(Formats.m * 60, "h", "hrs", "hours")
-AddFormat(Formats.h * 24, "d", "days")
-AddFormat(Formats.d * 7, "w", "wks", "weeks")
-AddFormat(Formats.d * (365 / 12), "mons", "months")
-AddFormat(Formats.d * 365, "y", "yrs", "years")
+Duration.AddFormat(1 / 1000, "ms", "miliseconds")
+Duration.AddFormat(1, "", "s", "secs", "seconds")
+Duration.AddFormat(60, "m", "mins", "minutes")
+Duration.AddFormat(Duration.Formats.m * 60, "h", "hrs", "hours")
+Duration.AddFormat(Duration.Formats.h * 24, "d", "days")
+Duration.AddFormat(Duration.Formats.d * 7, "w", "wks", "weeks")
+Duration.AddFormat(Duration.Formats.d * (365 / 12), "mons", "months")
+Duration.AddFormat(Duration.Formats.d * 365, "y", "yrs", "years")
 
-function Parse(str, outputFormat)
+function Duration.Parse(str, outputFormat)
 	outputFormat = outputFormat and outputFormat:lower() or "s"
 	str = tostring(str)
 
-	local outputRatio = Formats[outputFormat]
+	local outputRatio = Duration.Formats[outputFormat]
 
 	if not outputRatio then
-		outputRatio = Formats[outputFormat:gsub("s$", "")]
+		outputRatio = Duration.Formats[outputFormat:gsub("s$", "")]
 	end
 
 	if not outputRatio then
@@ -34,17 +34,17 @@ function Parse(str, outputFormat)
 	local result
 
 	for num, unit in str:gmatch("(%-?%d*%.?%d*)(%a*)") do
-		num = tonumber(num)
+		num = tonumber(str)
 		unit = unit:lower()
 
 		if num == nil then
 			continue
 		end
 
-		local ratio = Formats[unit]
+		local ratio = Duration.Formats[unit]
 
 		if not ratio then
-			ratio = Formats[unit:gsub("s$", "")]
+			ratio = Duration.Formats[unit:gsub("s$", "")]
 		end
 
 		if not ratio then

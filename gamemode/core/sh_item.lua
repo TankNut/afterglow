@@ -1,15 +1,14 @@
-ITEM_NULL = 0
+ITEM_NONE = 0
 ITEM_WORLD = 1
 ITEM_PLAYER = 2
 ITEM_CONTAINER = 3
 ITEM_ITEM = 4
 
-module("Item", package.seeall)
+Item = Item or {}
+Item.List = Item.List or {}
+Item.All = Item.All or setmetatable({}, {__mode = "v"})
 
-List = List or {}
-All = All or setmetatable({}, {__mode = "v"})
-
-function Inherit(tab, base)
+function Item.Inherit(tab, base)
 	if not base then
 		return tab
 	end
@@ -18,7 +17,7 @@ function Inherit(tab, base)
 		if tab[k] == nil then
 			tab[k] = v
 		elseif k != "BaseClass" and istable(tab[k]) and istable(v) then
-			Inherit(tab[k], v)
+			Item.Inherit(tab[k], v)
 		end
 	end
 
@@ -27,12 +26,12 @@ function Inherit(tab, base)
 	return tab
 end
 
-function IsBasedOn(name, base)
+function Item.IsBasedOn(name, base)
 	if name == base then
 		return true
 	end
 
-	local item = List[name]
+	local item = Item.List[name]
 
 	if not item or not item.Base then
 		return false
@@ -42,10 +41,10 @@ function IsBasedOn(name, base)
 		return true
 	end
 
-	return IsBasedOn(item.Base, base)
+	return Item.IsBasedOn(item.Base, base)
 end
 
-function Add(name, data)
+function Item.Add(name, data)
 	name = name:lower()
 
 	if name != "base_item" then
@@ -61,28 +60,28 @@ function Add(name, data)
 	data.ClassName = name
 	data.Internal = tobool(data.Internal)
 
-	List[name] = data
+	Item.List[name] = data
 end
 
-function AddFile(path, name)
+function Item.AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
 	_G.ITEM = {}
 
 	IncludeFile(path)
-	Add(name, ITEM)
+	Item.Add(name, ITEM)
 
 	_G.ITEM = nil
 end
 
-function AddFolder(basePath)
+function Item.AddFolder(basePath)
 	local recursive
 
 	recursive = function(path)
 		local abort = file.Exists(path .. "/shared.lua", "LUA")
 
 		if abort then
-			AddFile(path .. "/shared.lua", path:GetFileFromFilename())
+			Item.AddFile(path .. "/shared.lua", path:GetFileFromFilename())
 
 			return
 		end
@@ -94,7 +93,7 @@ function AddFolder(basePath)
 				continue
 			end
 
-			AddFile(path .. "/" .. v)
+			Item.AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -104,17 +103,17 @@ function AddFolder(basePath)
 
 	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 
-	for name in pairs(List) do
-		baseclass.Set(name, GetTable(name))
+	for name in pairs(Item.List) do
+		baseclass.Set(name, Item.GetTable(name))
 	end
 
-	for _, item in pairs(All) do
-		table.Merge(item, GetTable(item.ClassName))
+	for _, item in pairs(Item.All) do
+		table.Merge(item, Item.GetTable(item.ClassName))
 	end
 end
 
-function GetTable(name)
-	local item = List[name]
+function Item.GetTable(name)
+	local item = Item.List[name]
 
 	if not item then
 		return
@@ -131,37 +130,37 @@ function GetTable(name)
 	end
 
 	if item.Base then
-		tab = Inherit(tab, GetTable(item.Base))
+		tab = Item.Inherit(tab, Item.GetTable(item.Base))
 	end
 
 	return tab
 end
 
-function Get(id)
-	return All[id]
+function Item.Get(id)
+	return Item.All[id]
 end
 
-function Instance(name, id, data)
-	local item = GetTable(name)
+function Item.Instance(name, id, data)
+	local item = Item.GetTable(name)
 
 	item.ID = id
 	item.CustomData = data or {}
 	item.Cache = {}
 
-	All[id] = item
+	Item.All[id] = item
 
 	return item
 end
 
 if CLIENT then
-	function GetOrInstance(name, id, data)
-		local item = Get(id)
+	function Item.GetOrInstance(name, id, data)
+		local item = Item.Get(id)
 
 		if item then
 			item.CustomData = data
 			-- Refresh
 		else
-			item = Instance(name, id, data)
+			item = Item.Instance(name, id, data)
 		end
 
 		return item
@@ -169,27 +168,27 @@ if CLIENT then
 end
 
 if SERVER then
-	TempID = TempID or -1
+	Item.TempID = Item.TempID or -1
 
-	Create = coroutine.Bind(function(name, data)
-		local query = mysql:Insert("rp_items")
+	Item.Create = coroutine.Bind(function(name, data)
+		local query = MySQL:Insert("rp_items")
 			query:Insert("class", name)
-			query:Insert("custom_data", pack.Encode(data))
+			query:Insert("custom_data", Pack.Encode(data))
 		local _, id = query:Execute()
 
-		return Instance(name, id, data)
+		return Item.Instance(name, id, data)
 	end)
 
-	function CreateTemp(name, data)
-		local item = Instance(name, TempID, data)
+	function Item.CreateTemp(name, data)
+		local item = Item.Instance(name, Item.TempID, data)
 
-		TempID = TempID - 1
+		Item.TempID = Item.TempID - 1
 
 		return item
 	end
 
-	LoadWorldItems = coroutine.Bind(function()
-		local query = mysql:Select("rp_items")
+	Item.LoadWorldItems = coroutine.Bind(function()
+		local query = MySQL:Select("rp_items")
 			query:Select("id")
 			query:Select("class")
 			query:Select("custom_data")
@@ -199,12 +198,12 @@ if SERVER then
 		local data = query:Execute()
 
 		for _, v in pairs(data) do
-			if not List[v.class] then
+			if not Item.List[v.class] then
 				continue
 			end
 
-			local item = items.Instance(v.class, v.id, pack.Decode(v.custom_data))
-			local worldPos = pack.Decode(v.world_pos)
+			local item = Item.Instance(v.class, v.id, Pack.Decode(v.custom_data))
+			local worldPos = Pack.Decode(v.world_pos)
 
 			local ent = item:SetWorldPos(worldPos.Pos, worldPos.Ang, true)
 
@@ -214,8 +213,8 @@ if SERVER then
 		end
 	end)
 
-	PlayerCreate = coroutine.Bind(function(ply, name)
-		local item = Create(name, {})
+	Item.PlayerCreate = coroutine.Bind(function(ply, name)
+		local item = Item.Create(name, {})
 
 		item:SetWorldPos(hook.Run("GetItemDropLocation", ply))
 	end)
@@ -229,6 +228,6 @@ end)
 
 if SERVER then
 	hook.Add("PostInitDatabase", "Item", function()
-		LoadWorldItems()
+		Item.LoadWorldItems()
 	end)
 end

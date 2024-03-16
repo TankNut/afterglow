@@ -35,7 +35,7 @@ function CLASS:SendFullUpdate(targets)
 		})
 	end
 
-	netstream.Send("InventoryCreated", targets, {
+	Netstream.Send("InventoryCreated", targets, {
 		ID = self.ID,
 		StoreType = self.StoreType,
 		StoreID = self.StoreID,
@@ -60,5 +60,5 @@ function CLASS:RemoveReceiver(ply)
 
 	self.Receivers[ply] = nil
 
-	netstream.Send("InventoryRemoved", ply, self.ID)
+	Netstream.Send("InventoryRemoved", ply, self.ID)
 end

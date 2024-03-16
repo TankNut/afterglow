@@ -1,41 +1,37 @@
-module("console", package.seeall)
+Console = Console or {}
+Console.Commands = {}
 
-Commands = Commands or {}
-Command = Command or {}
+local writeLog = Log.Category("Console")
 
-local writeLog = log.Category("Console")
-
-function AddCommand(commands, callback)
+function Console.AddCommand(commands, callback)
 	local command = setmetatable({
 		Callback = callback,
 		Description = "No description specified",
 		Arguments = {},
 		Realm = SERVER
 	}, {
-		__index = Command
+		__index = Console.Command
 	})
 
-	if not istable(commands) then
-		commands = {commands}
-	end
+	commands = istable(commands) and commands or {commands}
 
 	for _, v in pairs(commands) do
-		Commands[v] = command
+		Console.Commands[v] = command
 	end
 
 	return command
 end
 
-function Rebuild()
-	for command, commandObject in pairs(Commands) do
+function Console.Rebuild()
+	for command, commandObject in pairs(Console.Commands) do
 		concommand.Add(command, function(ply, _, _, args)
-			Parse(ply, command, args)
-		end, AutoComplete, table.concat(commandObject:AutoComplete(), " | "))
+			Console.Parse(ply, command, args)
+		end, Console.AutoComplete, table.concat(commandObject:AutoComplete(), " | "))
 	end
 end
 
-function Parser(name, callback)
-	console[name] = function(options, argName)
+function Console.Parser(name, callback)
+	Console[name] = function(options, argName)
 		return {
 			Callback = callback,
 			Name = argName and argName:lower(),
@@ -45,16 +41,16 @@ function Parser(name, callback)
 	end
 end
 
-function PlayerName(ply)
+function Console.PlayerName(ply)
 	return IsValid(ply) and ply:Nick() or "CONSOLE"
 end
 
-function Feedback(ply, class, ...)
+function Console.Feedback(ply, class, ...)
 	local args = {...}
 
 	for k, v in pairs(args) do
 		if isentity(v) then
-			args[k] = PlayerName(v)
+			args[k] = Console.PlayerName(v)
 		end
 	end
 
@@ -69,11 +65,11 @@ function Feedback(ply, class, ...)
 	end
 end
 
-function Trim(str)
+function Console.Trim(str)
 	return str:match("^()%s*$") and "" or str:match("^%s*(.*%S)")
 end
 
-function Split(str)
+function Console.Split(str)
 	str = str:Trim()
 
 	local args = {}
@@ -86,7 +82,7 @@ function Split(str)
 		local prefix = str:sub(currentPos, (pos or 0) - 1)
 
 		if not inQuote then
-			local trim = Trim(prefix)
+			local trim = Console.Trim(prefix)
 
 			if trim != "" then
 				table.Add(args, string.Explode("%s+", trim, true))
@@ -106,15 +102,15 @@ function Split(str)
 	return args
 end
 
-function Parse(ply, name, str)
-	local command = Commands[name]
+function Console.Parse(ply, name, str)
+	local command = Console.Commands[name]
 
 	if not command then
 		return
 	end
 
 	if CLIENT and not command.Realm then
-		netstream.Send("Console", {
+		Netstream.Send("Console", {
 			Name = name,
 			Args = str
 		})
@@ -122,12 +118,12 @@ function Parse(ply, name, str)
 		return
 	end
 
-	local args = Split(str)
+	local args = Console.Split(str)
 
 	if IsValid(ply) then
 		if command.NoPlayer then
 			writeLog("Rejected: %s -> %s %s (NoPlayer)", ply, name, str)
-			Feedback(ply, "ERROR", "This command can only be run from the server console.")
+			Console.Feedback(ply, "ERROR", "This command can only be run from the server console.")
 
 			return
 		end
@@ -138,7 +134,7 @@ function Parse(ply, name, str)
 			msg = msg or "You do not have access to this command."
 
 			writeLog("Rejected: %s -> %s %s (%s)", ply, name, str, msg)
-			Feedback(ply, "ERROR", msg)
+			Console.Feedback(ply, "ERROR", msg)
 
 			return
 		end
@@ -149,7 +145,7 @@ function Parse(ply, name, str)
 	else
 		if command.NoConsole then
 			writeLog("Rejected: CONSOLE -> %s %s (NoConsole)", name, str)
-			Feedback(ply, "ERROR", "This command can only be run from an in-game client.")
+			Console.Feedback(ply, "ERROR", "This command can only be run from an in-game client.")
 
 			return
 		end
@@ -160,11 +156,13 @@ function Parse(ply, name, str)
 	end
 end
 
-function AutoComplete(name, args)
-	local command = Commands[name]
+function Console.AutoComplete(name, args)
+	local command = Console.Commands[name]
 
 	return table.Add({name .. args}, command:AutoComplete())
 end
+
+local Command = {}
 
 function Command:Invoke(ply, args)
 	local processedArgs = {}
@@ -176,7 +174,7 @@ function Command:Invoke(ply, args)
 
 				continue
 			else
-				Feedback(ply, "ERROR", "Missing argument #%s (%s)", k, arg.Name or arg.Type)
+				Console.Feedback(ply, "ERROR", "Missing argument #%s (%s)", k, arg.Name or arg.Type)
 
 				return
 			end
@@ -185,7 +183,7 @@ function Command:Invoke(ply, args)
 		local ok, processed = arg.Callback(ply, args, k == #self.Arguments, arg.Options)
 
 		if not ok then
-			Feedback(ply, "ERROR", "Failed to parse argument #%s (%s): %s", k, arg.Name or arg.Type, processed or "Unknown error")
+			Console.Feedback(ply, "ERROR", "Failed to parse argument #%s (%s): %s", k, arg.Name or arg.Type, processed or "Unknown error")
 
 			return
 		end
@@ -262,11 +260,13 @@ function Command:SetPlayerOnly()
 	self.NoConsole = true
 end
 
+Console.Command = Command
+
 if SERVER then
-	netstream.Hook("Console", function(ply, payload)
-		Parse(ply, payload.Name, payload.Args)
+	Netstream.Hook("Console", function(ply, payload)
+		Console.Parse(ply, payload.Name, payload.Args)
 	end)
 end
 
-hook.Add("InitPostEntity", "Console", Rebuild)
-hook.Add("OnReloaded", "Console", Rebuild)
+hook.Add("InitPostEntity", "Console", Console.Rebuild)
+hook.Add("OnReloaded", "Console", Console.Rebuild)

@@ -46,7 +46,7 @@ function table.DBKeyValues(tab)
 	local res = {}
 
 	for _, v in pairs(tab) do
-		res[v.key] = pack.Decode(v.value)
+		res[v.key] = Pack.Decode(v.value)
 	end
 
 	return res

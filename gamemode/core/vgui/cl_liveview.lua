@@ -85,4 +85,4 @@ function PANEL:Paint(w, h)
 	self.LastPaint = RealTime()
 end
 
-derma.DefineControl("RPLiveView", "Panel for drawing players themselves into a DModelPanel", PANEL, "DModelPanel")
+RPLiveView = derma.DefineControl("RPLiveView", "Panel for drawing players themselves into a DModelPanel", PANEL, "DModelPanel")

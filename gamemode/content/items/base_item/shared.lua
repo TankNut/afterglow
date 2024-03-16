@@ -64,7 +64,7 @@ function ITEM:SetProperty(key, val)
 	self:PropertyUpdated(key, old, val)
 
 	if SERVER then
-		netstream.Send("ItemData", self:GetReceivers(), {ID = self.ID, Key = key, Value = val})
+		Netstream.Send("ItemData", self:GetReceivers(), {ID = self.ID, Key = key, Value = val})
 		self:SaveData()
 	end
 end

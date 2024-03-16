@@ -1,4 +1,4 @@
-module("queue", package.seeall)
+Queue = Queue or {}
 
 local class = {}
 
@@ -28,6 +28,6 @@ function class:Count()
 	return self.Last - self.First + 1
 end
 
-function New()
+function Queue.New()
 	return setmetatable({First = 0, Last = -1, Items = {}}, {__index = class})
 end

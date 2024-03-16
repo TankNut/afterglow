@@ -1,4 +1,4 @@
-module("Plugin", package.seeall)
+Plugin = Plugin or {}
 
 local pluginFiles = {
 	"cl_plugin.lua",
@@ -6,7 +6,7 @@ local pluginFiles = {
 	"sv_plugin.lua"
 }
 
-function Load()
+function Plugin.Load()
 	local base = engine.ActiveGamemode() .. "/gamemode/plugins/"
 	local files, folders = file.Find(base .. "*", "LUA")
 

@@ -36,7 +36,7 @@ function PANEL:Init()
 	self.Confirm:Dock(BOTTOM)
 	self.Confirm:SetText("Confirm")
 
-	self.Confirm:SetDisabled(true)
+	self.Confirm:SetEnabled(false)
 
 	self.Confirm.DoClick = function(pnl)
 		self:Submit()
@@ -97,7 +97,7 @@ function PANEL:BuildFields()
 
 		icon:SetSize(56, 56)
 		icon:SetModel(v)
-		icon:SetTooltip()
+		icon:SetTooltip(false)
 
 		icon.DoClick = function()
 			self:SetModel(v)
@@ -156,7 +156,7 @@ function PANEL:RebuildSkins()
 
 		icon:SetSize(56, 56)
 		icon:SetModel(mdl, i)
-		icon:SetTooltip()
+		icon:SetTooltip(false)
 
 		icon.DoClick = function()
 			self:SetSkin(i)
@@ -167,24 +167,24 @@ function PANEL:RebuildSkins()
 end
 
 function PANEL:Validate()
-	local ok, key, err = validate.Multi(self.Fields, Character.GetRules())
+	local ok, key, err = Validate.Multi(self.Fields, Character.GetRules())
 
-	self.Confirm:SetDisabled(not ok)
+	self.Confirm:SetEnabled(ok)
 
 	if ok then
-		self.Confirm:SetTooltip()
+		self.Confirm:SetTooltip(false)
 	else
 		self.Confirm:SetTooltip(string.format("%s: %s", key, err))
 	end
 end
 
 function PANEL:Submit()
-	local ok, payload = validate.Multi(self.Fields, Character.GetRules())
+	local ok, payload = Validate.Multi(self.Fields, Character.GetRules())
 
 	if ok then
-		netstream.Send("CreateCharacter", payload)
+		Netstream.Send("CreateCharacter", payload)
 
-		self.Confirm:SetDisabled(true)
+		self.Confirm:SetEnabled(false)
 	end
 end
 

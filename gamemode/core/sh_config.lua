@@ -1,5 +1,5 @@
-module("Config", package.seeall)
+Config = Config or {}
 
-function Get(key)
+function Config.Get(key)
 	return GM and GM.Config[key] or GAMEMODE.Config[key]
 end

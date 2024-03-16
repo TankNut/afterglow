@@ -55,7 +55,7 @@ local function func(self)
 				Default = LocalPlayer():GetCharacterDescription()
 			})
 
-			netstream.Send("SetCharacterDescription", new)
+			Netstream.Send("SetCharacterDescription", new)
 		end)()
 	end
 
@@ -75,7 +75,7 @@ local function func(self)
 				Default = LocalPlayer():GetVisibleName()
 			})
 
-			netstream.Send("SetCharacterName", new)
+			Netstream.Send("SetCharacterName", new)
 		end)()
 	end
 

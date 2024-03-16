@@ -1,20 +1,20 @@
 function GM:GetCharacterNameRules()
 	return {
-		validate.Required(),
-		validate.String(),
-		validate.Min(Config.Get("MinNameLength")),
-		validate.Max(Config.Get("MaxNameLength")),
-		validate.AllowedCharacters(Config.Get("NameCharacters"))
+		Validate.Required(),
+		Validate.String(),
+		Validate.Min(Config.Get("MinNameLength")),
+		Validate.Max(Config.Get("MaxNameLength")),
+		Validate.AllowedCharacters(Config.Get("NameCharacters"))
 	}
 end
 
 function GM:GetCharacterDescriptionRules()
 	return {
-		validate.Required(),
-		validate.String(),
-		validate.Min(Config.Get("MinDescriptionLength")),
-		validate.Max(Config.Get("MaxDescriptionLength")),
-		validate.AllowedCharacters(Config.Get("DescriptionCharacters"))
+		Validate.Required(),
+		Validate.String(),
+		Validate.Min(Config.Get("MinDescriptionLength")),
+		Validate.Max(Config.Get("MaxDescriptionLength")),
+		Validate.AllowedCharacters(Config.Get("DescriptionCharacters"))
 	}
 end
 
@@ -23,16 +23,16 @@ function GM:GetBaseCharacterRules()
 		Name = hook.Run("GetCharacterNameRules"),
 		Description = hook.Run("GetCharacterDescriptionRules"),
 		Model = {
-			validate.Required(),
-			validate.String(),
-			validate.InList(Config.Get("CharacterModels"))
+			Validate.Required(),
+			Validate.String(),
+			Validate.InList(Config.Get("CharacterModels"))
 		},
 		Skin = {
-			validate.Required(),
-			validate.Number(),
-			validate.Min(0),
-			validate.Callback(function(val)
-				return val < util.GetModelSkins(validate.Cache().Model), "Skin index out of bounds"
+			Validate.Required(),
+			Validate.Number(),
+			Validate.Min(0),
+			Validate.Callback(function(val)
+				return val < util.GetModelSkins(Validate.Cache().Model), "Skin index out of bounds"
 			end)
 		}
 	}

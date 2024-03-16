@@ -247,4 +247,4 @@ function PANEL:Sort()
 	end
 end
 
-derma.DefineControl("RPInventoryPanel", "A panel that contains the standard inventory display", PANEL, "DPanel")
+RPInventoryPanel = derma.DefineControl("RPInventoryPanel", "A panel that contains the standard inventory display", PANEL, "DPanel")

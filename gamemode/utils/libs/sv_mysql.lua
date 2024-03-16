@@ -1,10 +1,8 @@
-mysql = mysql or {}
+require("mysqloo")
 
-local writeLog = log.Category("MySQL")
+MySQL = MySQL or {}
 
-if not mysqloo then
-	require("mysqloo")
-end
+local writeLog = Log.Category("MySQL")
 
 local QUERY_SELECT = 1
 local QUERY_INSERT = 2
@@ -36,7 +34,7 @@ function QUERY:New(queryType, tableName)
 	}, QUERY)
 end
 
-function QUERY:Escape(str) return mysql:Escape(str) end
+function QUERY:Escape(str) return MySQL:Escape(str) end
 function QUERY:Where(val) table.insert(self.WhereList, val) end
 
 function QUERY:WhereEqual(key, val) table.insert(self.WhereList, string.format("`%s` = '%s'", key, self:Escape(val))) end
@@ -168,22 +166,22 @@ function QUERY:Execute(callback)
 	end
 
 	if query then
-		return mysql:Query(query, callback)
+		return MySQL:Query(query, callback)
 	end
 end
 
-function mysql:Select(tableName) return QUERY:New(QUERY_SELECT, tableName) end
-function mysql:Insert(tableName) return QUERY:New(QUERY_INSERT, tableName) end
-function mysql:InsertIgnore(tableName) return QUERY:New(QUERY_INSERT_IGNORE, tableName) end
-function mysql:Update(tableName) return QUERY:New(QUERY_UPDATE, tableName) end
-function mysql:Upsert(tableName) return QUERY:New(QUERY_UPSERT, tableName) end
-function mysql:Delete(tableName) return QUERY:New(QUERY_DELETE, tableName) end
-function mysql:Drop(tableName) return QUERY:New(QUERY_DROP, tableName) end
-function mysql:Truncate(tableName) return QUERY:New(QUERY_TRUNCATE, tableName) end
-function mysql:Create(tableName) return QUERY:New(QUERY_CREATE, tableName) end
-function mysql:Alter(tableName) return QUERY:New(QUERY_ALTER, tableName) end
+function MySQL:Select(tableName) return QUERY:New(QUERY_SELECT, tableName) end
+function MySQL:Insert(tableName) return QUERY:New(QUERY_INSERT, tableName) end
+function MySQL:InsertIgnore(tableName) return QUERY:New(QUERY_INSERT_IGNORE, tableName) end
+function MySQL:Update(tableName) return QUERY:New(QUERY_UPDATE, tableName) end
+function MySQL:Upsert(tableName) return QUERY:New(QUERY_UPSERT, tableName) end
+function MySQL:Delete(tableName) return QUERY:New(QUERY_DELETE, tableName) end
+function MySQL:Drop(tableName) return QUERY:New(QUERY_DROP, tableName) end
+function MySQL:Truncate(tableName) return QUERY:New(QUERY_TRUNCATE, tableName) end
+function MySQL:Create(tableName) return QUERY:New(QUERY_CREATE, tableName) end
+function MySQL:Alter(tableName) return QUERY:New(QUERY_ALTER, tableName) end
 
-function mysql:Begin()
+function MySQL:Begin()
 	self.Transaction = {}
 
 	writeLog("Transaction: START")
@@ -241,7 +239,7 @@ local function startQuery(query, suppress, callback)
 	end
 end
 
-function mysql:Commit(callback)
+function MySQL:Commit(callback)
 	writeLog("Transaction: COMMIT")
 
 	if not self.Transaction then
@@ -250,7 +248,7 @@ function mysql:Commit(callback)
 		self.Transaction = nil
 
 		if isfunction(callback) then
-			callback(suppress and true)
+			callback(self.SuppressState and true)
 		end
 
 		return
@@ -274,7 +272,7 @@ function mysql:Commit(callback)
 	end
 end
 
-function mysql:Query(query, callback)
+function MySQL:Query(query, callback)
 	if self.Transaction then
 		table.insert(self.Transaction, query)
 
@@ -295,15 +293,15 @@ function mysql:Query(query, callback)
 	end
 end
 
-function mysql:Suppress()
+function MySQL:Suppress()
 	self.SuppressState = true
 end
 
-function mysql:Escape(str)
+function MySQL:Escape(str)
 	return self.Connection:escape(str)
 end
 
-function mysql:Connect(host, username, password, database, port)
+function MySQL:Connect(host, username, password, database, port)
 	if self.Connection and self.Connection:ping() then
 		return
 	end
@@ -328,7 +326,7 @@ function mysql:Connect(host, username, password, database, port)
 	self.Connection:connect()
 end
 
-function mysql:Disconnect()
+function MySQL:Disconnect()
 	self.Connection:disconnect(true)
 end
 

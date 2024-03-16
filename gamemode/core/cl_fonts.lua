@@ -45,11 +45,11 @@ for k, v in pairs({massive = 30, giant = 22, big = 18, medium = 16, small = 14, 
 	function COMPONENT:Push() self.Context:PushFont("afterglow.label" .. k) end
 	function COMPONENT:Pop() self.Context:PopFont() end
 
-	scribe.Register(COMPONENT)
+	Scribe.Register(COMPONENT)
 end
 
 -- Chat component
-scribe.Register({
+Scribe.Register({
 	Name = {"chat"},
 	Components = {
 		{"big"},
@@ -70,7 +70,7 @@ do -- Bold component
 		self.Context:PopFont()
 	end
 
-	scribe.Register(COMPONENT)
+	Scribe.Register(COMPONENT)
 end
 
 do -- Italic component
@@ -86,5 +86,5 @@ do -- Italic component
 		self.Context:PopFont()
 	end
 
-	scribe.Register(COMPONENT)
+	Scribe.Register(COMPONENT)
 end

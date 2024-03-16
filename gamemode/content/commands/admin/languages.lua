@@ -1,33 +1,33 @@
-local give = console.AddCommand("rpa_language_give", function(ply, targets, lang, speaking)
+local give = Console.AddCommand("rpa_language_give", function(ply, targets, lang, speaking)
 	local name = Language.GetName(lang)
 	local ability = speaking and "speak" or "understand"
 
 	for _, target in pairs(targets) do
 		if target:CanSpeakLanguage(lang) or (not speaking and target:CanUnderstandLanguage(lang)) then
-			console.Feedback(ply, "ERROR", "%s already %ss %s.", target:GetVisibleName(), ability, name)
+			Console.Feedback(ply, "ERROR", "%s already %ss %s.", target:GetVisibleName(), ability, name)
 
 			continue
 		end
 
 		target:GiveLanguage(lang, speaking)
 
-		console.Feedback(ply, "NOTICE", "You've given %s the ability to %s %s.", target:GetVisibleName(), ability, name)
-		console.Feedback(target, "NOTICE", "%s has given you the ability to %s %s.", ply, ability, name)
+		Console.Feedback(ply, "NOTICE", "You've given %s the ability to %s %s.", target:GetVisibleName(), ability, name)
+		Console.Feedback(target, "NOTICE", "%s has given you the ability to %s %s.", ply, ability, name)
 	end
 end)
 
 give:SetDescription("Gives someone the ability to speak or understand a specific language.")
-give:AddParameter(console.Player())
-give:AddParameter(console.Language())
-give:AddOptional(console.Bool({}, "Speaking"), true)
+give:AddParameter(Console.Player())
+give:AddParameter(Console.Language())
+give:AddOptional(Console.Bool({}, "Speaking"), true)
 give:SetAccess(Command.IsAdmin)
 
-local take = console.AddCommand("rpa_language_take", function(ply, targets, lang)
+local take = Console.AddCommand("rpa_language_take", function(ply, targets, lang)
 	local name = Language.GetName(lang)
 
 	for _, target in pairs(targets) do
 		if not target:CanUnderstandLanguage(lang) then
-			console.Feedback(ply, "ERROR", "%s doesn't know %s.", target:GetVisibleName(), name)
+			Console.Feedback(ply, "ERROR", "%s doesn't know %s.", target:GetVisibleName(), name)
 
 			continue
 		end
@@ -36,28 +36,28 @@ local take = console.AddCommand("rpa_language_take", function(ply, targets, lang
 
 		target:TakeLanguage(lang)
 
-		console.Feedback(ply, "NOTICE", "You've taken the ability to %s %s from %s.", ability, name, target:GetVisibleName())
-		console.Feedback(target, "NOTICE", "%s has removed your ability to %s %s.", ply, ability, name)
+		Console.Feedback(ply, "NOTICE", "You've taken the ability to %s %s from %s.", ability, name, target:GetVisibleName())
+		Console.Feedback(target, "NOTICE", "%s has removed your ability to %s %s.", ply, ability, name)
 	end
 end)
 
 take:SetDescription("Removes the ability to understand a specific language from someone.")
-take:AddParameter(console.Player())
-take:AddParameter(console.Language())
+take:AddParameter(Console.Player())
+take:AddParameter(Console.Language())
 take:SetAccess(Command.IsAdmin)
 
-local reset = console.AddCommand("rpa_language_reset", function(ply, targets)
+local reset = Console.AddCommand("rpa_language_reset", function(ply, targets)
 	for _, target in pairs(targets) do
 		target:SetLanguages(target:GetCharacterFlagAttribute("DefaultLanguages"))
 		target:CheckLanguage()
 
-		console.Feedback(ply, "NOTICE", "You've reset %s's languages.", target:GetVisibleName())
-		console.Feedback(target, "NOTICE", "%s has reset your languages.", ply)
+		Console.Feedback(ply, "NOTICE", "You've reset %s's languages.", target:GetVisibleName())
+		Console.Feedback(target, "NOTICE", "%s has reset your languages.", ply)
 	end
 end)
 
 reset:SetDescription("Resets someone's languages to the default for their character flag.")
-reset:AddParameter(console.Player())
+reset:AddParameter(Console.Player())
 reset:SetAccess(Command.IsAdmin)
 
 local function verify(ply, tab)
@@ -67,7 +67,7 @@ local function verify(ply, tab)
 		end
 
 		if not Language.Get(lang) then
-			console.Feedback(ply, "ERROR", "Unknown language: %s", lang)
+			Console.Feedback(ply, "ERROR", "Unknown language: %s", lang)
 			return false
 		end
 	end
@@ -75,7 +75,7 @@ local function verify(ply, tab)
 	return tab
 end
 
-local set = console.AddCommand("rpa_language_set", function(ply, targets, languages, hearing)
+local set = Console.AddCommand("rpa_language_set", function(ply, targets, languages, hearing)
 	languages = verify(ply, string.Explode("[^%a]+", languages, true))
 
 	if not languages then
@@ -102,13 +102,13 @@ local set = console.AddCommand("rpa_language_set", function(ply, targets, langua
 		target:SetLanguages(data)
 		target:CheckLanguage()
 
-		console.Feedback(ply, "NOTICE", "You've set %s's languages.", target:GetVisibleName(), names)
-		console.Feedback(target, "NOTICE", "%s has set your languages.", ply, names)
+		Console.Feedback(ply, "NOTICE", "You've set %s's languages.", target:GetVisibleName())
+		Console.Feedback(target, "NOTICE", "%s has set your languages.", ply)
 	end
 end)
 
 set:SetDescription("Sets someone's languages to a specific set.")
-set:AddParameter(console.Player())
-set:AddOptional(console.String({}, "Languages"), "", "none")
-set:AddOptional(console.String({}, "Hearing only"), "", "none")
+set:AddParameter(Console.Player())
+set:AddOptional(Console.String({}, "Languages"), "", "none")
+set:AddOptional(Console.String({}, "Hearing only"), "", "none")
 set:SetAccess(Command.IsAdmin)

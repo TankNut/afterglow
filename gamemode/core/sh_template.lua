@@ -1,15 +1,15 @@
-module("Template", package.seeall)
+Template = Template or {}
+
+Template.Class = Template.Class or {}
+Template.List = Template.List or {}
 
 local meta = FindMetaTable("Player")
 
-Class = Class or {}
-List = List or {}
-
-_G.TEMPLATE = Class
+_G.TEMPLATE = Template.Class
 IncludeFile("class/base_template.lua")
 _G.TEMPLATE = nil
 
-function ProcessTemplate(data)
+function Template.ProcessTemplate(data)
 	-- Rewrite fields and callbacks so they're in the proper load format
 	if data.Vars then
 		local vars = {}
@@ -47,30 +47,30 @@ function ProcessTemplate(data)
 
 	return setmetatable(data, {
 		__index = function(_, index)
-			return base and Get(base)[index] or Class[index]
+			return base and Template.Get(base)[index] or Template.Class[index]
 		end
 	})
 end
 
-function Add(name, data)
+function Template.Add(name, data)
 	name = name:lower()
 	data.ID = name
 
-	List[name] = ProcessTemplate(data)
+	Template.List[name] = Template.ProcessTemplate(data)
 end
 
-function AddFile(path, name)
+function Template.AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
 	_G.TEMPLATE = {}
 
 	IncludeFile(path)
-	Add(name, TEMPLATE)
+	Template.Add(name, TEMPLATE)
 
 	_G.TEMPLATE = nil
 end
 
-function AddFolder(basePath)
+function Template.AddFolder(basePath)
 	local recursive
 
 	recursive = function(path)
@@ -81,7 +81,7 @@ function AddFolder(basePath)
 				continue
 			end
 
-			AddFile(path .. "/" .. v)
+			Template.AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -92,8 +92,8 @@ function AddFolder(basePath)
 	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
-function Get(id)
-	return List[id]
+function Template.Get(id)
+	return Template.List[id]
 end
 
 function meta:CanAccessTemplate(id)
@@ -103,7 +103,7 @@ end
 function meta:GetAvailableTemplates()
 	local tab = {}
 
-	for id, data in pairs(List) do
+	for id, data in pairs(Template.List) do
 		if self:CanAccessTemplate(id) then
 			table.insert(tab, data)
 		end
@@ -154,8 +154,8 @@ if SERVER then
 		template:OnLoad(self, data)
 	end
 
-	netstream.Hook("LoadTemplate", function(ply, id)
-		local template = Get(id)
+	Netstream.Hook("LoadTemplate", function(ply, id)
+		local template = Template.Get(id)
 
 		if not template or not ply:CanAccessTemplate(id) then
 			return

@@ -1,20 +1,19 @@
-module("Progress", package.seeall)
+Progress = Progress or {}
+Progress.Active = Progress.Active or {}
 
 local meta = FindMetaTable("Player")
 
-Active = Active or {}
-
 if CLIENT then
-	netstream.Hook("StartProgress", function(payload)
-		Active[payload.Player] = {
+	Netstream.Hook("StartProgress", function(payload)
+		Progress.Active[payload.Player] = {
 			StartTime = CurTime(),
 			EndTime = payload.Time,
-			Scribe = scribe.Parse("<big>" .. payload.Text, 380)
+			Scribe = Scribe.Parse("<big>" .. payload.Text, 380)
 		}
 	end)
 
-	netstream.Hook("StopProgress", function(ply)
-		Active[ply] = nil
+	Netstream.Hook("StopProgress", function(ply)
+		Progress.Active[ply] = nil
 	end)
 
 	hook.Add("PostRenderVGUI", "Progress", function()
@@ -26,9 +25,9 @@ if CLIENT then
 		local x = (ScrW() / 2) - (w * 0.5)
 		local y = (ScrH() / 2) + h
 
-		for ply, data in SortedPairsByMemberValue(Active, "StartTime") do
+		for ply, data in SortedPairsByMemberValue(Progress.Active, "StartTime") do
 			if not IsValid(ply) or CurTime() > data.EndTime then
-				Active[ply] = nil
+				Progress.Active[ply] = nil
 
 				continue
 			end
@@ -49,9 +48,9 @@ if CLIENT then
 end
 
 if SERVER then
-	function Start(ply, time, text, checklist, notify, notifyText)
-		if Active[ply] then
-			Stop(ply, true)
+	function Progress.Start(ply, time, text, checklist, notify, notifyText)
+		if Progress.Active[ply] then
+			Progress.Stop(ply, true)
 		end
 
 		checklist = checklist or {}
@@ -64,39 +63,39 @@ if SERVER then
 			Pos = ply:GetPos()
 		}
 
-		netstream.Send("StartProgress", ply, {
+		Netstream.Send("StartProgress", ply, {
 			Time = data.EndTime,
 			Text = text,
 			Player = ply
 		})
 
 		if notify then
-			netstream.Send("StartProgress", notify, {
+			Netstream.Send("StartProgress", notify, {
 				Time = data.EndTime,
 				Text = notifyText,
 				Player = ply
 			})
 		end
 
-		Active[ply] = data
+		Progress.Active[ply] = data
 
 		if data.Coroutine then
 			return coroutine.yield()
 		end
 	end
 
-	function Stop(ply, silent)
-		local data = Active[ply]
+	function Progress.Stop(ply, silent)
+		local data = Progress.Active[ply]
 
 		if not data then
 			return
 		end
 
 		if not silent then
-			netstream.Send("StopProgress", ply, ply)
+			Netstream.Send("StopProgress", ply, ply)
 
 			if data.Notify then
-				netstream.Send("StopProgress", data.Notify, ply)
+				Netstream.Send("StopProgress", data.Notify, ply)
 			end
 		end
 
@@ -104,11 +103,11 @@ if SERVER then
 			coroutine.Resume(data.Coroutine, false)
 		end
 
-		Active[ply] = nil
+		Progress.Active[ply] = nil
 	end
 
-	function Finish(ply)
-		local data = Active[ply]
+	function Progress.Finish(ply)
+		local data = Progress.Active[ply]
 
 		if not data then
 			return
@@ -118,13 +117,13 @@ if SERVER then
 			coroutine.Resume(data.Coroutine, true)
 		end
 
-		Active[ply] = nil
+		Progress.Active[ply] = nil
 	end
 
-	function Think()
-		for ply, data in pairs(Active) do
-			if not IsValid(ply) or not CheckOwner(ply, data.Pos) then
-				Stop(ply)
+	function Progress.Think()
+		for ply, data in pairs(Progress.Active) do
+			if not IsValid(ply) or not Progress.CheckOwner(ply, data.Pos) then
+				Progress.Stop(ply)
 
 				continue
 			end
@@ -132,25 +131,25 @@ if SERVER then
 			local abort = false
 
 			for _, v in pairs(data.Checklist) do
-				if not Validate(ply, v) then
+				if not Progress.Validate(ply, v) then
 					abort = true
 					break
 				end
 			end
 
 			if abort then
-				Stop(ply)
+				Progress.Stop(ply)
 
 				continue
 			end
 
 			if data.EndTime <= CurTime() then
-				Finish(ply)
+				Progress.Finish(ply)
 			end
 		end
 	end
 
-	function CheckOwner(ply, pos)
+	function Progress.CheckOwner(ply, pos)
 		if not ply:Alive() or ply:GetPos():DistToSqr(pos) > 4 then
 			return false
 		end
@@ -158,33 +157,33 @@ if SERVER then
 		return true
 	end
 
-	function Validate(ply, check)
+	function Progress.Validate(ply, check)
 		if isentity(check) then
 			if not IsValid(check) then
 				return false
 			end
 
-			return check:IsPlayer() and CheckPlayer(ply, check) or CheckEntity(ply, check)
+			return check:IsPlayer() and Progress.CheckPlayer(ply, check) or Progress.CheckEntity(ply, check)
 		elseif check.__Item then
-			return CheckItem(ply, check)
+			return Progress.CheckItem(ply, check)
 		end
 	end
 
-	function CheckEntity(ply, ent)
+	function Progress.CheckEntity(ply, ent)
 		return true
 	end
 
-	function CheckPlayer(ply, target)
+	function Progress.CheckPlayer(ply, target)
 		return true
 	end
 
-	function CheckItem(ply, item)
+	function Progress.CheckItem(ply, item)
 		return item:CanInteract(ply)
 	end
 
-	hook.Add("Think", "Progress", Think)
+	hook.Add("Think", "Progress", Progress.Think)
 
 	function meta:WaitFor(time, text, checklist, notify, notifyText)
-		return Start(self, time, text, checklist, notify, notifyText)
+		return Progress.Start(self, time, text, checklist, notify, notifyText)
 	end
 end

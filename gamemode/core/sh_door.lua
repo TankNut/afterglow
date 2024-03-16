@@ -1,45 +1,44 @@
--- This library uses NW and not NetVar because of PVS issues, don't try to change it
-module("Door", package.seeall)
-
-local entity = FindMetaTable("Entity")
-
-Types = Types or table.Lookup({
+-- This library uses NW and not Netvar because of PVS issues, don't try to change it
+Door = Door or {}
+Door.Types = table.Lookup({
 	"prop_door_rotating",
 	"func_door_rotating",
 	"func_door"
 })
 
-All = All or {}
-Vars = Vars or {}
+Door.All = Door.All or {}
+Door.Vars = Door.Vars or {}
 
-function AddSaveVar(name, get, set)
-	Vars[name] = {
+local entity = FindMetaTable("Entity")
+
+function Door.AddSaveVar(name, get, set)
+	Door.Vars[name] = {
 		Get = get,
 		Set = set
 	}
 end
 
-function Iterator()
-	return pairs(All)
+function Door.Iterator()
+	return pairs(Door.All)
 end
 
 if SERVER then
-	function QueueSave()
-		if not Initialized then
+	function Door.QueueSave()
+		if not Door.Initialized then
 			return
 		end
 
 		timer.Create("DoorSave", 10, 1, function()
-			SaveData()
+			Door.SaveData()
 		end)
 	end
 
-	function SaveData()
+	function Door.SaveData()
 		timer.Remove("DoorSave")
 
 		local data = {}
 
-		for door in Iterator() do
+		for door in Door.Iterator() do
 			local id = door:MapCreationID()
 
 			if id != -1 then
@@ -66,7 +65,7 @@ end
 hook.Add("OnEntityCreated", "Door", function(ent)
 	if hook.Run("EntityIsDoor", ent) then
 		ent._IsDoor = true
-		All[ent] = ent:GetClass()
+		Door.All[ent] = ent:GetClass()
 
 		if SERVER then
 			timer.Simple(0, function()
@@ -85,13 +84,13 @@ hook.Add("EntityRemoved", "Door", function(ent, fullUpdate)
 		return
 	end
 
-	if All[ent] then
-		All[ent] = nil
+	if Door.All[ent] then
+		Door.All[ent] = nil
 	end
 end)
 
 if SERVER then
-	IsOpenCallbacks = {
+	Door.IsOpenCallbacks = {
 		["prop_door_rotating"] = function(self) return self:GetInternalVariable("m_eDoorState") != 0 end,
 		["func_door_rotating"] = function(self) return self:GetInternalVariable("m_toggle_state") == 0 end,
 		["func_door"] = function(self) return self:GetInternalVariable("m_toggle_state") == 0 end
@@ -99,8 +98,8 @@ if SERVER then
 
 	-- Only semi-reliable way of doing this
 	hook.Add("Think", "Door", function()
-		for door, class in Iterator() do
-			local open = IsOpenCallbacks[class](door)
+		for door, class in Door.Iterator() do
+			local open = Door.IsOpenCallbacks[class](door)
 
 			if door:GetDoorOpen() != open then
 				door:SetNWBool("DoorOpen", open)
@@ -154,20 +153,20 @@ if SERVER then
 
 		local data = Data.GetMapData("doors", {})
 
-		for door in Iterator() do
+		for door in Door.Iterator() do
 			local initial = {}
 			local values = {}
 
 			local id = door:MapCreationID()
 
-			for key, callbacks in pairs(Vars) do
+			for key, callbacks in pairs(Door.Vars) do
 				initial[key] = callbacks.Get(door)
 			end
 
 			if id != -1 and data[id] then
 				for index, value in pairs(data[id]) do
 					values[index] = value
-					Vars[index].Set(door, value)
+					Door.Vars[index].Set(door, value)
 				end
 			end
 
@@ -188,13 +187,13 @@ if SERVER then
 
 	function entity:ResetDoorValues(save)
 		for key, value in pairs(self.InitialDoorValues) do
-			Vars[key].Set(self, value)
+			Door.Vars[key].Set(self, value)
 		end
 
 		if save then
 			table.Empty(self.DoorValues)
 
-			QueueSave()
+			Door.QueueSave()
 		end
 	end
 
@@ -209,7 +208,7 @@ if SERVER then
 
 		local ent = self:GetMasterDoor()
 
-		Vars[key].Set(ent, value)
+		Door.Vars[key].Set(ent, value)
 
 		if value == self:GetInitialDoorValue(key) then
 			ent.DoorValues[key] = nil
@@ -217,7 +216,7 @@ if SERVER then
 			ent.DoorValues[key] = value
 		end
 
-		QueueSave()
+		Door.QueueSave()
 	end
 end
 
@@ -356,11 +355,11 @@ if SERVER then
 	end
 end
 
-AddSaveVar("Locked", entity.GetDoorLocked, entity.SetDoorLocked)
-AddSaveVar("Usable", entity.GetDoorUsable, entity.SetDoorUsable)
+Door.AddSaveVar("Locked", entity.GetDoorLocked, entity.SetDoorLocked)
+Door.AddSaveVar("Usable", entity.GetDoorUsable, entity.SetDoorUsable)
 
-AddSaveVar("Toggled", entity.GetDoorToggled, entity.SetDoorToggled)
-AddSaveVar("AutoClose", entity.GetDoorAutoClose, entity.SetDoorAutoClose)
-AddSaveVar("Speed", entity.GetDoorSpeed, entity.SetDoorSpeed)
-AddSaveVar("Damage", entity.GetDoorDamage, entity.SetDoorDamage)
-AddSaveVar("ForceMove", entity.GetDoorForceMove, entity.SetDoorForceMove)
+Door.AddSaveVar("Toggled", entity.GetDoorToggled, entity.SetDoorToggled)
+Door.AddSaveVar("AutoClose", entity.GetDoorAutoClose, entity.SetDoorAutoClose)
+Door.AddSaveVar("Speed", entity.GetDoorSpeed, entity.SetDoorSpeed)
+Door.AddSaveVar("Damage", entity.GetDoorDamage, entity.SetDoorDamage)
+Door.AddSaveVar("ForceMove", entity.GetDoorForceMove, entity.SetDoorForceMove)

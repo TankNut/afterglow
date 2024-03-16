@@ -1,13 +1,13 @@
-module("Context", package.seeall)
+Context = Context or {}
 
 local meta = FindMetaTable("Player")
 
-function Add(name, data)
-	if not Current then
+function Context.Add(name, data)
+	if not Context.Current then
 		return
 	end
 
-	Current[name] = {
+	Context.Current[name] = {
 		ID = name,
 		Name = data.Name or "Unnamed Option",
 		Section = data.Section or 0,
@@ -19,27 +19,28 @@ function Add(name, data)
 end
 
 if CLIENT then
-	function OpenMenu()
-		Current = {}
+	function Context.OpenMenu()
+		Context.Current = {}
 
 		LocalPlayer():GetContextOptions()
 
-		local options = Current
+		local options = Context.Current
 
-		Current = nil
+		Context.Current = nil
 
-		Menu = DermaMenu()
-		Menu:SetSkin("Afterglow")
+		Context.Menu = DermaMenu()
+		Context.Menu:SetSkin("Afterglow")
 
-		BuildMenu(options)
+		Context.BuildMenu(options)
 
 		gui.EnableScreenClicker(true)
 
-		Menu:Open()
+		Context.Menu:Open()
 	end
 
-	function BuildMenu(options)
+	function Context.BuildMenu(options)
 		local sections = {}
+		local menu = Context.Menu
 
 		for _, data in pairs(options) do
 			if not sections[data.Section] then
@@ -57,7 +58,7 @@ if CLIENT then
 			if first then
 				first = false
 			else
-				Menu:AddSpacer()
+				menu:AddSpacer()
 			end
 
 			for _, data in pairs(sectionOptions) do
@@ -69,14 +70,14 @@ if CLIENT then
 							local val = data.Client(value)
 
 							if val != nil then
-								netstream.Send("ContextOption", {
+								Netstream.Send("ContextOption", {
 									ID = data.ID,
 									Value = val
 								})
 							end
 						end)()
 					else
-						netstream.Send("ContextOption", {
+						Netstream.Send("ContextOption", {
 							ID = data.ID,
 							Value = value
 						})
@@ -84,22 +85,22 @@ if CLIENT then
 				end
 
 				if data.SubMenu then
-					local subMenu = Menu:AddSubMenu(data.Name)
+					local subMenu = menu:AddSubMenu(data.Name)
 
 					data.SubMenu(subMenu, callback)
 				else
-					Menu:AddOption(data.Name, callback)
+					menu:AddOption(data.Name, callback)
 				end
 			end
 		end
 	end
 
-	function CloseMenu()
-		if IsValid(Menu) then
-			Menu:Remove()
+	function Context.CloseMenu()
+		if IsValid(Context.Menu) then
+			Context.Menu:Remove()
 		end
 
-		Menu = nil
+		Context.Menu = nil
 
 		gui.EnableScreenClicker(false)
 	end
@@ -108,19 +109,19 @@ end
 if CLIENT then
 	hook.Add("OnContextMenuOpen", "Context", function()
 		if hook.Run("ShouldOpenContextMenu", LocalPlayer()) then
-			OpenMenu()
+			Context.OpenMenu()
 
 			return true
 		end
 	end)
 
 	hook.Add("OnContextMenuClose", "Context", function()
-		CloseMenu()
+		Context.CloseMenu()
 	end)
 end
 
 function meta:GetContextOptions()
-	Add("test", {
+	Context.Add("test", {
 		Name = "Test Option",
 		Client = function()
 			print("Test!")

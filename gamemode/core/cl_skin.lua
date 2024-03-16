@@ -32,7 +32,7 @@ for k, v in pairs(SKIN.Text) do
 	function COMPONENT:Push() self.Context:PushColor(v) end
 	function COMPONENT:Pop() self.Context:PopColor() end
 
-	scribe.Register(COMPONENT)
+	Scribe.Register(COMPONENT)
 end
 
 -- Overrides for hardcoded values

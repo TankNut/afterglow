@@ -91,7 +91,7 @@ if CLIENT then
 	end
 else
 	CLASS.LoadItems = coroutine.Bind(function(self)
-		local query = mysql:Select("rp_items")
+		local query = MySQL:Select("rp_items")
 			query:Select("id")
 			query:Select("class")
 			query:Select("custom_data")
@@ -104,7 +104,7 @@ else
 				continue
 			end
 
-			local item = Item.Instance(v.class, v.id, pack.Decode(v.custom_data))
+			local item = Item.Instance(v.class, v.id, Pack.Decode(v.custom_data))
 
 			item:SetInventory(self, true)
 		end

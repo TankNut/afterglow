@@ -19,8 +19,8 @@ function CLASS:UpdateInfo(force)
 
 	local color = Hud.Skin.Text.Normal
 
-	self.NameScribe = scribe.Parse(string.format("<giant><ol><c=%s>%s", color, self.LastName))
-	self.TeamScribe = scribe.Parse(string.format("<giant><ol><c=%s>%s", color, team.GetName(self.LastTeam)))
+	self.NameScribe = Scribe.Parse(string.format("<giant><ol><c=%s>%s", color, self.LastName))
+	self.TeamScribe = Scribe.Parse(string.format("<giant><ol><c=%s>%s", color, team.GetName(self.LastTeam)))
 end
 
 function CLASS:Paint(w, h)

@@ -1,9 +1,9 @@
 local PANEL = {}
 
-AccessorFunc(PANEL, "fProgress", "Progress")
+AccessorFunc(PANEL, "Progress", "Progress")
 
 function PANEL:Init()
-	self:SetProgress(0)
+	self.Progress = 0
 end
 
 function PANEL:Paint(w, h)

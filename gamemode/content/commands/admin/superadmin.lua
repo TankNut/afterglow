@@ -1,17 +1,17 @@
-local usergroup = console.AddCommand("rpa_usergroup_set", function(ply, target, group)
+local usergroup = Console.AddCommand("rpa_usergroup_set", function(ply, target, group)
 	target:SetRPUserGroup(group)
 
-	console.Feedback(ply, "NOTICE", "You've set %s's usergroup to %s.", target:Nick(), group)
-	console.Feedback(target, "NOTICE", "%s has set your usergroup to %s.", ply, group)
+	Console.Feedback(ply, "NOTICE", "You've set %s's usergroup to %s.", target:Nick(), group)
+	Console.Feedback(target, "NOTICE", "%s has set your usergroup to %s.", ply, group)
 end)
 
 usergroup:SetDescription("Sets someone's usergroup.")
-usergroup:AddParameter(console.Player({
+usergroup:AddParameter(Console.Player({
 	CheckImmunity = true,
 	NoSelfTarget = true,
 	SingleTarget = true
 }))
-usergroup:AddOptional(console.UserGroup({
+usergroup:AddOptional(Console.UserGroup({
 	CheckImmunity = true,
 	NoSelfSelect = true
 }), "user")

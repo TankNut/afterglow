@@ -1,18 +1,17 @@
-module("PlayerVar", package.seeall)
+PlayerVar = PlayerVar or {}
+PlayerVar.Vars = PlayerVar.Vars or {}
+PlayerVar.Fields = PlayerVar.Fields or {}
 
 local meta = FindMetaTable("Player")
 
-Vars = Vars or {}
-Fields = Fields or {}
-
-function Add(key, data)
-	Vars[key] = data
+function PlayerVar.Add(key, data)
+	PlayerVar.Vars[key] = data
 
 	data.Key = "P_" .. key:FirstToUpper()
 	data.Accessor = data.Accessor or key:FirstToUpper()
 
 	if data.Field then
-		Fields[data.Field] = data.Accessor
+		PlayerVar.Fields[data.Field] = data.Accessor
 	end
 
 	if data.ServerOnly then
@@ -50,21 +49,21 @@ function Add(key, data)
 
 			if not noSave and data.Field then
 				-- Write nil here to keep the database clean
-				Save(ply, data.Field, value)
+				PlayerVar.Save(ply, data.Field, value)
 			end
 		end
 	else
 		meta["Get" .. data.Accessor] = function(ply)
-			local val = ply:GetNetVar(data.Key, data.Default)
+			local val = ply:GetNetvar(data.Key, data.Default)
 
 			return data.Get and data.Get(ply, val) or val
 		end
 
 		if SERVER then
-			local func = data.Private and "SetPrivateNetVar" or "SetNetVar"
+			local func = data.Private and "SetPrivateNetvar" or "SetNetvar"
 
 			meta["Set" .. data.Accessor] = function(ply, value, noSave)
-				local old = ply:GetNetVar(data.Key, data.Default)
+				local old = ply:GetNetvar(data.Key, data.Default)
 
 				-- Since defaults are pre-defined, we can replace nil with it
 				local callValue = value != nil and value or data.Default
@@ -77,13 +76,13 @@ function Add(key, data)
 
 				if not noSave and data.Field then
 					-- Write nil here to keep the database clean
-					Save(ply, data.Field, value)
+					PlayerVar.Save(ply, data.Field, value)
 				end
 			end
 		end
 
 		if CLIENT and data.Callback then
-			netvar.AddEntityHook(data.Key, "PlayerVar", function(ply, old, value)
+			Netvar.AddEntityHook(data.Key, "PlayerVar", function(ply, old, value)
 				local callValue = value != nil and value or data.Default
 
 				data.Callback(ply, old, callValue)
@@ -93,33 +92,33 @@ function Add(key, data)
 end
 
 if SERVER then
-	Load = coroutine.Bind(function(ply)
-		local query = mysql:Select("rp_player_data")
+	PlayerVar.Load = coroutine.Bind(function(ply)
+		local query = MySQL:Select("rp_player_data")
 			query:Select("key")
 			query:Select("value")
 			query:WhereEqual("steamid", ply:SteamID())
 		local data = query:Execute()
 
 		for _, v in pairs(data) do
-			local accessor = Fields[v.key]
+			local accessor = PlayerVar.Fields[v.key]
 
 			if accessor then
-				ply["Set" .. accessor](ply, pack.Decode(v.value), true)
+				ply["Set" .. accessor](ply, Pack.Decode(v.value), true)
 			end
 		end
 	end)
 
-	function Save(ply, field, value)
+	function PlayerVar.Save(ply, field, value)
 		if value == nil then
-			local query = mysql:Delete("rp_player_data")
+			local query = MySQL:Delete("rp_player_data")
 				query:WhereEqual("steamid", ply:SteamID())
 				query:WhereEqual("key", field)
 			query:Execute(true)
 		else
-			local query = mysql:Upsert("rp_player_data")
+			local query = MySQL:Upsert("rp_player_data")
 				query:Insert("steamid", ply:SteamID())
 				query:Insert("key", field)
-				query:Insert("value", pack.Encode(value))
+				query:Insert("value", Pack.Encode(value))
 			query:Execute(true)
 		end
 	end

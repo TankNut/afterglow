@@ -1,4 +1,3 @@
-DEFINE_BASECLASS("DLabel")
 local PANEL = {}
 
 function PANEL:Init()
@@ -11,11 +10,11 @@ end
 
 function PANEL:Setup(item)
 	self.Item = item
-	self.Scribe = scribe.Parse(item:GetFormattedItemName())
+	self.Scribe = Scribe.Parse(item:GetFormattedItemName())
 end
 
 function PANEL:OnDepressed()
-	self.GrabX, self.GrabY = self:ScreenToLocal(gui.MousePos())
+	self.GrabX, self.GrabY = self:ScreenToLocal(input.GetCursorPos())
 end
 
 function PANEL:DoDoubleClick()
@@ -30,7 +29,7 @@ function PANEL:PaintAt(x, y, w, h)
 	x = x + (self:GetWide() * 0.5) - 8 - self.GrabX
 	y = y + (self:GetTall() * 0.5) - 8 - self.GrabY
 
-	return BaseClass.PaintAt(self, x, y, w, h)
+	return DLabel.PaintAt(self, x, y, w, h)
 end
 
 function PANEL:Paint(w, h)
@@ -64,7 +63,8 @@ function PANEL:Paint(w, h)
 		draw.SimpleText("Equipped", "afterglow.labelsmall", x + 10, y + 1, self:GetSkin().Text.Primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
-	local offset = self.ScrollPanel.VBar.Enabled and 0 or self.ScrollPanel.VBar:GetWide() * 0.6
+	local vbar = self.ScrollPanel:GetVBar()
+	local offset = vbar:IsEnabled() and vbar:GetWide() * 0.6 or 0
 
 	draw.SimpleText(item:GetProperty("Category"), "afterglow.labelbig", w * 0.6 - offset, y, self:GetSkin().Text.Disabled, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	draw.SimpleText(item:GetWeight() .. " kg", "afterglow.labelbig", w - 5, y, self:GetSkin().Text.Disabled, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)

@@ -1,6 +1,6 @@
 local PANEL = {}
 
-AccessorFunc(PANEL, "m_bFirstPerson", "FirstPerson")
+AccessorFunc(PANEL, "FirstPerson", "FirstPerson")
 AccessorFunc(PANEL, "OrbitDistance", "OrbitDistance")
 
 function PANEL:Init()
@@ -35,7 +35,7 @@ function PANEL:Think()
 		return
 	end
 
-	if self.m_bFirstPerson then
+	if self.FirstPerson then
 		return self:FirstPersonControls()
 	end
 end

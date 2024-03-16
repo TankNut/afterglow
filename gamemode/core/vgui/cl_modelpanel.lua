@@ -1,11 +1,10 @@
 local PANEL = {}
-DEFINE_BASECLASS("DModelPanel")
 
-AccessorFunc(PANEL, "bAllowManipulation", "AllowManipulation")
+AccessorFunc(PANEL, "AllowManipulation", "AllowManipulation")
 
-AccessorFunc(PANEL, "vCamPosRange", "CamPosRange")
-AccessorFunc(PANEL, "vLookAtRange", "LookAtRange")
-AccessorFunc(PANEL, "fFOVRange", "FOVRange")
+AccessorFunc(PANEL, "CamPosRange", "CamPosRange")
+AccessorFunc(PANEL, "LookAtRange", "LookAtRange")
+AccessorFunc(PANEL, "FOVRange", "FOVRange")
 
 function PANEL:Init()
 	self.Zoom = 0
@@ -19,7 +18,7 @@ function PANEL:Init()
 end
 
 function PANEL:SetEntity(ent)
-	BaseClass.SetEntity(self, ent)
+	DModelPanel.SetEntity(self, ent)
 
 	ent.PanelLayoutDone = false
 end
@@ -31,7 +30,7 @@ function PANEL:SetModel(mdl)
 		cycle = self.Entity:GetCycle()
 	end
 
-	BaseClass.SetModel(self, mdl)
+	DModelPanel.SetModel(self, mdl)
 
 	self.Entity:SetCycle(cycle)
 end
@@ -41,7 +40,7 @@ function PANEL:SetSkin(num)
 end
 
 function PANEL:LayoutEntity(ent)
-	if self.bAnimated then
+	if self:GetAnimated() then
 		self:RunAnimation()
 	end
 
@@ -57,7 +56,7 @@ function PANEL:LayoutEntity(ent)
 		ent:SetAngles(Angle(0, 20, 0))
 	end
 
-	if not self.bAllowManipulation then
+	if not self.AllowManipulation then
 		return
 	end
 
@@ -86,9 +85,9 @@ function PANEL:LayoutEntity(ent)
 end
 
 function PANEL:GetCameraTarget()
-	local pos = LerpVector(self.Zoom, unpack(self.vCamPosRange))
-	local look = LerpVector(self.Zoom, unpack(self.vLookAtRange))
-	local fov = Lerp(self.Zoom, unpack(self.fFOVRange))
+	local pos = LerpVector(self.Zoom, unpack(self.CamPosRange))
+	local look = LerpVector(self.Zoom, unpack(self.LookAtRange))
+	local fov = Lerp(self.Zoom, unpack(self.FOVRange))
 
 	return self.Entity:GetPos() + pos, self.Entity:GetPos() + look, fov
 end
@@ -102,7 +101,7 @@ function PANEL:OnMouseWheeled(delta)
 end
 
 function PANEL:OnMousePressed(mouse)
-	if self.bAllowManipulation then
+	if self.AllowManipulation then
 		self:MouseCapture(true)
 
 		self.Dragging = true

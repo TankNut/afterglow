@@ -34,13 +34,13 @@ end
 
 function PANEL:AddMessage(message, consoleMessage, tabs)
 	local data = {
-		Scribe = scribe.Parse("<chat>" .. message, self:GetWide() - self.VBar:GetWide()),
+		Scribe = Scribe.Parse("<chat>" .. message, self:GetWide() - self.VBar:GetWide()),
 		ReceiveTime = CurTime(),
 		Tabs = tabs
 	}
 
 	if consoleMessage then
-		scribe.Parse("<chat>" .. consoleMessage):PrintToConsole()
+		Scribe.Parse("<chat>" .. consoleMessage):PrintToConsole()
 	else
 		data.Scribe:PrintToConsole()
 	end

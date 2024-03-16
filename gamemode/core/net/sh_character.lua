@@ -1,12 +1,12 @@
 if SERVER then
-	netstream.Hook("SelectCharacter", function(ply, id)
+	Netstream.Hook("SelectCharacter", function(ply, id)
 		if ply:GetCharacterList()[id] then
 			ply:LoadCharacter(id, Character.Fetch(id))
 		end
 	end)
 
-	netstream.Hook("CreateCharacter", function(ply, payload)
-		local ok, data = validate.Multi(payload, Character.GetRules())
+	Netstream.Hook("CreateCharacter", function(ply, payload)
+		local ok, data = Validate.Multi(payload, Character.GetRules())
 
 		if not ok then
 			return
@@ -31,7 +31,7 @@ if SERVER then
 		ply:LoadCharacterList()
 	end)
 
-	netstream.Hook("DeleteCharacter", function(ply, id)
+	Netstream.Hook("DeleteCharacter", function(ply, id)
 		if not ply:GetCharacterList()[id] then
 			return
 		end
@@ -41,7 +41,7 @@ if SERVER then
 	end)
 
 	local function addCharacterHook(name, callback)
-		netstream.Hook(name, function(ply, ...)
+		Netstream.Hook(name, function(ply, ...)
 			if not ply:HasCharacter() then
 				return
 			end
@@ -55,7 +55,7 @@ if SERVER then
 			return
 		end
 
-		local ok = validate.Value(new, hook.Run("GetCharacterDescriptionRules"))
+		local ok = Validate.Value(new, hook.Run("GetCharacterDescriptionRules"))
 
 		if not ok then
 			return
@@ -69,7 +69,7 @@ if SERVER then
 			return
 		end
 
-		local ok = validate.Value(new, hook.Run("GetCharacterNameRules"))
+		local ok = Validate.Value(new, hook.Run("GetCharacterNameRules"))
 
 		if not ok then
 			return
@@ -78,7 +78,7 @@ if SERVER then
 		ply:SetCharacterName(new)
 	end)
 
-	request.Hook("Examine", function(ply, target)
+	Request.Hook("Examine", function(ply, target)
 		target.ExamineCache = target.ExamineCache or {}
 
 		if not target.ExamineCache[ply] then

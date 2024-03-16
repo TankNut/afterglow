@@ -1,7 +1,7 @@
 local PANEL = {}
 
-AccessorFunc(PANEL, "_CamPosTarget", "CamPosTarget")
-AccessorFunc(PANEL, "_LookAtTarget", "LookAtTarget")
+AccessorFunc(PANEL, "CamPosTarget", "CamPosTarget")
+AccessorFunc(PANEL, "LookAtTarget", "LookAtTarget")
 
 function PANEL:Init()
 	self:SetCamPosTarget(Vector(60, -20, 64))
@@ -57,8 +57,8 @@ function PANEL:LayoutEntity(ent)
 end
 
 function PANEL:GetTargets()
-	local pos = Vector(self._CamPosTarget)
-	local look = Vector(self._LookAtTarget)
+	local pos = Vector(self.CamPosTarget)
+	local look = Vector(self.LookAtTarget)
 
 	local ang = Angle(0, self.Entity:EyeAngles().y, 0)
 

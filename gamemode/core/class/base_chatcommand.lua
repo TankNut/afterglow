@@ -66,6 +66,6 @@ if SERVER then
 
 		data.__Type = self.Name
 
-		netstream.Send("SendChat", self:GetTargets(ply, data), data)
+		Netstream.Send("SendChat", self:GetTargets(ply, data), data)
 	end
 end

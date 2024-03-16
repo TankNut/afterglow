@@ -1,9 +1,9 @@
 if CLIENT then
-	netstream.Hook("ItemAdd", function(payload)
+	Netstream.Hook("ItemAdd", function(payload)
 		Item.GetOrInstance(payload.Name, payload.ID, payload.Data):SetInventory(Inventory.Get(payload.Inventory))
 	end)
 
-	netstream.Hook("ItemRemove", function(id)
+	Netstream.Hook("ItemRemove", function(id)
 		local item = Item.Get(id)
 
 		if item then
@@ -11,7 +11,7 @@ if CLIENT then
 		end
 	end)
 
-	netstream.Hook("ItemData", function(payload)
+	Netstream.Hook("ItemData", function(payload)
 		local item = Item.Get(payload.ID)
 
 		if item then
@@ -19,7 +19,7 @@ if CLIENT then
 		end
 	end)
 
-	netstream.Hook("InventoryCreated", function(payload)
+	Netstream.Hook("InventoryCreated", function(payload)
 		local inventory = Inventory.New(payload.StoreType, payload.StoreID, payload.ID)
 
 		for _, v in pairs(payload.Items) do
@@ -27,11 +27,11 @@ if CLIENT then
 		end
 	end)
 
-	netstream.Hook("InventoryRemoved", Inventory.Remove)
+	Netstream.Hook("InventoryRemoved", Inventory.Remove)
 end
 
 if SERVER then
-	netstream.Hook("ItemAction", function(ply, payload)
+	Netstream.Hook("ItemAction", function(ply, payload)
 		local item = Item.Get(payload.ID)
 
 		if not item or not item:CanInteract(ply) then

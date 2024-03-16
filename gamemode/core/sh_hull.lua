@@ -1,41 +1,40 @@
-module("Hull", package.seeall)
+Hull = Hull or {}
+Hull.Tables = Hull.Tables or {}
+Hull.Models = Hull.Models or {}
 
 local meta = FindMetaTable("Player")
 
-Tables = Tables or {}
-Models = Models or {}
-
-Default = {
+Hull.Default = {
 	Hull = {Vector(-16, -16, 0), Vector(16, 16, 72)},
 	DuckHull = {Vector(-16, -16, 0), Vector(16, 16, 36)},
 	View = {Vector(0, 0, 64), Vector(0, 0, 28)}
 }
 
-function Standard(size, height)
+function Hull.Standard(size, height)
 	return {
 		Vector(-size, -size, 0),
 		Vector(size, size, height)
 	}
 end
 
-function Define(name, data)
-	local tab = Tables[name]
+function Hull.Define(name, data)
+	local tab = Hull.Tables[name]
 
 	if not tab then
 		tab = {}
-		Tables[name] = tab
+		Hull.Tables[name] = tab
 	end
 
 	table.Merge(tab, data)
 end
 
-function Add(name, models)
+function Hull.Add(name, models)
 	if not istable(models) then
 		models = {models}
 	end
 
 	for _, v in pairs(models) do
-		Models[v:lower()] = Tables[name]
+		Hull.Models[v:lower()] = Hull.Tables[name]
 	end
 end
 
@@ -52,7 +51,7 @@ if SERVER then
 end
 
 function meta:UpdateHull()
-	local data = Models[self:GetModel():lower()] or Default
+	local data = Hull.Models[self:GetModel():lower()] or Hull.Default
 	local scale = self:GetPlayerScale()
 
 	self:SetModelScale(scale, 0.0001)

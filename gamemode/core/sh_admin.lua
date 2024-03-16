@@ -1,17 +1,16 @@
-module("Admin", package.seeall)
+Admin = Admin or {}
+Admin.Ranks = Admin.Ranks or {}
 
 local meta = FindMetaTable("Player")
 
-Ranks = Ranks or {}
-
-function AddRank(name, inheritance)
-	Ranks[name:lower()] = inheritance and inheritance:lower() or true
+function Admin.AddRank(name, inheritance)
+	Admin.Ranks[name:lower()] = inheritance and inheritance:lower() or true
 end
 
-AddRank("user")
-AddRank("admin", "user")
-AddRank("superadmin", "admin")
-AddRank("developer", "superadmin")
+Admin.AddRank("user")
+Admin.AddRank("admin", "user")
+Admin.AddRank("superadmin", "admin")
+Admin.AddRank("developer", "superadmin")
 
 if SERVER then
 	hook.Remove("PlayerInitialSpawn", "PlayerAuthSpawn")
@@ -25,7 +24,7 @@ function meta:CheckUserGroup(group)
 	end
 
 	while usergroup do
-		local parent = Ranks[usergroup]
+		local parent = Admin.Ranks[usergroup]
 
 		if parent == group then
 			return true

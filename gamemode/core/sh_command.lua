@@ -1,6 +1,6 @@
-module("Command", package.seeall)
+Command = Command or {}
 
-function AddFolder(basePath)
+function Command.AddFolder(basePath)
 	local recursive
 
 	recursive = function(path)
@@ -18,19 +18,19 @@ function AddFolder(basePath)
 	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
-function IsAdmin(ply)
+function Command.IsAdmin(ply)
 	return ply:IsAdmin(), "You need to be an admin to do this."
 end
 
-function IsSuperAdmin(ply)
+function Command.IsSuperAdmin(ply)
 	return ply:IsSuperAdmin(), "You need to be a superadmin to do this."
 end
 
-function IsDeveloper(ply)
+function Command.IsDeveloper(ply)
 	return ply:IsDeveloper(), "You need to be a developer to do this."
 end
 
-function IsUserGroup(...)
+function Command.IsUserGroup(...)
 	local usergroups = {...}
 
 	return function(ply)
@@ -44,7 +44,7 @@ function IsUserGroup(...)
 	end
 end
 
-function FindPlayer(ply, str, options)
+function Command.FindPlayer(ply, str, options)
 	if not str or #str < 1 then
 		return false, "No target found."
 	end
@@ -52,6 +52,7 @@ function FindPlayer(ply, str, options)
 	str = str:lower()
 
 	local targets = {}
+	local multi = false
 
 	if str == "^" then -- Target self
 		if not IsValid(ply) then
@@ -77,6 +78,8 @@ function FindPlayer(ply, str, options)
 		if not IsValid(ply) then
 			return false, "Console does not support radius targeting."
 		end
+
+		multi = true
 
 		local radius, targetSelf = str:match("^%$([%d]+)(%+?)$")
 
@@ -104,11 +107,13 @@ function FindPlayer(ply, str, options)
 			return false, "Invalid team."
 		end
 
+		multi = true
 		targets = team.GetPlayers(data.Index)
 	elseif str == "@@" then
+		multi = true
 		targets = player.GetAll()
 	else -- Match by name
-		local multi = str[1] == "@"
+		multi = str[1] == "@"
 
 		if multi then
 			str = str:sub(2)

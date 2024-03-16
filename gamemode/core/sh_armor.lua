@@ -5,12 +5,12 @@ meta.Armor = nil
 meta.SetArmor = nil
 
 function entity:Armor()
-	return self:GetNetVar("Armor", 0)
+	return self:GetNetvar("Armor", 0)
 end
 
 if SERVER then
 	function entity:SetArmor(val)
-		self:SetNetVar("Armor", val)
+		self:SetNetvar("Armor", val)
 	end
 
 	function meta:UpdateArmor()

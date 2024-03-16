@@ -1,25 +1,24 @@
-module("Team", package.seeall)
+Team = Team or {}
+Team.List = {}
 
 local meta = FindMetaTable("Player")
 
-List = {}
-
-function Add(name, color, hidden)
-	return table.insert(List, {
+function Team.Add(name, color, hidden)
+	return table.insert(Team.List, {
 		Name = name,
 		Color = color,
 		Hidden = tobool(hidden)
 	})
 end
 
-function Get(index)
-	return List[index]
+function Team.Get(index)
+	return Team.List[index]
 end
 
-function Find(name)
+function Team.Find(name)
 	name = name:lower()
 
-	for _, data in pairs(List) do
+	for _, data in pairs(Team.List) do
 		if string.find(data.Name:lower(), name) then
 			return data
 		end

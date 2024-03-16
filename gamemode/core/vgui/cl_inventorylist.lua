@@ -40,4 +40,4 @@ function PANEL:PerformLayout()
 	self:SizeToChildren(false, true)
 end
 
-derma.DefineControl("RPInventoryList", "The list part of RPInventoryPanel", PANEL, "DPanel")
+RPInventoryList = derma.DefineControl("RPInventoryList", "The list part of RPInventoryPanel", PANEL, "DPanel")

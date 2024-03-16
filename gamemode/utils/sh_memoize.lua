@@ -7,7 +7,7 @@ local function createUnpack(...)
 
 	for i = 1, #args do
 		res[2 + (i-1) * 4] = "t["
-		res[3 + (i-1) * 4] = i
+		res[3 + (i-1) * 4] = tostring(i)
 		res[4 + (i-1) * 4] = "]"
 
 		if i != #args then
@@ -15,7 +15,7 @@ local function createUnpack(...)
 		end
 	end
 
-	local func = CompileString(table.concat(res))
+	local func = CompileString(table.concat(res), "Memoize")
 
 	return function()
 		return func(args)

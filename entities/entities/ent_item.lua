@@ -42,6 +42,6 @@ if SERVER then
 	end
 
 	function ENT:Use(ply)
-		self.Item:OnWorldUse(ply, ent)
+		self.Item:OnWorldUse(ply, self)
 	end
 end

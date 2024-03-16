@@ -1,15 +1,15 @@
-module("Appearance", package.seeall)
+Appearance = Appearance or {}
 
-local meta = FindMetaTable("Entity")
-
-Default = {
+Appearance.Default = {
 	Model = Model("models/player/skeleton.mdl"),
 	Hands = {}
 }
 
-UpdateList = UpdateList or {}
+Appearance.UpdateList = Appearance.UpdateList or {}
 
-function Apply(ent, data)
+local meta = FindMetaTable("Entity")
+
+function Appearance.Apply(ent, data)
 	if ent:GetModel() != data.Model then
 		ent:SetModel(data.Model)
 	end
@@ -39,17 +39,17 @@ function Apply(ent, data)
 	end
 end
 
-function Copy(from, to)
+function Appearance.Copy(from, to)
 	if CLIENT then
-		Apply(to, from:GetAppearance())
+		Appearance.Apply(to, from:GetAppearance())
 	else
 		to:SetAppearance(from:GetAppearance())
 	end
 end
 
 if SERVER then
-	function Update(ply)
-		local data = table.Copy(Default)
+	function Appearance.Update(ply)
+		local data = table.Copy(Appearance.Default)
 
 		if ply:HasCharacter() then
 			hook.Run("GetCharacterAppearance", ply, data)
@@ -70,20 +70,20 @@ if SERVER then
 		ply:SetupHands()
 	end
 
-	function QueueUpdate(ply)
-		UpdateList[ply] = true
+	function Appearance.QueueUpdate(ply)
+		Appearance.UpdateList[ply] = true
 	end
 
 	hook.Add("Think", "Appearance", function()
-		for ply in pairs(UpdateList) do
-			Update(ply)
+		for ply in pairs(Appearance.UpdateList) do
+			Appearance.Update(ply)
 		end
 
-		table.Empty(UpdateList)
+		table.Empty(Appearance.UpdateList)
 	end)
 end
 
-netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
+Netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
 	Appearance.Apply(ent, appearance)
 
 	hook.Run("PostSetAppearance", ent)
@@ -91,12 +91,12 @@ end)
 
 -- Not a PlayerVar because we apply to both entities and players
 function meta:GetAppearance()
-	return self:GetNetVar("Appearance", {})
+	return self:GetNetvar("Appearance", {})
 end
 
 if SERVER then
 	function meta:SetAppearance(data)
-		self:SetNetVar("Appearance", data)
+		self:SetNetvar("Appearance", data)
 	end
 
 	function meta:UpdateAppearance()

@@ -1,20 +1,19 @@
-module("pack", package.seeall)
+Pack = Pack or {}
+Pack.Precision = 3
 
-Precision = 3
-
-PointerTypes = {
+Pack.PointerTypes = {
 	[TYPE_TABLE] = true,
 	[TYPE_STRING] = true
 }
 
-EncodeTypes = {
+Pack.EncodeTypes = {
 	[TYPE_NIL] = function() return "?" end,
 	[TYPE_BOOL] = function(val)
 		return val and "t" or "f"
 	end,
 	[TYPE_TABLE] = function(tab)
 		if IsColor(tab) then
-			return EncodeTypes[TYPE_COLOR](tab)
+			return Pack.EncodeTypes[TYPE_COLOR](tab)
 		end
 
 		local ret = "{"
@@ -26,9 +25,9 @@ EncodeTypes = {
 		local broken = false
 
 		local function HandleCache(val)
-			local encoded = Encode(val)
+			local encoded = Pack.Encode(val)
 
-			if PointerTypes[TypeID(val)] then
+			if Pack.PointerTypes[TypeID(val)] then
 				local cached = cache[encoded]
 
 				if cached then
@@ -74,10 +73,10 @@ EncodeTypes = {
 		return string.format("c%i,%i,%i,%i", col.r, col.g, col.b, col.a)
 	end,
 	[TYPE_VECTOR] = function(vec)
-		return string.format("v%s,%s,%s", math.Round(vec.x, Precision), math.Round(vec.y, Precision), math.Round(vec.z, Precision))
+		return string.format("v%s,%s,%s", math.Round(vec.x, Pack.Precision), math.Round(vec.y, Pack.Precision), math.Round(vec.z, Pack.Precision))
 	end,
 	[TYPE_ANGLE] = function(ang)
-		return string.format("a%s,%s,%s", math.Round(ang.p % 360, Precision), math.Round(ang.y % 360, Precision), math.Round(ang.r % 360, Precision))
+		return string.format("a%s,%s,%s", math.Round(ang.p % 360, Pack.Precision), math.Round(ang.y % 360, Pack.Precision), math.Round(ang.r % 360, Pack.Precision))
 	end,
 	[TYPE_NUMBER] = function(num)
 		if num == 0 then
@@ -112,9 +111,9 @@ DecodeTypes = {
 		local broken = false
 
 		local function HandleCache(val) -- Builds the cache that pointers refer back to
-			local index, decoded = Decode_raw(val, cache)
+			local index, decoded = Pack.Decode_raw(val, cache)
 
-			if PointerTypes[TypeID(decoded)] then
+			if Pack.PointerTypes[TypeID(decoded)] then
 				table.insert(cache, decoded)
 			end
 
@@ -207,21 +206,21 @@ DecodeTypes = {
 
 		local finish = string.find(str, ";")
 
-		return finish, Entity(string.sub(str, 1, finish - 1))
+		return finish, Entity(string.sub(str, 1, finish - 1) --[[@as integer]])
 	end
 }
 
-function Encode(data)
-	local callback = EncodeTypes[TypeID(data)]
+function Pack.Encode(data)
+	local callback = Pack.EncodeTypes[TypeID(data)]
 
 	if not callback then
-		callback = EncodeTypes[TYPE_NIL]
+		callback = Pack.EncodeTypes[TYPE_NIL]
 	end
 
 	return callback(data) .. ";"
 end
 
-function Decode_raw(str, cache)
+function Pack.Decode_raw(str, cache)
 	local identifier = string.sub(str, 1, 1)
 	local callback = DecodeTypes[identifier]
 
@@ -232,14 +231,14 @@ function Decode_raw(str, cache)
 	return callback(string.sub(str, 2), cache)
 end
 
-function Decode(str)
-	if not isstring(str) or #str == 0 then
+function Pack.Decode(str)
+	if #str == 0 then
 		return
 	end
 
-	local _, res = Decode_raw(str)
+	local _, res = Pack.Decode_raw(str)
 
 	return res
 end
 
-Default = Encode({})
+Pack.Default = Pack.Encode({})

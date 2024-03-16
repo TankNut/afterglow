@@ -1,22 +1,22 @@
 local PANEL = {}
 DEFINE_BASECLASS("EditablePanel")
 
-AccessorFunc(PANEL, "bAllowEscape", "AllowEscape")
-AccessorFunc(PANEL, "sToggleKey", "ToggleKey")
-AccessorFunc(PANEL, "bDrawTopbar", "DrawTopbar")
-AccessorFunc(PANEL, "bDraggable", "Draggable")
+AccessorFunc(PANEL, "AllowEscape", "AllowEscape")
+AccessorFunc(PANEL, "ToggleKey", "ToggleKey")
+AccessorFunc(PANEL, "DrawTopbar", "DrawTopbar")
+AccessorFunc(PANEL, "Draggable", "Draggable")
 
 function PANEL:Init()
 	self:SetSkin("Afterglow")
 
-	self.bDrawTopbar = false
+	self.DrawTopBar = false
 
 	self:DockPadding(1, 1, 1, 1)
 	self.Armed = false
 end
 
 function PANEL:SetDrawTopBar(bool)
-	if bool == self.bDrawTopbar then
+	if bool == self.DrawTopbar then
 		return
 	end
 
@@ -26,7 +26,7 @@ function PANEL:SetDrawTopBar(bool)
 		self:SetTall(self:GetTall() + 24)
 		self:DockPadding(padding, padding + 24, padding, padding)
 
-		if self.bAllowEscape then
+		if self.AllowEscape then
 			self.ButtonClose = self:Add("DButton")
 			self.ButtonClose:SetSize(24, 24)
 			self.ButtonClose:SetFont("marlett")
@@ -58,7 +58,7 @@ function PANEL:SetDrawTopBar(bool)
 end
 
 function PANEL:Think()
-	if self.bAllowEscape and gui.IsGameUIVisible() and (not IsValid(vgui.GetKeyboardFocus()) or vgui.FocusedHasParent(self)) then
+	if self.AllowEscape and gui.IsGameUIVisible() and (not IsValid(vgui.GetKeyboardFocus()) or vgui.FocusedHasParent(self)) then
 		self:Remove()
 		gui.HideGameUI()
 	end
@@ -89,15 +89,15 @@ function PANEL:SetSize(w, h)
 end
 
 function PANEL:OnKeyCodePressed(key)
-	if self.sToggleKey and input.LookupKeyBinding(key) == self.sToggleKey then
+	if self.ToggleKey and input.LookupKeyBinding(key) == self.ToggleKey then
 		self:Remove()
 	end
 end
 
 function PANEL:OnMousePressed()
-	local x, y = self:ScreenToLocal(gui.MousePos())
+	local x, y = self:ScreenToLocal(input.GetCursorPos())
 
-	if self.bDraggable and math.InRange(x, 0, self:GetWide()) and math.InRange(y, 0, 24) then
+	if self.Draggable and math.InRange(x, 0, self:GetWide()) and math.InRange(y, 0, 24) then
 		self.Dragging = {x, y}
 		self:MouseCapture(true)
 	end

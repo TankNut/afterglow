@@ -1,36 +1,35 @@
-module("CharacterFlag", package.seeall)
+CharacterFlag = CharacterFlag or {}
+CharacterFlag.List = CharacterFlag.List or {}
 
 local meta = FindMetaTable("Player")
 
-List = List or {}
-
-function Add(name, data)
+function CharacterFlag.Add(name, data)
 	if name != "default" then
-		setmetatable(data, {__index = List.default})
+		setmetatable(data, {__index = CharacterFlag.List.default})
 	else
-		Default = data
+		CharacterFlag.Default = data
 	end
 
 	data.ID = name
 
-	List[name] = data
+	CharacterFlag.List[name] = data
 end
 
-function AddFile(path, name)
+function CharacterFlag.AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
 	_G.FLAG = {}
 
 	IncludeFile(path)
-	Add(name, FLAG)
+	CharacterFlag.Add(name, FLAG)
 
 	_G.FLAG = nil
 end
 
-function AddFolder(basePath)
+function CharacterFlag.AddFolder(basePath)
 	basePath = engine.ActiveGamemode() .. "/gamemode/" .. basePath
 
-	AddFile(basePath .. "/default.lua")
+	CharacterFlag.AddFile(basePath .. "/default.lua")
 
 	local recursive
 
@@ -42,7 +41,7 @@ function AddFolder(basePath)
 				continue
 			end
 
-			AddFile(path .. "/" .. v)
+			CharacterFlag.AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -53,16 +52,16 @@ function AddFolder(basePath)
 	recursive(basePath)
 end
 
-function Get(name)
-	return List[name]
+function CharacterFlag.Get(name)
+	return CharacterFlag.List[name]
 end
 
-function GetOrDefault(name)
-	return List[name] or List.default
+function CharacterFlag.GetOrDefault(name)
+	return CharacterFlag.List[name] or CharacterFlag.default
 end
 
 function meta:GetCharacterFlagTable()
-	return GetOrDefault(self:GetCharacterFlag())
+	return CharacterFlag.GetOrDefault(self:GetCharacterFlag())
 end
 
 function meta:GetCharacterFlagAttribute(name)

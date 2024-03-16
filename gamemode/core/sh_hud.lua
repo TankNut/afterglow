@@ -1,17 +1,17 @@
-module("Hud", package.seeall)
+Hud = Hud or {}
 
 if SERVER then
-	IncludeFile("class/base_hudelement.lua", "client")
+	AddCSLuaFile("class/base_hudelement.lua")
 end
 
-function AddFile(path, name)
+function Hud.AddFile(path, name)
 	if CLIENT then
 		name = name or path:GetFileFromFilename():sub(1, -5)
 
 		_G.CLASS = {}
 
 		IncludeFile(path, "client")
-		RegisterElement(name, CLASS)
+		Hud.RegisterElement(name, CLASS)
 
 		_G.CLASS = nil
 	else
@@ -19,7 +19,7 @@ function AddFile(path, name)
 	end
 end
 
-function AddFolder(basePath)
+function Hud.AddFolder(basePath)
 	local recursive
 
 	recursive = function(path)
@@ -30,7 +30,7 @@ function AddFolder(basePath)
 				continue
 			end
 
-			AddFile(path .. "/" .. v)
+			Hud.AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -43,120 +43,120 @@ end
 
 if SERVER then
 	hook.Add("PostPlayerSpawn", "Hud", function(ply)
-		netstream.Send("HudRebuild", ply)
+		Netstream.Send("HudRebuild", ply)
 	end)
 
 	hook.Add("UnloadCharacter", "Hud", function(ply, id, loadingNew)
 		if not loadingNew then
-			netstream.Send("HudClear", ply)
+			Netstream.Send("HudClear", ply)
 		end
 	end)
 
 	return
 end
 
-List = List or {}
-Class = Class or {}
+Hud.List = Hud.List or {}
+Hud.Class = Hud.Class or {}
 
-ActiveElements = ActiveElements or {}
-ActiveLookup = ActiveLookup or {}
+Hud.ActiveElements = Hud.ActiveElements or {}
+Hud.ActiveLookup = Hud.ActiveLookup or {}
 
-_G.CLASS = Class
+_G.CLASS = Hud.Class
 IncludeFile("class/base_hudelement.lua", "client")
 _G.CLASS = nil
 
-Skin = derma.GetNamedSkin("Afterglow")
+Hud.Skin = derma.GetNamedSkin("Afterglow")
 
-function RegisterElement(name, data)
+function Hud.RegisterElement(name, data)
 	name = name:lower()
 	data.ID = name
 
 	local base = data.Base
 
-	List[name] = setmetatable(data, {
+	Hud.List[name] = setmetatable(data, {
 		__index = function(_, index)
-			return base and Get(base)[index] or Class[index]
+			return base and Hud.Get(base)[index] or Hud.Class[index]
 		end
 	})
 end
 
-function Get(id)
-	return List[id]
+function Hud.Get(id)
+	return Hud.List[id]
 end
 
-function GetActive(id)
-	return ActiveLookup[id]
+function Hud.GetActive(id)
+	return Hud.ActiveLookup[id]
 end
 
-function FireEvent(event, ...)
-	for _, element in pairs(ActiveElements) do
+function Hud.FireEvent(event, ...)
+	for _, element in pairs(Hud.ActiveElements) do
 		element:OnEvent(event, ...)
 	end
 end
 
-function Add(id)
-	if not Get(id) or not Rebuilding then
+function Hud.Add(id)
+	if not Hud.Get(id) or not Hud.Rebuilding then
 		return
 	end
 
-	Rebuilding[id] = true
+	Hud.Rebuilding[id] = true
 end
 
-function Clear()
-	for _, element in pairs(ActiveElements) do
+function Hud.Clear()
+	for _, element in pairs(Hud.ActiveElements) do
 		element:OnRemove()
 	end
 
-	table.Empty(ActiveElements)
-	table.Empty(ActiveLookup)
+	table.Empty(Hud.ActiveElements)
+	table.Empty(Hud.ActiveLookup)
 end
 
-function Rebuild()
-	Rebuilding = {}
+function Hud.Rebuild()
+	Hud.Rebuilding = {}
 
 	local ply = LocalPlayer()
 
 	hook.Run("GetHudElements", ply)
 
-	local elements = Rebuilding
+	local elements = Hud.Rebuilding
 
-	Rebuilding = nil
+	Hud.Rebuilding = nil
 
 	for id in pairs(elements) do
-		if not ActiveLookup[id] then
-			local data = Get(id)
+		if not Hud.ActiveLookup[id] then
+			local data = Hud.Get(id)
 			local element = setmetatable({
 				Player = LocalPlayer()
 			}, {__index = data})
 
-			table.insert(ActiveElements, element)
-			ActiveLookup[id] = element
+			table.insert(Hud.ActiveElements, element)
+			Hud.ActiveLookup[id] = element
 
 			element:Initialize()
 		end
 	end
 
-	for id, element in pairs(ActiveLookup) do
+	for id, element in pairs(Hud.ActiveLookup) do
 		if not elements[id] then
 			element:OnRemove()
 
-			for index, v in pairs(ActiveElements) do
+			for index, v in pairs(Hud.ActiveElements) do
 				if v == element then
-					table.remove(ActiveElements, index)
+					table.remove(Hud.ActiveElements, index)
 
 					break
 				end
 			end
 
-			ActiveLookup[id] = nil
+			Hud.ActiveLookup[id] = nil
 		end
 	end
 
-	table.SortByMember(ActiveElements, "DrawOrder")
+	table.SortByMember(Hud.ActiveElements, "DrawOrder")
 end
 
-netstream.Hook("HudRebuild", function() Rebuild() end)
-netstream.Hook("HudClear", function() Clear() end)
+Netstream.Hook("HudRebuild", function() Hud.Rebuild() end)
+Netstream.Hook("HudClear", function() Hud.Clear() end)
 
 local disabled = table.Lookup({
 	"CHudHealth", "CHudBattery",
@@ -173,7 +173,7 @@ end)
 hook.Add("HUDPaint", "Hud", function()
 	local w, h = ScrW(), ScrH()
 
-	for _, element in ipairs(ActiveElements) do
+	for _, element in ipairs(Hud.ActiveElements) do
 		element:Paint(w, h)
 	end
 end)
@@ -181,7 +181,7 @@ end)
 hook.Add("HUDPaintBackground", "Hud", function()
 	local w, h = ScrW(), ScrH()
 
-	for _, element in ipairs(ActiveElements) do
+	for _, element in ipairs(Hud.ActiveElements) do
 		element:PaintBackground(w, h)
 	end
 end)

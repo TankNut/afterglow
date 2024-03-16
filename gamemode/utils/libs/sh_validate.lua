@@ -1,9 +1,8 @@
-module("validate", package.seeall)
+Validate = Validate or {}
+Validate.Rules = Validate.Rules or {}
 
-Rules = Rules or {}
-
-function AddRule(name, callback, checkNil)
-	Rules[name] = setmetatable({
+function Validate.AddRule(name, callback, checkNil)
+	Validate.Rules[name] = setmetatable({
 		Callback = callback,
 		CheckNil = checkNil
 	}, {
@@ -15,16 +14,16 @@ function AddRule(name, callback, checkNil)
 		end
 	})
 
-	validate[name] = Rules[name]
+	Validate[name] = Validate.Rules[name]
 end
 
-function Value(val, rules)
+function Validate.Value(val, rules)
 	if rules.Name then
 		rules = {rules}
 	end
 
 	for k, v in pairs(rules) do
-		local rule = Rules[v.Name]
+		local rule = Validate.Rules[v.Name]
 
 		if val == nil and not rule.CheckNil then
 			continue
@@ -40,8 +39,8 @@ function Value(val, rules)
 	return true, val
 end
 
-function Multi(tab, rules)
-	Cache = weakref(tab)
+function Validate.Multi(tab, rules)
+	Cache = Weakref(tab)
 
 	local ret = {}
 
@@ -52,7 +51,7 @@ function Multi(tab, rules)
 			continue
 		end
 
-		local ok, err = Value(v, rule, k)
+		local ok, err = Validate.Value(v, rule)
 
 		if not ok then
 			return false, k, err
@@ -64,7 +63,7 @@ function Multi(tab, rules)
 	-- Check for missing keys
 	for k, v in pairs(rules) do
 		if k != "*" and not ret[k] then
-			local ok, err = Value(nil, v, k)
+			local ok, err = Validate.Value(nil, v)
 
 			if not ok then
 				return false, k, err
@@ -75,11 +74,11 @@ function Multi(tab, rules)
 	return true, ret
 end
 
-AddRule("Required", function(val)
+Validate.AddRule("Required", function(val)
 	return val != nil, "Cannot be nil"
 end, true)
 
-AddRule("Is", function(val, types)
+Validate.AddRule("Is", function(val, types)
 	local id = TypeID(val)
 
 	if istable(types) then
@@ -95,11 +94,11 @@ AddRule("Is", function(val, types)
 	end
 end, true)
 
-AddRule("Number", function(val) return isnumber(val), "Is not a number" end)
-AddRule("String", function(val) return isstring(val), "Is not a string" end)
-AddRule("Bool", function(val) return isbool(val), "Is not a boolean" end)
+Validate.AddRule("Number", function(val) return isnumber(val), "Is not a number" end)
+Validate.AddRule("String", function(val) return isstring(val), "Is not a string" end)
+Validate.AddRule("Bool", function(val) return isbool(val), "Is not a boolean" end)
 
-AddRule("Min", function(val, min)
+Validate.AddRule("Min", function(val, min)
 	if isstring(val) then
 		return #val >= min, string.format("Has to be at least %s characters long", min)
 	else
@@ -107,7 +106,7 @@ AddRule("Min", function(val, min)
 	end
 end)
 
-AddRule("Max", function(val, max)
+Validate.AddRule("Max", function(val, max)
 	if isstring(val) then
 		return #val <= max, string.format("Cannot be more than %s characters long", max)
 	else
@@ -115,7 +114,7 @@ AddRule("Max", function(val, max)
 	end
 end)
 
-AddRule("AllowedCharacters", function(val, characters)
+Validate.AddRule("AllowedCharacters", function(val, characters)
 	local lookup = table.Lookup(string.Explode("", characters))
 	local bad = {}
 
@@ -136,11 +135,11 @@ AddRule("AllowedCharacters", function(val, characters)
 	return true
 end)
 
-AddRule("Callback", function(val, callback)
+Validate.AddRule("Callback", function(val, callback)
 	return callback(val)
 end)
 
-AddRule("InList", function(val, tab)
+Validate.AddRule("InList", function(val, tab)
 	return table.HasValue(tab, val)
 end)
 
@@ -162,14 +161,14 @@ local function getProperty(val, index, ...)
 	return property
 end
 
-AddRule("True", function(val, property, ...) return tobool(getProperty(val, property, ...)) end)
-AddRule("False", function(val, property, ...) return not tobool(getProperty(val, property, ...)) end)
+Validate.AddRule("True", function(val, property, ...) return tobool(getProperty(val, property, ...)) end)
+Validate.AddRule("False", function(val, property, ...) return not tobool(getProperty(val, property, ...)) end)
 
-AddRule("Equals", function(val, other, property, ...) return getProperty(val, property, ...) == other end)
-AddRule("Differs", function(val, other, property, ...) return getProperty(val, property, ...) != other end)
+Validate.AddRule("Equals", function(val, other, property, ...) return getProperty(val, property, ...) == other end)
+Validate.AddRule("Differs", function(val, other, property, ...) return getProperty(val, property, ...) != other end)
 
-AddRule("LessThan", function(val, other, property, ...) return getProperty(val, property, ...) < other end)
-AddRule("LessThanEquals", function(val, other, property, ...) return getProperty(val, property, ...) <= other end)
+Validate.AddRule("LessThan", function(val, other, property, ...) return getProperty(val, property, ...) < other end)
+Validate.AddRule("LessThanEquals", function(val, other, property, ...) return getProperty(val, property, ...) <= other end)
 
-AddRule("GreaterThan", function(val, other, property, ...) return getProperty(val, property, ...) > other end)
-AddRule("GreaterThanEquals", function(val, other, property, ...) return getProperty(val, property, ...) >= other end)
+Validate.AddRule("GreaterThan", function(val, other, property, ...) return getProperty(val, property, ...) > other end)
+Validate.AddRule("GreaterThanEquals", function(val, other, property, ...) return getProperty(val, property, ...) >= other end)

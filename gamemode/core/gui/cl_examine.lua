@@ -61,7 +61,7 @@ Interface.Register("Examine", function(ply, description)
 end)
 
 FindMetaTable("Player").Examine = coroutine.Bind(function(self)
-	local description = request.Send("Examine", self) or self.ExamineCache
+	local description = Request.Send("Examine", self) or self.ExamineCache
 
 	self.ExamineCache = description
 

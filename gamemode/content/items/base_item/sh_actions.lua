@@ -55,7 +55,7 @@ function ITEM:FireAction(ply, name, val)
 						val = action.Client(self, ply)
 					end
 
-					netstream.Send("ItemAction", {
+					Netstream.Send("ItemAction", {
 						ID = self.ID,
 						Name = action.Name,
 						Value = val

@@ -1,56 +1,56 @@
 module("Inventory", package.seeall)
+Inventory = Inventory or {}
+Inventory.Class = Inventory.Class or {}
+Inventory.All = Inventory.All or {}
+
+if SERVER then
+	Inventory.Index = Inventory.Index or 0
+end
 
 local entity = FindMetaTable("Entity")
 
-Class = Class or {}
-All = All or {}
-
-if SERVER then
-	Index = Index or 0
-end
-
-_G.CLASS = Class
+_G.CLASS = Inventory.Class
 IncludeFile("class/inventory/shared.lua")
 _G.CLASS = nil
 
-function Get(id)
-	return All[id]
+function Inventory.Get(id)
+	return Inventory.All[id]
 end
 
-function Remove(id)
-	if not id or not All[id] then
+function Inventory.Remove(id)
+	if not id or not Inventory.All[id] then
 		return
 	end
 
 	if SERVER then
-		netstream.Send("InventoryRemoved", Get(id):GetReceivers(), id)
+		Netstream.Send("InventoryRemoved", Inventory.Get(id):GetReceivers(), id)
 	end
 
-	All[id] = nil
+	Inventory.All[id] = nil
 end
 
-function New(storeType, storeID, id)
+function Inventory.New(storeType, storeID, id)
 	if SERVER then
-		id = Index
-		Index = Index + 1
+		id = Inventory.Index
+		Inventory.Index = Inventory.Index + 1
 	end
 
-	local instance = setmetatable({}, {__index = Class})
+	local instance = setmetatable({}, {__index = Inventory.Class})
 
 	instance:Initialize(id, storeType, storeID)
 
-	All[id] = instance
+	Inventory.All[id] = instance
 
 	return instance
 end
 
 if SERVER then
-	if not Null then
-		Null = New(ITEM_NULL, 0)
+	if not Inventory.Null then
+		Inventory.Null = Inventory.New(ITEM_NONE, 0)
 	end
 
 	local function unload(ply)
-		Remove(ply:GetNetVar("InventoryID"))
+		Inventory.Remove(ply:GetNetvar("InventoryID"))
 	end
 
 	hook.Add("PlayerDisconnected", "Inventory", unload)
@@ -58,7 +58,7 @@ if SERVER then
 end
 
 function entity:GetInventory()
-	return Inventory.Get(self:GetNetVar("InventoryID"))
+	return Inventory.Get(self:GetNetvar("InventoryID"))
 end
 
 function entity:GetItems(class, allowChildren)
@@ -82,13 +82,15 @@ function entity:InventoryWeight()
 end
 
 function entity:InventoryMaxWeight()
-	local weight = self:GetCharacterFlagAttribute("MaxWeight")
+	if entity:IsPlayer() then
+		return self:GetCharacterFlagAttribute("MaxWeight")
+	end
 
-	return weight
+	return 0
 end
 
 if SERVER then
 	function entity:SetInventory(inventory)
-		self:SetNetVar("InventoryID", inventory.ID)
+		self:SetNetvar("InventoryID", inventory.ID)
 	end
 end

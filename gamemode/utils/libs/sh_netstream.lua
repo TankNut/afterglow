@@ -1,26 +1,26 @@
-module("netstream", package.seeall)
+Netstream = Netstream or {}
 
-Hooks = Hooks or {}
-Cache = Cache or {}
+Netstream.Hooks = Netstream.Hooks or {}
+Netstream.Cache = Netstream.Cache or {}
 
-MessageLimit = 60000 -- 60 KB
-TickLimit = 200000 -- 0.2 MB/s
+Netstream.MessageLimit = 60000 -- 60 KB
+Netstream.TickLimit = 200000 -- 0.2 MB/s
 
-local writeLog = log.Category("Netstream")
+local writeLog = Log.Category("Netstream")
 
-function Split(data)
-	local encoded = Encode(data)
+function Netstream.Split(data)
+	local encoded = Netstream.Encode(data)
 	local length = #encoded
 
-	if length < MessageLimit then
+	if length < Netstream.MessageLimit then
 		return {{Data = encoded, Length = length}}, length
 	end
 
 	local payload = {}
-	local count = math.ceil(length / MessageLimit)
+	local count = math.ceil(length / Netstream.MessageLimit)
 
 	for i = 1, count do
-		local buffer = string.sub(encoded, MessageLimit * (i - 1) + 1, MessageLimit * i)
+		local buffer = string.sub(encoded, Netstream.MessageLimit * (i - 1) + 1, Netstream.MessageLimit * i)
 
 		payload[i] = {Data = buffer, Length = #buffer}
 	end
@@ -28,21 +28,21 @@ function Split(data)
 	return payload, length
 end
 
-function Encode(data)
-	return pack.Encode(data)
+function Netstream.Encode(data)
+	return Pack.Encode(data)
 end
 
-function Decode(data)
-	return pack.Decode(data)
+function Netstream.Decode(data)
+	return Pack.Decode(data)
 end
 
-function Hook(name, cb)
-	Hooks[name] = cb
-	Cache[name] = {}
+function Netstream.Hook(name, cb)
+	Netstream.Hooks[name] = cb
+	Netstream.Cache[name] = {}
 end
 
 if CLIENT then
-	function Send(name, data)
+	function Netstream.Send(name, data)
 		if not data then
 			writeLog("Outgoing: '%s' (NOTIFY) to SERVER", name)
 
@@ -53,7 +53,7 @@ if CLIENT then
 			return
 		end
 
-		local payload, size = Split(data)
+		local payload, size = Netstream.Split(data)
 
 		writeLog("Outgoing: '%s' (%s) to SERVER", name, string.NiceSize(size))
 
@@ -67,12 +67,12 @@ if CLIENT then
 		end
 	end
 
-	function Read(name)
+	function Netstream.Read(name)
 		local final = net.ReadBool()
 		local length = net.ReadUInt(15)
 		local payload = net.ReadData(length)
 
-		local cache = Cache[name]
+		local cache = Netstream.Cache[name]
 
 		table.insert(cache, payload)
 
@@ -81,19 +81,19 @@ if CLIENT then
 
 			table.Empty(cache)
 
-			return Decode(raw), #raw
+			return Netstream.Decode(raw), #raw
 		end
 	end
 
 	net.Receive("Netstream", function()
 		local name = net.ReadString()
-		local callback = Hooks[name]
+		local callback = Netstream.Hooks[name]
 
 		if not callback then
 			return
 		end
 
-		local data, len = Read(name)
+		local data, len = Netstream.Read(name)
 
 		if data then
 			writeLog("Incoming: '%s' (%s) from SERVER", name, string.NiceSize(len))
@@ -104,7 +104,7 @@ if CLIENT then
 
 	net.Receive("Netstream_Notify", function()
 		local name = net.ReadString()
-		local callback = Hooks[name]
+		local callback = Netstream.Hooks[name]
 
 		if not callback then
 			return
@@ -120,11 +120,11 @@ if SERVER then
 	util.AddNetworkString("Netstream")
 	util.AddNetworkString("Netstream_Notify")
 
-	Queue = Queue or {}
-	Rate = Rate or {}
-	Ready = Ready or {}
+	Netstream.Queue = Netstream.Queue or {}
+	Netstream.Rate = Netstream.Rate or {}
+	Netstream.Ready = Netstream.Ready or {}
 
-	function GetTargets(targets)
+	function Netstream.GetTargets(targets)
 		local result
 
 		if not targets then
@@ -140,7 +140,7 @@ if SERVER then
 		return result
 	end
 
-	function AddToQueue(name, final, payload, targets)
+	function Netstream.AddToQueue(name, final, payload, targets)
 		local data = {
 			Name = name,
 			Final = final,
@@ -149,20 +149,20 @@ if SERVER then
 		}
 
 		for _, v in pairs(targets) do
-			if not Queue[v] then
-				Queue[v] = queue.New()
+			if not Netstream.Queue[v] then
+				Netstream.Queue[v] = Queue.New()
 			end
 
-			Queue[v]:Push(data)
+			Netstream.Queue[v]:Push(data)
 		end
 	end
 
-	function Broadcast(name, data)
-		Send(name, nil, data)
+	function Netstream.Broadcast(name, data)
+		Netstream.Send(name, nil, data)
 	end
 
-	function Send(name, targets, data)
-		targets = GetTargets(targets)
+	function Netstream.Send(name, targets, data)
+		targets = Netstream.GetTargets(targets)
 
 		if #targets < 1 then
 			writeLog("Rejected: '%s' to NOBODY", name)
@@ -173,26 +173,26 @@ if SERVER then
 		if not data then
 			writeLog("Outgoing: '%s' (NOTIFY) to %s", name, #targets > 1 and #targets .. " targets" or targets[1])
 
-			AddToQueue(name, nil, nil, targets)
+			Netstream.AddToQueue(name, nil, nil, targets)
 
 			return
 		end
 
-		local payload, size = Split(data)
+		local payload, size = Netstream.Split(data)
 
 		writeLog("Outgoing: '%s' (%s) to %s", name, string.NiceSize(size), #targets > 1 and #targets .. " targets" or targets[1])
 
 		for k, v in pairs(payload) do
-			AddToQueue(name, k == #payload, v, targets)
+			Netstream.AddToQueue(name, k == #payload, v, targets)
 		end
 	end
 
-	function Read(name, ply)
+	function Netstream.Read(name, ply)
 		local final = net.ReadBool()
 		local length = net.ReadUInt(15)
 		local payload = net.ReadData(length)
 
-		local cache = Cache[name]
+		local cache = Netstream.Cache[name]
 
 		if not cache[ply] then
 			cache[ply] = {}
@@ -205,13 +205,13 @@ if SERVER then
 
 			table.Empty(cache[ply])
 
-			return Decode(raw), #raw
+			return Netstream.Decode(raw), #raw
 		end
 	end
 
 	net.Receive("Netstream", function(_, ply)
 		local name = net.ReadString()
-		local callback = Hooks[name]
+		local callback = Netstream.Hooks[name]
 
 		if not callback then
 			writeLog("Rejected: '%s' from %s", name, ply)
@@ -219,7 +219,7 @@ if SERVER then
 			return
 		end
 
-		local data, len = Read(name, ply)
+		local data, len = Netstream.Read(name, ply)
 
 		if data then
 			writeLog("Incoming: '%s' (%s) from %s", name, string.NiceSize(len), ply)
@@ -230,7 +230,7 @@ if SERVER then
 
 	net.Receive("Netstream_Notify", function(_, ply)
 		local name = net.ReadString()
-		local callback = Hooks[name]
+		local callback = Netstream.Hooks[name]
 
 		if not callback then
 			writeLog("Rejected: '%s' from %s", name, ply)
@@ -244,12 +244,12 @@ if SERVER then
 	end)
 
 	hook.Add("OnPlayerReady", "Netstream", function(ply)
-		Ready[ply] = true
+		Netstream.Ready[ply] = true
 
-		if Queue[ply] then
+		if Netstream.Queue[ply] then
 			local size = 0
 
-			for _, v in pairs(Queue[ply].Items) do
+			for _, v in pairs(Netstream.Queue[ply].Items) do
 				size = size + v.Length
 			end
 
@@ -260,23 +260,23 @@ if SERVER then
 	end)
 
 	hook.Add("Think", "Netstream", function()
-		for k, v in pairs(Queue) do
+		for k, v in pairs(Netstream.Queue) do
 			if not IsValid(k) then
-				Queue[k] = nil
-				Rate[k] = nil
-				Ready[k] = nil
+				Netstream.Queue[k] = nil
+				Netstream.Rate[k] = nil
+				Netstream.Ready[k] = nil
 
 				continue
 			end
 
-			if not Ready[k] or Queue[k]:Count() < 1 then
+			if not Netstream.Ready[k] or Netstream.Queue[k]:Count() < 1 then
 				continue
 			end
 
-			Rate[k] = Rate[k] or TickLimit
-			Rate[k] = math.Min(Rate[k] + (TickLimit * FrameTime()), TickLimit)
+			Netstream.Rate[k] = Netstream.Rate[k] or Netstream.TickLimit
+			Netstream.Rate[k] = math.min(Netstream.Rate[k] + (Netstream.TickLimit * FrameTime()), Netstream.TickLimit)
 
-			while Rate[k] - MessageLimit > 0 do
+			while Netstream.Rate[k] - Netstream.MessageLimit > 0 do
 				local payload = v:Pop()
 
 				if not payload then
@@ -290,7 +290,7 @@ if SERVER then
 						net.WriteUInt(payload.Length, 15)
 						net.WriteData(payload.Data, payload.Length)
 
-						Rate[k] = Rate[k] - net.BytesWritten()
+						Netstream.Rate[k] = Netstream.Rate[k] - net.BytesWritten()
 					net.Send(k)
 				else
 					net.Start("Netstream_Notify")

@@ -5,46 +5,45 @@ TAB_ADMIN	= 2^4
 TAB_PM		= 2^5
 TAB_RADIO	= 2^6
 
-module("Chat", package.seeall)
+Chat = Chat or {
+	Class = {},
+	List = {},
+	ConsoleCommands = {},
+	Commands = {},
+	Aliases = {}
+}
 
 local entity = FindMetaTable("Entity")
 local meta = FindMetaTable("Player")
 
-Class = Class or {}
-List = List or {}
-
-ConsoleCommands = ConsoleCommands or {}
-Commands = Commands or {}
-Aliases = Aliases or {}
-
-_G.CLASS = Class
+_G.CLASS = Chat.Class
 IncludeFile("class/base_chatcommand.lua")
 _G.CLASS = nil
 
-function Add(data)
-	List[data.Name] = setmetatable(data, {
-		__index = Class
+function Chat.Add(data)
+	Chat.List[data.Name] = setmetatable(data, {
+		__index = Chat.Class
 	})
 
 	for _, v in pairs(data.Commands) do
-		Commands[v] = data
+		Chat.Commands[v] = data
 	end
 
 	for _, v in pairs(data.Aliases) do
-		Aliases[v] = data.Commands[1]
+		Chat.Aliases[v] = data.Commands[1]
 	end
 end
 
-function AddFile(path)
+function Chat.AddFile(path)
 	_G.CLASS = {}
 
 	IncludeFile(path)
-	Add(CLASS)
+	Chat.Add(CLASS)
 
 	_G.CLASS = nil
 end
 
-function AddFolder(basePath)
+function Chat.AddFolder(basePath)
 	local recursive
 
 	recursive = function(path)
@@ -55,7 +54,7 @@ function AddFolder(basePath)
 				continue
 			end
 
-			AddFile(path .. "/" .. v)
+			Chat.AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -66,18 +65,18 @@ function AddFolder(basePath)
 	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
-function AddConsoleCommand(names, command)
+function Chat.AddConsoleCommand(names, command)
 	if not istable(names) then
 		names = {names}
 	end
 
 	for _, name in pairs(names) do
-		ConsoleCommands[name] = command
+		Chat.ConsoleCommands[name] = command
 	end
 end
 
-function Process(ply, str)
-	for k, v in pairs(Aliases) do
+function Chat.Process(ply, str)
+	for k, v in pairs(Chat.Aliases) do
 		if string.find(str, k, 1, true) == 1 then
 			str = string.format("/%s %s", v, string.sub(str, #k + 1))
 
@@ -103,7 +102,7 @@ function Process(ply, str)
 	return lang, command:lower(), args
 end
 
-function GetTargets(pos, range, muffledRange, withEntities)
+function Chat.GetTargets(pos, range, muffledRange, withEntities)
 	local maxRange = math.max(range, muffledRange)
 	local targets = {}
 
@@ -124,17 +123,17 @@ function GetTargets(pos, range, muffledRange, withEntities)
 	end
 end
 
-function Parse(ply, str)
-	local lang, cmd, args = Process(ply, str)
+function Chat.Parse(ply, str)
+	local lang, cmd, args = Chat.Process(ply, str)
 
 	if CLIENT then
-		if ConsoleCommands[cmd] then
-			console.Parse(LocalPlayer(), ConsoleCommands[cmd], args)
+		if Chat.ConsoleCommands[cmd] then
+			Console.Parse(LocalPlayer(), Chat.ConsoleCommands[cmd], args)
 		else
-			netstream.Send("ParseChat", str)
+			Netstream.Send("ParseChat", str)
 		end
 	else
-		local command = Commands[cmd]
+		local command = Chat.Commands[cmd]
 
 		if not command then
 			ply:SendChat("ERROR", string.format("Unknown command: '%s'", cmd))
@@ -149,15 +148,15 @@ function Parse(ply, str)
 end
 
 if CLIENT then
-	function Show()
+	function Chat.Show()
 		Interface.GetGroup("Chat"):Show()
 	end
 
-	function Hide()
+	function Chat.Hide()
 		Interface.GetGroup("Chat"):Hide()
 	end
 
-	function Receive(name, data)
+	function Chat.Receive(name, data)
 		local command = List[name]
 		local message, consoleMessage = command:OnReceive(data)
 
@@ -168,20 +167,20 @@ if CLIENT then
 end
 
 if SERVER then
-	function Send(name, data, targets)
+	function Chat.Send(name, data, targets)
 		if isstring(data) then
 			data = {Text = data}
 		end
 
 		data.__Type = name
 
-		netstream.Send("SendChat", targets, data)
+		Netstream.Send("SendChat", targets, data)
 	end
 end
 
 if CLIENT then
-	netstream.Hook("SendChat", function(payload)
-		Receive(payload.__Type, payload)
+	Netstream.Hook("SendChat", function(payload)
+		Chat.Receive(payload.__Type, payload)
 	end)
 
 	hook.Add("InitPostEntity", "Chat", function()
@@ -196,7 +195,7 @@ if CLIENT then
 
 	hook.Add("PlayerBindPress", "Chat", function(ply, bind, down)
 		if down and string.find(bind, "messagemode") then
-			Show()
+			Chat.Show()
 
 			return true
 		end
@@ -204,8 +203,8 @@ if CLIENT then
 end
 
 if SERVER then
-	netstream.Hook("ParseChat", Parse)
-	hook.Add("PlayerSay", "Chat", Parse)
+	Netstream.Hook("ParseChat", Chat.Parse)
+	hook.Add("PlayerSay", "Chat", Chat.Parse)
 end
 
 function entity:CanHear(pos)
@@ -223,8 +222,8 @@ function meta:SendChat(name, data)
 			error("Attempt to SendChat to a non-local player")
 		end
 
-		Receive(name, data)
+		Chat.Receive(name, data)
 	else
-		Send(name, data, self)
+		Chat.Send(name, data, self)
 	end
 end

@@ -32,7 +32,7 @@ function PANEL:Populate()
 		button:SetText(data.Name)
 
 		button.DoClick = function(pnl)
-			netstream.Send("LoadTemplate", data.ID)
+			Netstream.Send("LoadTemplate", data.ID)
 		end
 
 		table.insert(self.Buttons, button)

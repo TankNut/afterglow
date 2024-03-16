@@ -99,9 +99,9 @@ function PANEL:Populate(item)
 
 	self.DataScribe:SetText(string.format("<cdisabled><tiny>Weight: %s kg\nTags: %s", item:GetWeight(), table.concat(item:GetTags(), ", ")))
 
-	self.ActionButton:SetDisabled(not self:HasValidActions())
-	self.DropButton:SetDisabled(not self.Item:CanDrop(ply))
-	self.DestroyButton:SetDisabled(not self.Item:CanDestroy(ply))
+	self.ActionButton:SetEnabled(self:HasValidActions())
+	self.DropButton:SetEnabled(self.Item:CanDrop(LocalPlayer()))
+	self.DestroyButton:SetEnabled(self.Item:CanDestroy(LocalPlayer()))
 end
 
 function PANEL:HasValidActions()

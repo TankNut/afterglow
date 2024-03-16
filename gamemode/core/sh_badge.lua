@@ -1,12 +1,12 @@
-module("Badge", package.seeall)
+Badge = Badge or {}
+
+Badge.Index = 1
+Badge.List = Badge.List or {}
+Badge.Lookup = Badge.Lookup or {}
 
 local meta = FindMetaTable("Player")
 
-Index = 1
-List = List or {}
-Lookup = Lookup or {}
-
-function Add(id, name, mat, callback)
+function Badge.Add(id, name, mat, callback)
 	local data = {
 		ID = id,
 		Name = name,
@@ -15,21 +15,21 @@ function Add(id, name, mat, callback)
 		Automated = tobool(callback)
 	}
 
-	List[Index] = data
-	Lookup[id] = data
+	Badge.List[Badge.Index] = data
+	Badge.Lookup[id] = data
 
-	Index = Index + 1
+	Badge.Index = Badge.Index + 1
 end
 
-function Get(id)
-	return Lookup[id]
+function Badge.Get(id)
+	return Badge.Lookup[id]
 end
 
 function meta:GetBadges()
 	local custom = self:GetCustomBadges()
 	local badges = {}
 
-	for _, badge in pairs(List) do
+	for _, badge in pairs(Badge.List) do
 		if (badge.Automated and badge.Callback(self)) or custom[badge.ID] then
 			table.insert(badges, badge)
 		end
@@ -39,7 +39,7 @@ function meta:GetBadges()
 end
 
 function meta:HasBadge(id)
-	local badge = Get(id)
+	local badge = Badge.Get(id)
 
 	if badge.Automated then
 		return tobool(badge.Callback(self))
@@ -50,7 +50,7 @@ end
 
 if SERVER then
 	function meta:GiveBadge(id)
-		local badge = Get(id)
+		local badge = Badge.Get(id)
 
 		if badge.Automated then
 			return
@@ -64,7 +64,7 @@ if SERVER then
 	end
 
 	function meta:TakeBadge(id)
-		local badge = Get(id)
+		local badge = Badge.Get(id)
 
 		if badge.Automated then
 			return

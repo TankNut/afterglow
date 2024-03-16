@@ -1,12 +1,12 @@
-module("Combine", package.seeall)
+Combine = Combine or {}
 
-DefaultTeam = TEAM_COMBINE
+Combine.DefaultTeam = TEAM_COMBINE
 
 IncludeFile("sh_combineflag.lua")
 IncludeFile("sh_vars.lua")
 IncludeFile("sh_hooks.lua")
 
-function GetCID(seed)
+function Combine.GetCID(seed)
 	if seed then
 		math.randomseed(seed)
 	end
@@ -30,6 +30,6 @@ end)
 
 if SERVER then
 	hook.Add("PreCreateCharacter", "Plugin.Combine", function(ply, fields)
-		fields.cid = GetCID()
+		fields.cid = Combine.GetCID()
 	end)
 end

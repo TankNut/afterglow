@@ -1,8 +1,7 @@
 local PANEL = {}
-DEFINE_BASECLASS("RPBasePanel")
 
 function PANEL:Init()
-	self.Topbar = self:Add("DPanel")
+	self.Topbar = vgui.Create("DPanel", self)
 	self.Topbar:DockPadding(5, 10, 5, 10)
 	self.Topbar:Dock(TOP)
 	self.Topbar:SetTall(50)
@@ -10,14 +9,14 @@ function PANEL:Init()
 
 	self.MenuButtons = {}
 
-	self.Content = self:Add("DPanel")
+	self.Content = vgui.Create("DPanel", self)
 	self.Content:DockPadding(5, 5, 5, 5)
 	self.Content:Dock(FILL)
 	self.Content:SetPaintBackground(false)
 end
 
 function PANEL:Think()
-	BaseClass.Think(self)
+	RPBasePanel.Think(self)
 
 	self:MoveToBack()
 end
@@ -33,7 +32,7 @@ function PANEL:Populate()
 	local width = math.floor(space / count)
 
 	for k, v in SortedPairs(self.MenuButtons) do
-		local button = self.Topbar:Add("DButton")
+		local button = vgui.Create("DButton", self.Topbar)
 
 		button:DockMargin(5, 0, 5, 0)
 		button:Dock(LEFT)
@@ -60,7 +59,7 @@ function PANEL:Populate()
 				end
 			end
 		else
-			button:SetDisabled(true)
+			button:SetEnabled(false)
 		end
 
 		v.Panel = button
@@ -88,4 +87,4 @@ function PANEL:AddMenu(order, name, func, default)
 	end
 end
 
-derma.DefineControl("RPBaseMenu", "Base panel for F3/F4-style tabbed menus", PANEL, "RPBasePanel")
+RPBasemenu = derma.DefineControl("RPBaseMenu", "Base panel for F3/F4-style tabbed menus", PANEL, "RPBasePanel")

@@ -20,16 +20,16 @@ function PANEL:Init()
 end
 
 function PANEL:Setup(subtype, title, data)
-	self.Rules = {validate.Required()}
+	self.Rules = {Validate.Required()}
 
 	self:SetTitle(title)
 	self.SubType = subtype
 
 	if subtype == "string" then
-		table.insert(self.Rules, validate.String())
+		table.insert(self.Rules, Validate.String())
 
 		if data.AllowedCharacters then
-			table.insert(self.Rules, validate.AllowedCharacters(data.AllowedCharacters))
+			table.insert(self.Rules, Validate.AllowedCharacters(data.AllowedCharacters))
 		end
 
 		local width = data.Multiline and 500 or 300
@@ -46,11 +46,11 @@ function PANEL:Setup(subtype, title, data)
 		self.TextInput:SetCaretPos(#self.TextInput:GetText())
 
 		if data.Min then
-			table.insert(self.Rules, validate.Min(data.Min))
+			table.insert(self.Rules, Validate.Min(data.Min))
 		end
 
 		if data.Max then
-			table.insert(self.Rules, validate.Max(data.Max))
+			table.insert(self.Rules, Validate.Max(data.Max))
 
 			self.MaxLabel = self.Bottom:Add("DLabel")
 			self.MaxLabel:DockMargin(2, 0, 0, 0)
@@ -91,7 +91,7 @@ function PANEL:GetOutput()
 end
 
 function PANEL:Validate()
-	local ok, err = validate.Value(self:GetOutput(), self.Rules)
+	local ok, err = Validate.Value(self:GetOutput(), self.Rules)
 
 	if ok then
 		self.Submit:SetDisabled(false)

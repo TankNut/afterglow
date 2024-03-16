@@ -27,6 +27,6 @@ function CLASS:DrawDoors(depth, skybox, skybox3D)
 		render.DrawBox(door:GetPos(), door:GetAngles(),
 			door:OBBMins() - self.BoxSize,
 			door:OBBMaxs() + self.BoxSize,
-			ColorAlpha(Color(255, 0, 0), 50), true)
+			ColorAlpha(Color(255, 0, 0), 50))
 	end
 end

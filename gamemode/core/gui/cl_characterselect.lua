@@ -32,9 +32,9 @@ function PANEL:Populate()
 
 		button.DoClick = function(pnl)
 			if self.DeleteMode then
-				netstream.Send("DeleteCharacter", id)
+				Netstream.Send("DeleteCharacter", id)
 			else
-				netstream.Send("SelectCharacter", id)
+				Netstream.Send("SelectCharacter", id)
 
 				button:SetDisabled(true)
 			end
