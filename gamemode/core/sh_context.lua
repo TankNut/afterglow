@@ -20,13 +20,7 @@ end
 
 if CLIENT then
 	function Context.OpenMenu()
-		Context.Current = {}
-
-		LocalPlayer():GetContextOptions()
-
-		local options = Context.Current
-
-		Context.Current = nil
+		local options = LocalPlayer():GetContextOptions()
 
 		Context.Menu = DermaMenu()
 		Context.Menu:SetSkin("Afterglow")
@@ -121,6 +115,18 @@ if CLIENT then
 end
 
 function meta:GetContextOptions()
+	local options = {}
+
+	Context.Current = options
+
+	hook.Run("GetContextOptions", self)
+
+	Context.Current = nil
+
+	return options
+end
+
+function GM:GetContextOptions(ply, ent)
 	Context.Add("test", {
 		Name = "Test Option",
 		Client = function()
