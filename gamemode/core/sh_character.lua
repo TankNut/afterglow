@@ -3,6 +3,8 @@ CHARACTER_NONE = 0
 Character = Character or {}
 Character.Vars = Character.Vars or {}
 
+local meta = FindMetaTable("Player")
+
 PlayerVar.Add("CharID", {
 	Default = CHARACTER_NONE,
 	Callback = function(ply, old, new)
