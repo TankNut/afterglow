@@ -8,7 +8,7 @@ FLAG.DefaultLanguages = {
 	eng = true
 }
 
-FLAG.Weapons = {}
+FLAG.Weapons = {"weapon_rp_hands"}
 
 FLAG.Health = 100
 FLAG.Armor = 0

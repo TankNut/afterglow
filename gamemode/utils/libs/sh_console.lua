@@ -30,6 +30,9 @@ function Console.Rebuild()
 	end
 end
 
+hook.Add("InitPostEntity", "Console", Console.Rebuild)
+hook.Add("OnReloaded", "Console", Console.Rebuild)
+
 function Console.Parser(name, callback)
 	Console[name] = function(options, argName)
 		return {
@@ -156,6 +159,12 @@ function Console.Parse(ply, name, str)
 	end
 end
 
+if SERVER then
+	Netstream.Hook("Console", function(ply, payload)
+		Console.Parse(ply, payload.Name, payload.Args)
+	end)
+end
+
 function Console.AutoComplete(name, args)
 	local command = Console.Commands[name]
 
@@ -261,12 +270,3 @@ function Command:SetPlayerOnly()
 end
 
 Console.Command = Command
-
-if SERVER then
-	Netstream.Hook("Console", function(ply, payload)
-		Console.Parse(ply, payload.Name, payload.Args)
-	end)
-end
-
-hook.Add("InitPostEntity", "Console", Console.Rebuild)
-hook.Add("OnReloaded", "Console", Console.Rebuild)

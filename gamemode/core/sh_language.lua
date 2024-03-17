@@ -8,6 +8,18 @@ end
 
 local meta = FindMetaTable("Player")
 
+Character.AddVar("ActiveLanguage", {
+	Field = "active_language",
+	Private = true,
+	Accessor = "ActiveLanguage"
+})
+
+Character.AddVar("Languages", {
+	Private = true,
+	Accessor = "Languages",
+	Default = {}
+})
+
 function Language.Get(command)
 	return Language.Lookup[command]
 end
@@ -42,16 +54,6 @@ function Language.FromConfig(data)
 	return langs
 end
 
-if SERVER then
-	hook.Add("PostLoadCharacter", "Language", function(ply, id)
-		ply:CheckLanguage()
-	end)
-
-	hook.Add("PreCreateCharacter", "Language", function(ply, fields)
-		fields.languages = Config.Get("DefaultLanguages")
-	end)
-end
-
 function meta:CanSpeakLanguage(lang)
 	return hook.Run("CanSpeakLanguage", self, lang)
 end
@@ -78,6 +80,10 @@ if SERVER then
 		end
 	end
 
+	hook.Add("PostLoadCharacter", "Language", function(ply, id)
+		ply:CheckLanguage()
+	end)
+
 	function meta:GiveLanguage(lang, speak)
 		speak = speak or false
 
@@ -103,4 +109,16 @@ if SERVER then
 			self:CheckLanguage()
 		end
 	end
+
+	hook.Add("PreCreateCharacter", "Language", function(ply, fields)
+		fields.languages = Config.Get("DefaultLanguages")
+	end)
+end
+
+function GM:CanSpeakLanguage(ply, lang)
+	return ply:GetLanguages()[lang] == true
+end
+
+function GM:CanUnderstandLanguage(ply, lang)
+	return ply:GetLanguages()[lang] != nil
 end

@@ -3,7 +3,24 @@ CHARACTER_NONE = 0
 Character = Character or {}
 Character.Vars = Character.Vars or {}
 
-local meta = FindMetaTable("Player")
+PlayerVar.Add("CharID", {
+	Default = CHARACTER_NONE,
+	Callback = function(ply, old, new)
+		if CLIENT and ply == LocalPlayer() and new != CHARACTER_NONE then
+			Interface.CloseGroup("F2")
+		end
+	end
+})
+
+PlayerVar.Add("CharacterList", {
+	Private = true,
+	Default = {},
+	Callback = function(ply, old, new)
+		if CLIENT and (not ply:HasCharacter() or IsValid(Interface.Get("CharacterSelect")[1])) then
+			Interface.OpenGroup("CharacterSelect", "F2")
+		end
+	end
+})
 
 function Character.AddVar(key, data)
 	Character.Vars[key] = data
@@ -105,29 +122,72 @@ function Character.GetRules()
 	return rules
 end
 
+do -- Character Creation Rules
+	function GM:GetCharacterNameRules()
+		return {
+			Validate.Required(),
+			Validate.String(),
+			Validate.Min(Config.Get("MinNameLength")),
+			Validate.Max(Config.Get("MaxNameLength")),
+			Validate.AllowedCharacters(Config.Get("NameCharacters"))
+		}
+	end
+
+	function GM:GetCharacterDescriptionRules()
+		return {
+			Validate.Required(),
+			Validate.String(),
+			Validate.Min(Config.Get("MinDescriptionLength")),
+			Validate.Max(Config.Get("MaxDescriptionLength")),
+			Validate.AllowedCharacters(Config.Get("DescriptionCharacters"))
+		}
+	end
+
+	function GM:GetBaseCharacterRules()
+		return {
+			Name = hook.Run("GetCharacterNameRules"),
+			Description = hook.Run("GetCharacterDescriptionRules"),
+			Model = {
+				Validate.Required(),
+				Validate.String(),
+				Validate.InList(Config.Get("CharacterModels"))
+			},
+			Skin = {
+				Validate.Required(),
+				Validate.Number(),
+				Validate.Min(0),
+				Validate.Callback(function(val)
+					return val < util.GetModelSkins(Validate.Cache().Model), "Skin index out of bounds"
+				end)
+			}
+		}
+	end
+
+	function GM:ModifyCharacterRules(rules)
+	end
+
+end
+
 if SERVER then
 	Character.TempID = Character.TempID or -1
 
-	function Character.Delete(id)
-		assert(id > CHARACTER_NONE, "Attempt to delete invalid CharID")
-
-		local ply = Character.Find(id)
-
-		if IsValid(ply) then
-			ply:UnloadCharacter()
+	function Character.SaveVar(id, field, value)
+		if id <= CHARACTER_NONE then
+			return
 		end
 
-		MySQL:Begin()
-
-		local query = MySQL:Delete("rp_characters")
-			query:WhereEqual("id", id)
-		query:Execute()
-
-		query = MySQL:Delete("rp_character_data")
-		query:WhereEqual("id", id)
-		query:Execute()
-
-		MySQL:Commit()
+		if value == nil then
+			local query = MySQL:Delete("rp_character_data")
+				query:WhereEqual("id", id)
+				query:WhereEqual("key", field)
+			query:Execute(true)
+		else
+			local query = MySQL:Upsert("rp_character_data")
+				query:Insert("id", id)
+				query:Insert("key", field)
+				query:Insert("value", Pack.Encode(value))
+			query:Execute(true)
+		end
 	end
 
 	Character.Fetch = coroutine.Bind(function(id)
@@ -159,115 +219,70 @@ if SERVER then
 		return id
 	end)
 
-	function Character.SaveVar(id, field, value)
-		if id <= CHARACTER_NONE then
+	Netstream.Hook("CreateCharacter", function(ply, payload)
+		local ok, data = Validate.Multi(payload, Character.GetRules())
+
+		if not ok then
 			return
 		end
 
-		if value == nil then
-			local query = MySQL:Delete("rp_character_data")
-				query:WhereEqual("id", id)
-				query:WhereEqual("key", field)
-			query:Execute(true)
-		else
-			local query = MySQL:Upsert("rp_character_data")
-				query:Insert("id", id)
-				query:Insert("key", field)
-				query:Insert("value", Pack.Encode(value))
-			query:Execute(true)
-		end
-	end
-end
-
-function meta:HasCharacter()
-	return self:GetCharID() != CHARACTER_NONE
-end
-
-function meta:IsTemplateCharacter()
-	return self:GetCharID() < CHARACTER_NONE
-end
-
-function meta:HasForcedCharacterName()
-	return tobool(hook.Run("GetCharacterName", self))
-end
-
-if SERVER then
-	-- Using bind here because of inventory:LoadItems()
-	meta.LoadCharacter = coroutine.Bind(function(self, id, fields)
-		if self:HasCharacter() then
-			hook.Run("UnloadCharacter", self, self:GetCharID(), true)
-		end
-
-		_G.CHARACTER_LOADING = true
-
-		self:SetCharID(id)
-
-		for k, v in pairs(Character.Vars) do
-			local val = fields[v.Field] or nil
-
-			self["Set" .. v.Accessor](self, val, true)
-		end
-
-		local inventory = Inventory.New(ITEM_PLAYER, id)
-
-		self:SetInventory(inventory)
-
-		if not self:IsTemplateCharacter() then
-			inventory:LoadItems()
-		end
-
-		_G.CHARACTER_LOADING = nil
-
-		hook.Run("PostLoadCharacter", self, id)
-	end)
-
-	function meta:UnloadCharacter()
-		if self:HasCharacter() then
-			hook.Run("UnloadCharacter", self, self:GetCharID(), false)
-		end
-
-		_G.CHARACTER_LOADING = true
-
-		self:SetCharID(nil)
-
-		for k, v in pairs(Character.Vars) do
-			self["Set" .. v.Accessor](self, nil, true)
-		end
-
-		_G.CHARACTER_LOADING = nil
-
-		hook.Run("PostLoadCharacter", self, CHARACTER_NONE)
-	end
-
-	meta.LoadCharacterList = coroutine.Bind(function(self)
-		local characters = {}
-
-		local query = MySQL:Select("rp_characters")
-			query:Select("id")
-			query:WhereEqual("steamid", self:SteamID())
-		local ids = query:Execute()
-
 		local fields = {}
 
-		hook.Run("GetCharacterListFields", fields)
+		for k, v in pairs(data) do
+			local var = Character.Vars[k]
 
-		for _, v in pairs(ids) do
-			query = MySQL:Select("rp_character_data")
-				query:Select("key")
-				query:Select("value")
-				query:WhereEqual("id", v.id)
-				query:WhereIn("key", fields)
-
-			local data = table.DBKeyValues(query:Execute())
-
-			characters[v.id] = hook.Run("GetCharacterListName", data)
+			if var.Field then
+				fields[var.Field] = v
+			end
 		end
 
-		self:SetCharacterList(characters)
+		hook.Run("PreCreateCharacter", ply, fields)
+
+		coroutine.wrap(function()
+			ply:LoadCharacter(Character.Create(ply:SteamID(), fields), fields)
+		end)()
+
+		ply:LoadCharacterList()
 	end)
 
-	-- Move this somewhere else?
-	function meta:UpdateName()
-		self:SetVisibleName(hook.Run("GetCharacterName", self) or self:GetCharacterName())
+	function Character.Delete(id)
+		assert(id > CHARACTER_NONE, "Attempt to delete invalid CharID")
+
+		local ply = Character.Find(id)
+
+		if IsValid(ply) then
+			ply:UnloadCharacter()
+		end
+
+		MySQL:Begin()
+
+		local query = MySQL:Delete("rp_characters")
+			query:WhereEqual("id", id)
+		query:Execute()
+
+		query = MySQL:Delete("rp_character_data")
+		query:WhereEqual("id", id)
+		query:Execute()
+
+		MySQL:Commit()
+	end
+
+	Netstream.Hook("DeleteCharacter", function(ply, id)
+		if not ply:GetCharacterList()[id] then
+			return
+		end
+
+		Character.Delete(id)
+		ply:LoadCharacterList()
+	end)
+
+	function GM:PreCreateCharacter(ply, fields)
+	end
+
+	function GM:PostLoadCharacter(ply, id)
+		ply:Spawn()
+	end
+
+	function GM:UnloadCharacter(ply, id, loadingNew)
 	end
 end

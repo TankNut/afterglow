@@ -3,13 +3,59 @@ Template = Template or {}
 Template.Class = Template.Class or {}
 Template.List = Template.List or {}
 
-local meta = FindMetaTable("Player")
-
 _G.TEMPLATE = Template.Class
 IncludeFile("class/base_template.lua")
 _G.TEMPLATE = nil
 
-function Template.ProcessTemplate(data)
+local meta = FindMetaTable("Player")
+
+PlayerVar.Add("Templates", {
+	Field = "character_templates",
+	Default = {},
+	Private = true
+})
+
+function Template.Add(name, data)
+	name = name:lower()
+	data.ID = name
+
+	Template.List[name] = Template.Process(data)
+end
+
+function Template.AddFile(path, name)
+	name = name or path:GetFileFromFilename():sub(1, -5)
+
+	_G.TEMPLATE = {}
+
+	IncludeFile(path)
+	Template.Add(name, TEMPLATE)
+
+	_G.TEMPLATE = nil
+end
+
+function Template.AddFolder(basePath)
+	local recursive
+
+	recursive = function(path)
+		local files, folders = file.Find(path .. "/*", "LUA")
+
+		for _, v in pairs(files) do
+			if v:GetExtensionFromFilename() != "lua" then
+				continue
+			end
+
+			Template.AddFile(path .. "/" .. v)
+		end
+
+		for _, v in pairs(folders) do
+			recursive(path .. "/" .. v)
+		end
+	end
+
+	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
+end
+
+function Template.Process(data)
 	-- Rewrite fields and callbacks so they're in the proper load format
 	if data.Vars then
 		local vars = {}
@@ -50,46 +96,6 @@ function Template.ProcessTemplate(data)
 			return base and Template.Get(base)[index] or Template.Class[index]
 		end
 	})
-end
-
-function Template.Add(name, data)
-	name = name:lower()
-	data.ID = name
-
-	Template.List[name] = Template.ProcessTemplate(data)
-end
-
-function Template.AddFile(path, name)
-	name = name or path:GetFileFromFilename():sub(1, -5)
-
-	_G.TEMPLATE = {}
-
-	IncludeFile(path)
-	Template.Add(name, TEMPLATE)
-
-	_G.TEMPLATE = nil
-end
-
-function Template.AddFolder(basePath)
-	local recursive
-
-	recursive = function(path)
-		local files, folders = file.Find(path .. "/*", "LUA")
-
-		for _, v in pairs(files) do
-			if v:GetExtensionFromFilename() != "lua" then
-				continue
-			end
-
-			Template.AddFile(path .. "/" .. v)
-		end
-
-		for _, v in pairs(folders) do
-			recursive(path .. "/" .. v)
-		end
-	end
-
-	recursive(engine.ActiveGamemode() .. "/gamemode/" .. basePath)
 end
 
 function Template.Get(id)
@@ -179,4 +185,8 @@ if SERVER then
 
 		self:SetTemplates(templates)
 	end
+end
+
+function GM:CanAccessTemplate(ply, id)
+	return ply:IsSuperAdmin() or ply:GetTemplates()[id]
 end

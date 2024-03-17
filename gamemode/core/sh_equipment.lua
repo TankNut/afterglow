@@ -1,5 +1,9 @@
 local meta = FindMetaTable("Player")
 
+PlayerVar.Add("EquipmentCache", {
+	Default = {}
+})
+
 function meta:GetEquipment(slot)
 	if slot then
 		local id = self:GetEquipmentCache()[slot]

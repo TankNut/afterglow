@@ -3,6 +3,16 @@ Admin.Ranks = Admin.Ranks or {}
 
 local meta = FindMetaTable("Player")
 
+PlayerVar.Add("UserGroup", {
+	Accessor = "RPUserGroup",
+	Field = "usergroup",
+	Default = "user",
+	ServerOnly = true,
+	Callback = function(ply, _, new)
+		ply:SetUserGroup(new)
+	end
+})
+
 function Admin.AddRank(name, inheritance)
 	Admin.Ranks[name:lower()] = inheritance and inheritance:lower() or true
 end
@@ -14,6 +24,9 @@ Admin.AddRank("developer", "superadmin")
 
 if SERVER then
 	hook.Remove("PlayerInitialSpawn", "PlayerAuthSpawn")
+	hook.Add("PlayerInitialSpawn", "Admin", function(ply)
+		ply:SetUserGroup("user")
+	end)
 end
 
 function meta:CheckUserGroup(group)

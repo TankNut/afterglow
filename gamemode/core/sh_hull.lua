@@ -2,13 +2,22 @@ Hull = Hull or {}
 Hull.Tables = Hull.Tables or {}
 Hull.Models = Hull.Models or {}
 
-local meta = FindMetaTable("Player")
-
 Hull.Default = {
 	Hull = {Vector(-16, -16, 0), Vector(16, 16, 72)},
 	DuckHull = {Vector(-16, -16, 0), Vector(16, 16, 36)},
 	View = {Vector(0, 0, 64), Vector(0, 0, 28)}
 }
+
+local meta = FindMetaTable("Player")
+
+PlayerVar.Add("Scale", {
+	Accessor = "PlayerScale",
+	Default = 1,
+	Callback = function(ply, old, new)
+		ply:UpdateHull()
+	end
+})
+
 
 function Hull.Standard(size, height)
 	return {

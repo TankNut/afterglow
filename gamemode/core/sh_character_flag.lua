@@ -3,6 +3,15 @@ CharacterFlag.List = CharacterFlag.List or {}
 
 local meta = FindMetaTable("Player")
 
+Character.AddVar("Flag", {
+	Default = "default",
+	Callback = function(ply, old, new)
+		if SERVER and not CHARACTER_LOADING then
+			hook.Run("PlayerSetup", ply)
+		end
+	end
+})
+
 function CharacterFlag.Add(name, data)
 	if name != "default" then
 		setmetatable(data, {__index = CharacterFlag.List.default})
@@ -67,3 +76,14 @@ end
 function meta:GetCharacterFlagAttribute(name)
 	return self:GetCharacterFlagTable():GetAttribute(self, name)
 end
+
+function GM:GetCharacterFlagAttribute(flag, ply, name)
+	if flag.AttributeBlacklist[name] then
+		error("Attempt to FLAG:GetAttribute blacklisted key " .. name)
+	end
+
+	local func = flag["Get" .. name]
+
+	return func and func(flag, ply) or flag[name]
+end
+

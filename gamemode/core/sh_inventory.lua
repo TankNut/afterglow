@@ -44,7 +44,17 @@ function Inventory.New(storeType, storeID, id)
 	return instance
 end
 
-if SERVER then
+if CLIENT then
+	Netstream.Hook("InventoryCreated", function(payload)
+		local inventory = Inventory.New(payload.StoreType, payload.StoreID, payload.ID)
+
+		for _, v in pairs(payload.Items) do
+			inventory:AddItem(Item.GetOrInstance(v.Name, v.ID, v.Data), true)
+		end
+	end)
+
+	Netstream.Hook("InventoryRemoved", Inventory.Remove)
+else
 	if not Inventory.Null then
 		Inventory.Null = Inventory.New(ITEM_NONE, 0)
 	end

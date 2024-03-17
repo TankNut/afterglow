@@ -72,6 +72,18 @@ function ITEM:FireAction(ply, name, val)
 	end
 end
 
+if SERVER then
+	Netstream.Hook("ItemAction", function(ply, payload)
+		local item = Item.Get(payload.ID)
+
+		if not item or not item:CanInteract(ply) then
+			return
+		end
+
+		item:FireAction(ply, payload.Name, payload.Value)
+	end)
+end
+
 function ITEM:GetActions(ply)
 	local tab = {}
 

@@ -6,6 +6,11 @@ Badge.Lookup = Badge.Lookup or {}
 
 local meta = FindMetaTable("Player")
 
+PlayerVar.Add("CustomBadges", {
+	Field = "badges",
+	Default = {}
+})
+
 function Badge.Add(id, name, mat, callback)
 	local data = {
 		ID = id,

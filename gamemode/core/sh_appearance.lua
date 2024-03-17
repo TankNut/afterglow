@@ -5,9 +5,8 @@ Appearance.Default = {
 	Hands = {}
 }
 
-Appearance.UpdateList = Appearance.UpdateList or {}
-
-local meta = FindMetaTable("Entity")
+local entity = FindMetaTable("Entity")
+local meta = FindMetaTable("Player")
 
 function Appearance.Apply(ent, data)
 	if ent:GetModel() != data.Model then
@@ -39,6 +38,12 @@ function Appearance.Apply(ent, data)
 	end
 end
 
+Netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
+	Appearance.Apply(ent, appearance)
+
+	hook.Run("PostSetAppearance", ent)
+end)
+
 function Appearance.Copy(from, to)
 	if CLIENT then
 		Appearance.Apply(to, from:GetAppearance())
@@ -48,6 +53,8 @@ function Appearance.Copy(from, to)
 end
 
 if SERVER then
+	Appearance.UpdateList = Appearance.UpdateList or {}
+
 	function Appearance.Update(ply)
 		local data = table.Copy(Appearance.Default)
 
@@ -83,23 +90,38 @@ if SERVER then
 	end)
 end
 
-Netvar.AddEntityHook("Appearance", "Appearance", function(ent, _, appearance)
-	Appearance.Apply(ent, appearance)
-
-	hook.Run("PostSetAppearance", ent)
-end)
-
 -- Not a PlayerVar because we apply to both entities and players
-function meta:GetAppearance()
+function entity:GetAppearance()
 	return self:GetNetvar("Appearance", {})
 end
 
 if SERVER then
-	function meta:SetAppearance(data)
+	function entity:SetAppearance(data)
 		self:SetNetvar("Appearance", data)
 	end
 
 	function meta:UpdateAppearance()
 		Appearance.QueueUpdate(self)
+	end
+end
+
+function GM:PostSetAppearance(ent)
+end
+
+if CLIENT then
+	function GM:CreateClientsideRagdoll(ent, ragdoll)
+		Appearance.Copy(ent, ragdoll)
+	end
+else
+	function GM:CreateEntityRagdoll(ent, ragdoll)
+		Appearance.Copy(ent, ragdoll)
+	end
+
+	function GM:GetCharacterAppearance(ply, data)
+		ply:GetCharacterFlagTable():GetAppearance(ply, data)
+	end
+
+	function GM:PlayerSetHandsModel(ply, ent)
+		Appearance.Apply(ent, ply.HandsAppearance)
 	end
 end
