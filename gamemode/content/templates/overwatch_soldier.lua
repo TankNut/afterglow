@@ -5,23 +5,19 @@ TEMPLATE.Vars = {
 }
 
 TEMPLATE.Callbacks = {
-	"Name", "CID"
+	"Name"
 }
 
 TEMPLATE.Items = {
 	"overwatch_soldier"
 }
 
-function TEMPLATE:OnCreate(ply, data)
-	data.CID = Combine.GetCID()
+function TEMPLATE:OnCreate(ply, data, fields)
+	data.CID = fields[Character.VarToField("CID")]
 end
 
 function TEMPLATE:GetName(ply, data)
 	return "COTA.ECHO-OWS." .. data.CID
-end
-
-function TEMPLATE:GetCID(ply, data)
-	return data.CID
 end
 
 function TEMPLATE:OnLoad(ply, data)
