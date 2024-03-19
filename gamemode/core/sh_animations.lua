@@ -1,15 +1,15 @@
-Animtable = Animtable or {}
+Animations = Animations or {}
 
-Animtable.Tables = Animtable.Tables or {}
-Animtable.Models = Animtable.Models or {}
-Animtable.Offsets = Animtable.Offsets or {}
+Animations.Tables = Animations.Tables or {}
+Animations.Models = Animations.Models or {}
+Animations.Offsets = Animations.Offsets or {}
 
-function Animtable.Define(name, normal, combat)
-	local tab = Animtable.Tables[name]
+function Animations.Define(name, normal, combat)
+	local tab = Animations.Tables[name]
 
 	if not tab then
 		tab = {}
-		Animtable.Tables[name] = tab
+		Animations.Tables[name] = tab
 	end
 
 	table.Merge(tab, normal)
@@ -26,36 +26,36 @@ function Animtable.Define(name, normal, combat)
 	end
 end
 
-function Animtable.Add(name, models, offset)
+function Animations.Add(name, models, offset)
 	if not istable(models) then
 		models = {models}
 	end
 
 	for _, model in pairs(models) do
-		Animtable.Models[model:lower()] = Animtable.Tables[name]
+		Animations.Models[model:lower()] = Animations.Tables[name]
 	end
 
 	if offset then
-		Animtable.AddOffset(models, offset)
+		Animations.AddOffset(models, offset)
 	end
 end
 
-function Animtable.AddOffset(models, offset)
+function Animations.AddOffset(models, offset)
 	if not istable(models) then
 		models = {models}
 	end
 
 	for _, model in pairs(models) do
-		Animtable.Offsets[model:lower()] = offset
+		Animations.Offsets[model:lower()] = offset
 	end
 end
 
-function Animtable.Get(model)
-	return Animtable.Models[model:lower()]
+function Animations.Get(model)
+	return Animations.Models[model:lower()]
 end
 
-function Animtable.GetOffset(model)
-	return Animtable.Offsets[model:lower()] or Vector()
+function Animations.GetOffset(model)
+	return Animations.Offsets[model:lower()] or Vector()
 end
 
 function GM:CalcMainActivity(ply, vel)
@@ -91,7 +91,7 @@ function GM:CalcMainActivity(ply, vel)
 end
 
 function GM:HandleNonPlayerModel(ply, vel)
-	local animtable = Animtable.Get(ply:GetModel())
+	local animtable = Animations.Get(ply:GetModel())
 
 	if not animtable then
 		return
@@ -124,7 +124,7 @@ function GM:UpdateAnimation(ply, vel, max)
 	self.BaseClass:UpdateAnimation(ply, vel, max)
 
 	if CLIENT then
-		if Animtable.Get(ply:GetModel():lower()) then
+		if Animations.Get(ply:GetModel():lower()) then
 			ply:SetIK(false)
 		else
 			ply:SetIK(true)

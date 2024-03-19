@@ -17,7 +17,7 @@ function PANEL:SetPlayer(ply)
 		return ply:GetPlayerColor()
 	end
 
-	local animtable = Animtable.Get(ply:GetModel())
+	local animtable = Animations.Get(ply:GetModel())
 
 	if animtable then
 		local sequence = animtable[ACT_MP_STAND_IDLE]
@@ -65,7 +65,7 @@ function PANEL:GetTargets()
 	pos:Rotate(ang)
 	look:Rotate(ang)
 
-	local offset = Animtable.GetOffset(self:GetModel())
+	local offset = Animations.GetOffset(self:GetModel())
 
 	pos = pos + offset
 	look = look + offset

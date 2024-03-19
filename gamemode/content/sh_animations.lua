@@ -1,4 +1,4 @@
-Animtable.Define("antlion", {
+Animations.Define("antlion", {
 	[ACT_MP_STAND_IDLE] = ACT_IDLE,
 	[ACT_MP_WALK] = ACT_WALK,
 	[ACT_MP_RUN] = ACT_RUN,
@@ -14,4 +14,4 @@ Animtable.Define("antlion", {
 	[ACT_LAND] = ACT_IDLE
 })
 
-Animtable.Add("antlion", {"models/antlion.mdl", "models/antlion_worker.mdl"}, Vector(50, -10, -40))
+Animations.Add("antlion", {"models/antlion.mdl", "models/antlion_worker.mdl"}, Vector(50, -10, -40))

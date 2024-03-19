@@ -1,4 +1,4 @@
-IncludeFile("sh_animtables.lua")
+IncludeFile("sh_animations.lua")
 IncludeFile("sh_badges.lua")
 IncludeFile("sh_hulls.lua")
 IncludeFile("sh_teams.lua")
