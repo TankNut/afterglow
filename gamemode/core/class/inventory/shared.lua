@@ -108,9 +108,5 @@ else
 
 			item:SetInventory(self, true)
 		end
-
-		if self.StoreType == ITEM_PLAYER then
-			self:GetParent():UpdateEquipmentCache()
-		end
 	end)
 end

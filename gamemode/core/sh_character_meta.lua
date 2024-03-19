@@ -33,6 +33,8 @@ if SERVER then
 			inventory:LoadItems()
 		end
 
+		self:UpdateEquipmentCache()
+
 		_G.CHARACTER_LOADING = nil
 
 		hook.Run("PostLoadCharacter", self, id)
