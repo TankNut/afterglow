@@ -47,7 +47,7 @@ if CLIENT then
 		local first = true
 
 		for _, sectionOptions in pairs(sections) do
-			table.SortByMember(sectionOptions, "Order")
+			table.SortByMember(sectionOptions, "Order", true)
 
 			if first then
 				first = false
