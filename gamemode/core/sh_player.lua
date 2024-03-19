@@ -32,7 +32,27 @@ function GM:CanInteract(ply, ent)
 	return ply:HasCharacter() and ply:Alive() and IsValid(ent) and ent:WithinRange(ply, Config.Get("InteractRange"))
 end
 
-if SERVER then
+function GM:PostPlayerSpawn(ply)
+	if CLIENT then
+		local weapon = ply:GetWeapon(hook.Run("SelectDefaultWeapon", ply))
+
+		if IsValid(weapon) then
+			input.SelectWeapon(weapon)
+		end
+	else
+		Netstream.Send("PostPlayerSpawn", ply)
+	end
+end
+
+if CLIENT then
+	function GM:SelectDefaultWeapon(ply)
+		return ply:GetCharacterFlagAttribute("Weapons")[1] or "weapon_physgun"
+	end
+
+	Netstream.Hook("PostPlayerSpawn", function()
+		hook.Run("PostPlayerSpawn", LocalPlayer())
+	end)
+else
 	function GM:GetBaseArmor(ply) return ply:GetCharacterFlagAttribute("Armor") end
 	function GM:GetPlayerTeam(ply) return ply:GetCharacterFlagAttribute("Team") end
 
@@ -74,9 +94,6 @@ if SERVER then
 		hook.Run("PostPlayerSpawn", ply)
 	end
 
-	function GM:PostPlayerSpawn(ply)
-	end
-
 	function GM:PlayerSetup(ply)
 		local flag = ply:GetCharacterFlagTable()
 
@@ -108,11 +125,11 @@ if SERVER then
 			ply:Give(class)
 		end
 
-		ply:SelectWeapon(weaponList[1] or "weapon_physgun")
-
 		for _, item in pairs(ply:GetEquipment()) do
 			item:OnSpawn()
 		end
+
+		ply:SetActiveWeapon(NULL)
 
 		flag:OnSpawn(ply)
 	end
