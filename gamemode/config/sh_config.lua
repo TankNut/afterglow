@@ -61,3 +61,5 @@ GM.Config.ChatLimit = 500
 
 GM.Config.ContextRange = 1024
 GM.Config.InteractRange = 82
+
+GM.Config.BotTemplate = "citizen"

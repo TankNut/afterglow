@@ -49,10 +49,16 @@ if SERVER then
 		-- We don't use source armor
 		ply:SetMaxArmor(0)
 
-		coroutine.wrap(function()
-			PlayerVar.Load(ply)
-			ply:LoadCharacterList()
-		end)()
+		if ply:IsBot() then
+			timer.Simple(0, function()
+				ply:LoadTemplate(Template.Get(Config.Get("BotTemplate")))
+			end)
+		else
+			coroutine.wrap(function()
+				PlayerVar.Load(ply)
+				ply:LoadCharacterList()
+			end)()
+		end
 	end
 
 	function GM:PlayerSpawn(ply)
