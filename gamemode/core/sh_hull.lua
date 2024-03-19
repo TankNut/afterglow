@@ -18,7 +18,6 @@ PlayerVar.Add("Scale", {
 	end
 })
 
-
 function Hull.Standard(size, height)
 	return {
 		Vector(-size, -size, 0),

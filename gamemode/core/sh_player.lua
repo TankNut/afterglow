@@ -24,6 +24,14 @@ function GM:GetPlayerColor(ply) return
 	ply:GetAppearance().PlayerColor or team.GetVecColor(ply:Team())
 end
 
+function meta:CanInteract(ent)
+	return hook.Run("CanInteract", self, ent)
+end
+
+function GM:CanInteract(ply, ent)
+	return ply:HasCharacter() and ply:Alive() and IsValid(ent) and ent:WithinRange(ply, Config.Get("InteractRange"))
+end
+
 if SERVER then
 	function GM:GetBaseArmor(ply) return ply:GetCharacterFlagAttribute("Armor") end
 	function GM:GetPlayerTeam(ply) return ply:GetCharacterFlagAttribute("Team") end

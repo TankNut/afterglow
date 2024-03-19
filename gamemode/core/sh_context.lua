@@ -114,23 +114,78 @@ if CLIENT then
 	end)
 end
 
-function meta:GetContextOptions()
+if CLIENT then
+	function meta:GetContextEntity()
+		local range = Config.Get("ContextRange")
+
+		local origin = self:EyePos()
+		local tab = table.Filter(ents.FindInSphere(origin, range), function(_, ent)
+			return not ent:IsDormant() and ent:GetCollisionGroup() == COLLISION_GROUP_IN_VEHICLE
+		end)
+
+		table.sort(tab, function(a, b)
+			return a:WorldSpaceCenter():DistToSqr(origin) > b:WorldSpaceCenter():DistToSqr(origin)
+		end)
+
+		local dir = self:EyeAngles():Forward() * range
+
+		for _, ent in pairs(tab) do
+			local hit = util.IntersectRayWithOBB(origin, dir, ent:GetPos(), ent:GetAngles(), ent:OBBMins(), ent:OBBMaxs())
+
+			if hit then
+				return ent
+			end
+		end
+
+		local ent = self:GetEyeTrace().Entity
+
+		if hook.Run("IsValidContextEntity", self, ent) then
+			return ent
+		end
+	end
+end
+
+function meta:GetContextOptions(ent)
+	if CLIENT then
+		ent = self:GetContextEntity()
+	end
+
 	local options = {}
 
 	Context.Current = options
 
 	hook.Run("GetContextOptions", self)
 
+	if IsValid(ent) then
+		hook.Run("GetEntityContextOptions", self, ent)
+	end
+
 	Context.Current = nil
 
 	return options
 end
 
-function GM:GetContextOptions(ply, ent)
+function GM:IsValidContextEntity(ply, ent)
+	return IsValid(ent) and ent:WithinRange(ply, Config.Get("ContextRange"))
+end
+
+function GM:GetContextOptions(ply)
 	Context.Add("test", {
 		Name = "Test Option",
+		Order = 1,
 		Client = function()
 			print("Test!")
 		end
 	})
+end
+
+function GM:GetEntityContextOptions(ply, ent)
+	if ent:IsPlayer() then
+		Context.Add("examine", {
+			Name = "Examine",
+			Client = function()
+				ent:Examine()
+			end
+		})
+	end
 end

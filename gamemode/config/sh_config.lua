@@ -58,3 +58,6 @@ GM.Config.DamageScale = {
 GM.Config.PenetrationCap = 75
 
 GM.Config.ChatLimit = 500
+
+GM.Config.ContextRange = 1024
+GM.Config.InteractRange = 82
