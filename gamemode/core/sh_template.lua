@@ -121,6 +121,10 @@ end
 if SERVER then
 	-- Don't have to bind here since ply:LoadCharacter doesn't do any async calls on template character loads
 	function meta:LoadTemplate(template)
+		if isstring(template) then
+			template = Template.Get(template)
+		end
+
 		local fields = {}
 
 		for field, val in pairs(template.Vars) do
