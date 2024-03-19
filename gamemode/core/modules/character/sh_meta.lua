@@ -40,12 +40,6 @@ if SERVER then
 		hook.Run("PostLoadCharacter", self, id)
 	end)
 
-	Netstream.Hook("SelectCharacter", function(ply, id)
-		if ply:GetCharacterList()[id] then
-			ply:LoadCharacter(id, Character.Fetch(id))
-		end
-	end)
-
 	function meta:UnloadCharacter()
 		if self:HasCharacter() then
 			hook.Run("UnloadCharacter", self, self:GetCharID(), false)
@@ -90,15 +84,4 @@ if SERVER then
 
 		self:SetCharacterList(characters)
 	end)
-
-	-- Database fields to use when fetching data for the character list
-	-- TODO: Replace with character vars and translate internally
-	function GM:GetCharacterListFields(fields)
-		table.insert(fields, "name")
-	end
-
-	-- Turns the fields from the GetCharacterListFields into the name used in the character list
-	function GM:GetCharacterListName(fields)
-		return fields.name or "*UNNAMED CHARACTER*"
-	end
 end
