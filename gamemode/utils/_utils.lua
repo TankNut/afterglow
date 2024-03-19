@@ -36,6 +36,22 @@ function IncludeFolder(dir, baseDir, realm)
 	end
 end
 
+local moduleFiles = {
+	"cl_module.lua",
+	"sh_module.lua",
+	"sv_module.lua"
+}
+
+function IncludeModule(folder)
+	local baseDir = engine.ActiveGamemode() .. "/gamemode/core/modules/" .. folder .. "/"
+
+	for _, path in pairs(moduleFiles) do
+		if file.Exists(baseDir .. path, "LUA") then
+			IncludeFile(baseDir .. path)
+		end
+	end
+end
+
 IncludeFile("sh_memoize.lua")
 
 -- Extensions
