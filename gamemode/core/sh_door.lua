@@ -60,10 +60,10 @@ if SERVER then
 
 		Data.SetMapData("doors", data)
 	end
+end
 
-	function GM:EntityIsDoor(ent)
-		return tobool(Door.Types[ent:GetClass()])
-	end
+function GM:EntityIsDoor(ent)
+	return tobool(Door.Types[ent:GetClass()])
 end
 
 hook.Add("OnEntityCreated", "Door", function(ent)
