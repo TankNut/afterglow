@@ -157,7 +157,7 @@ function meta:GetContextOptions(ent)
 	hook.Run("GetContextOptions", self)
 
 	if IsValid(ent) then
-		hook.Run("GetEntityContextOptions", self, ent)
+		hook.Run("GetEntityContextOptions", self, ent, ent:WithinRange(self, Config.Get("InteractRange")))
 	end
 
 	Context.Current = nil
@@ -179,7 +179,7 @@ function GM:GetContextOptions(ply)
 	})
 end
 
-function GM:GetEntityContextOptions(ply, ent)
+function GM:GetEntityContextOptions(ply, ent, interact)
 	if ent:IsPlayer() then
 		Context.Add("examine", {
 			Name = "Examine",
