@@ -56,6 +56,10 @@ if SERVER then
 	Appearance.UpdateList = Appearance.UpdateList or {}
 
 	function Appearance.Update(ply)
+		if not IsValid(ply) then
+			continue
+		end
+
 		local data = table.Copy(Appearance.Default)
 
 		if ply:HasCharacter() then
