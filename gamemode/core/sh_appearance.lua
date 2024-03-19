@@ -57,7 +57,7 @@ if SERVER then
 
 	function Appearance.Update(ply)
 		if not IsValid(ply) then
-			continue
+			return
 		end
 
 		local data = table.Copy(Appearance.Default)
