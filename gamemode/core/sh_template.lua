@@ -131,6 +131,8 @@ if SERVER then
 			fields[field] = val
 		end
 
+		hook.Run("PreCreateCharacter", self, fields)
+
 		local data = {}
 
 		template:OnCreate(self, data)
