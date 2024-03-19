@@ -170,6 +170,14 @@ do -- Character Creation Rules
 
 end
 
+function Character.VarToField(var)
+	var = Character.Vars[var]
+
+	if var then
+		return var.Field
+	end
+end
+
 if SERVER then
 	Character.TempID = Character.TempID or -1
 
