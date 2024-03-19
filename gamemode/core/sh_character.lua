@@ -116,15 +116,15 @@ function Character.Find(id)
 	end
 end
 
-function Character.GetRules()
-	local rules = hook.Run("GetBaseCharacterRules")
-
-	hook.Run("ModifyCharacterRules", rules)
-
-	return rules
-end
-
 do -- Character Creation Rules
+	function Character.GetRules()
+		local rules = hook.Run("GetBaseCharacterRules")
+
+		hook.Run("ModifyCharacterRules", rules)
+
+		return rules
+	end
+
 	function GM:GetCharacterNameRules()
 		return {
 			Validate.Required(),

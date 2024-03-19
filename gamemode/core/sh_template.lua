@@ -61,10 +61,10 @@ function Template.Process(data)
 		local vars = {}
 
 		for key, val in pairs(data.Vars) do
-			local var = Character.Vars[key]
+			local field = Character.VarToField(key)
 
-			if var then
-				vars[var.Field] = val
+			if field then
+				vars[field] = val
 			end
 		end
 

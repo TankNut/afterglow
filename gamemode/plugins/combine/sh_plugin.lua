@@ -30,6 +30,6 @@ end)
 
 if SERVER then
 	hook.Add("PreCreateCharacter", "Plugin.Combine", function(ply, fields)
-		fields.cid = Combine.GetCID()
+		fields[Character.VarToField("CID")] = Combine.GetCID()
 	end)
 end
