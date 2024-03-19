@@ -135,7 +135,7 @@ if SERVER then
 
 		local data = {}
 
-		template:OnCreate(self, data)
+		template:OnCreate(self, data, fields)
 
 		for field, func in pairs(template.Callbacks) do
 			local val = template[func](template, self, data)
