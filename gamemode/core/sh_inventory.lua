@@ -92,7 +92,7 @@ function entity:InventoryWeight()
 end
 
 function entity:InventoryMaxWeight()
-	if entity:IsPlayer() then
+	if self:IsPlayer() then
 		return self:GetCharacterFlagAttribute("MaxWeight")
 	end
 
