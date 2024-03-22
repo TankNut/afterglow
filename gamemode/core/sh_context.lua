@@ -20,19 +20,23 @@ end
 
 if CLIENT then
 	function Context.OpenMenu()
-		local options = LocalPlayer():GetContextOptions()
+		local options, ent = LocalPlayer():GetContextOptions()
+
+		if table.Count(options) < 1 then
+			return
+		end
 
 		Context.Menu = DermaMenu()
 		Context.Menu:SetSkin("Afterglow")
 
-		Context.BuildMenu(options)
+		Context.BuildMenu(options, ent)
 
 		gui.EnableScreenClicker(true)
 
 		Context.Menu:Open()
 	end
 
-	function Context.BuildMenu(options)
+	function Context.BuildMenu(options, ent)
 		local sections = {}
 		local menu = Context.Menu
 
@@ -66,6 +70,7 @@ if CLIENT then
 							if val != nil then
 								Netstream.Send("ContextOption", {
 									ID = data.ID,
+									Entity = ent,
 									Value = val
 								})
 							end
@@ -73,6 +78,7 @@ if CLIENT then
 					else
 						Netstream.Send("ContextOption", {
 							ID = data.ID,
+							Entity = ent,
 							Value = value
 						})
 					end
@@ -98,6 +104,16 @@ if CLIENT then
 
 		gui.EnableScreenClicker(false)
 	end
+else
+	Netstream.Hook("ContextOption", function(ply, payload)
+		local options = ply:GetContextOptions(payload.Entity)
+
+		for key, option in pairs(options) do
+			if key == payload.ID then
+				option.Callback(payload.Value)
+			end
+		end
+	end)
 end
 
 if CLIENT then
@@ -162,7 +178,7 @@ function meta:GetContextOptions(ent)
 
 	Context.Current = nil
 
-	return options
+	return options, ent
 end
 
 function GM:IsValidContextEntity(ply, ent)
@@ -170,13 +186,6 @@ function GM:IsValidContextEntity(ply, ent)
 end
 
 function GM:GetContextOptions(ply)
-	Context.Add("test", {
-		Name = "Test Option",
-		Order = 1,
-		Client = function()
-			print("Test!")
-		end
-	})
 end
 
 function GM:GetEntityContextOptions(ply, ent, interact)
