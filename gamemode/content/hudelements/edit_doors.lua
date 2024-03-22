@@ -17,6 +17,10 @@ function CLASS:DrawDoors(depth, skybox, skybox3D)
 		return
 	end
 
+	if not LocalPlayer():GetEditMode() then
+		return
+	end
+
 	render.SetColorMaterial()
 
 	for door, class in Door.Iterator() do

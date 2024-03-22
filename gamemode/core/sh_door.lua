@@ -9,12 +9,26 @@ Door.Types = table.Lookup({
 Door.All = Door.All or {}
 Door.Vars = Door.Vars or {}
 
+Door.EditData = Door.EditData or {}
+
 local entity = FindMetaTable("Entity")
 
 function Door.AddSaveVar(name, get, set)
 	Door.Vars[name] = {
 		Get = get,
 		Set = set
+	}
+end
+
+function Door.AddEditVar(name, data, options)
+	data.title = data.title or name
+
+	Door.EditData[name] = {
+		Edit = data,
+		Order = data.order or 0,
+		Check = options.Check,
+		Get = options.Get,
+		Set = options.Set
 	}
 end
 
@@ -286,6 +300,8 @@ if SERVER then
 		else
 			self:SetKeyValue("spawnflags", bit.UnsetFlag(self:GetSpawnFlags(), 256))
 		end
+
+		self:SetNWBool("DoorUsable", bool)
 	end
 
 	function entity:SetDoorToggled(bool)
@@ -298,6 +314,8 @@ if SERVER then
 		else
 			self:SetKeyValue("spawnflags", bit.UnsetFlag(self:GetSpawnFlags(), 32))
 		end
+
+		self:SetNWBool("DoorToggle", bool)
 	end
 
 	function entity:SetDoorAutoClose(time)
@@ -359,11 +377,92 @@ if SERVER then
 	end
 end
 
+hook.Add("GetEditModeOptions", "Door", function(ply, ent, interact)
+	if ent:IsDoor() then
+		Context.Add("edit_door", {
+			Name = "Edit Door",
+			Section = 1,
+			Client = function()
+				Interface.Open("DoorEdit", ent)
+			end
+		})
+	end
+end)
+
 Door.AddSaveVar("Locked", entity.GetDoorLocked, entity.SetDoorLocked)
 Door.AddSaveVar("Usable", entity.GetDoorUsable, entity.SetDoorUsable)
-
 Door.AddSaveVar("Toggled", entity.GetDoorToggled, entity.SetDoorToggled)
 Door.AddSaveVar("AutoClose", entity.GetDoorAutoClose, entity.SetDoorAutoClose)
 Door.AddSaveVar("Speed", entity.GetDoorSpeed, entity.SetDoorSpeed)
 Door.AddSaveVar("Damage", entity.GetDoorDamage, entity.SetDoorDamage)
 Door.AddSaveVar("ForceMove", entity.GetDoorForceMove, entity.SetDoorForceMove)
+
+Door.AddEditVar("Usable", {
+	title = "+Use Opens",
+	type = "Boolean",
+	order = 0
+}, {
+	Check = function(door, ply) return not door:IsPropDoor() end,
+	Get = function(door) return door:GetDoorUsable() end,
+	Set = function(door, value) door:SetDoorSaveValue("Usable", tobool(value)) end
+})
+
+Door.AddEditVar("Toggled", {
+	title = "Toggle Open",
+	type = "Boolean",
+	order = 1
+}, {
+	Check = function(door, ply) return not door:IsPropDoor() end,
+	Get = function(door) return door:GetDoorToggled() end,
+	Set = function(door, value) door:SetDoorSaveValue("Toggled", tobool(value)) end
+})
+
+Door.AddEditVar("AutoCloseToggle", {
+	title = "Auto Close",
+	type = "Boolean",
+	order = 2
+}, {
+	Get = function(door) return door:GetDoorAutoClose() != -1 end,
+	Set = function(door, value) door:SetDoorSaveValue("AutoClose", tobool(value) and 1 or -1) end
+})
+
+Door.AddEditVar("AutoCloseValue", {
+	title = "Close Timer",
+	type = "Float",
+	min = 1,
+	max = 60,
+	order = 3
+}, {
+	Get = function(door)
+		local value = door:GetDoorAutoClose()
+
+		return value == -1 and 0 or value
+	end,
+	Set = function(door, value)
+		if door:GetDoorAutoClose() != -1 then
+			door:SetDoorSaveValue("AutoClose", value)
+		end
+	end
+})
+
+if SERVER then
+	Netstream.Hook("SetDoorProperty", function(ply, payload)
+		if not ply:GetEditMode() then
+			return
+		end
+
+		local door = payload.Door:GetMasterDoor()
+
+		if not IsValid(door) or not door:IsDoor() then
+			return
+		end
+
+		local data = Door.EditData[payload.Key]
+
+		if not data or (data.Check and not data.Check(door, ply)) then
+			return
+		end
+
+		data.Set(door, payload.Value)
+	end)
+end
