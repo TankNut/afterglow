@@ -198,6 +198,19 @@ Door.AddVar("Damage", {
 	end
 })
 
+Door.AddVar("Group", {
+	Saved = true,
+	Edit = {
+		title = "Group",
+		type = "Generic",
+		order = -1
+	},
+	Get = function(self) return self:GetNWString("DoorGroup", "") end,
+	Set = function(self, value)
+		self:SetNWString("DoorGroup", value)
+	end,
+})
+
 function Door.Iterator()
 	return pairs(Door.All)
 end
@@ -343,7 +356,7 @@ if SERVER then
 		end
 	end)
 
-	hook.Add("AcceptInput", "Door", function(ent, name)
+	hook.Add("AcceptInput", "Door", function(ent, name, activator, caller, value)
 		if not ent:IsDoor() then
 			return
 		end
@@ -352,6 +365,18 @@ if SERVER then
 
 		if name == "lock" or name == "unlock" then
 			ent:SetNWBool("DoorLocked", name == "lock")
+		elseif name == "use" and not ent:IsPropDoor() and not value then
+			local group = ent:GetDoorValue("Group")
+
+			if group != "" then
+				-- Need to not do this
+				for door in Door.Iterator() do
+					if door != ent and door:GetDoorValue("Group") == group then
+						-- Passing true here so we can detect it in the if statement and avoid an infinite server-crashing loop
+						door:Fire("Use", true, 0, activator, caller)
+					end
+				end
+			end
 		end
 	end)
 
