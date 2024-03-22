@@ -18,8 +18,8 @@ local entity = FindMetaTable("Entity")
 function Door.AddVar(name, data)
 	Door.Vars[name] = {
 		Mode = data.Mode or DOOR_SEPARATE,
-		NoProp = tobool(data.NoProp),
-		Saved = tobool(data.Saved),
+		NoProp = data.NoProp,
+		Saved = data.Saved,
 		Order = data.Edit and data.Edit.order or 0,
 		Edit = data.Edit,
 		Get = data.Get,
@@ -255,14 +255,11 @@ if SERVER then
 		end
 
 		self.DoorValues[key] = value
+
 		Door.QueueSave()
 	end
 
 	function Door.QueueSave()
-		if not Door.Initialized then
-			return
-		end
-
 		timer.Create("DoorSave", 10, 1, function()
 			Door.SaveData()
 		end)
@@ -366,10 +363,7 @@ if SERVER then
 		key = key:lower()
 
 		if key == "spawnflags" then
-			if not Initialized then
-				ent:SetNWBool("DoorLocked", bit.Check(value, 2048))
-			end
-
+			ent:SetNWBool("DoorLocked", bit.Check(value, 2048))
 			ent:SetNWBool("DoorUsable", ent:IsPropDoor() or bit.Check(value, 256))
 			ent:SetNWBool("DoorToggle", ent:IsPropDoor() and bit.Check(value, 8192) or bit.Check(value, 32))
 
@@ -388,8 +382,6 @@ if SERVER then
 	end)
 
 	hook.Add("InitPostEntity", "Door", coroutine.Bind(function()
-		Initialized = true
-
 		local mapData = Data.GetMapData("doors", {})
 
 		for door in Door.Iterator() do
@@ -503,7 +495,7 @@ if SERVER then
 			if isfunction(data.Saved) then
 				data.Saved(door, value)
 			else
-				door:SetSaveValue(key, value)
+				door:SetDoorSaveValue(key, value)
 			end
 		end
 	end)
