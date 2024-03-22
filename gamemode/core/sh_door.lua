@@ -55,13 +55,35 @@ Door.AddVar("Usable", {
 	end
 })
 
+Door.AddVar("Touchable", {
+	NoProp = true,
+	Saved = true,
+	Edit = {
+		title = "Touch Opens",
+		type = "Boolean",
+		order = 1
+	},
+	Get = function(self) return self:GetNWBool("DoorTouchOpen", false) end,
+	Set = function(self, value)
+		value = tobool(value)
+
+		if value then
+			self:SetKeyValue("spawnflags", bit.SetFlag(self:GetSpawnFlags(), 1024))
+		else
+			self:SetKeyValue("spawnflags", bit.UnsetFlag(self:GetSpawnFlags(), 1024))
+		end
+
+		self:SetNWBool("DoorTouchOpen", value)
+	end
+})
+
 Door.AddVar("Toggle", {
 	NoProp = true,
 	Saved = true,
 	Edit = {
 		title = "Toggle Open",
 		type = "Boolean",
-		order = 1
+		order = 2
 	},
 	Get = function(self) return self:GetNWBool("DoorToggle", false) end,
 	Set = function(self, value)
@@ -79,12 +101,15 @@ Door.AddVar("Toggle", {
 
 Door.AddVar("AutoCloseToggle", {
 	Mode = DOOR_BOTH,
+	Saved = function(self, value)
+		self:SetDoorSaveValue("AutoClose", self:GetNWFloat("DoorAutoClose", -1))
+	end,
 	Edit = {
 		title = "Auto Close",
 		type = "Boolean",
-		order = 2
+		order = 3
 	},
-	Get = function(self) return self:GetDoorValue("AutoCloseValue") != -1 end,
+	Get = function(self) return self:GetNWFloat("DoorAutoClose", -1) != -1 end,
 	Set = function(self, value)
 		value = tobool(value) and 1 or -1
 
@@ -98,7 +123,7 @@ Door.AddVar("AutoCloseToggle", {
 	end
 })
 
-Door.AddVar("AutoCloseValue", {
+Door.AddVar("AutoClose", {
 	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {
@@ -106,11 +131,10 @@ Door.AddVar("AutoCloseValue", {
 		type = "Float",
 		min = 1,
 		max = 60,
-		order = 3
+		order = 4
 	},
 	Get = function(self) return self:GetNWFloat("DoorAutoClose", -1) end,
 	Set = function(self, value)
-		print(self, value)
 		if self:GetNWFloat("DoorAutoClose", -1) != -1 then
 			self:SetNWFloat("DoorAutoClose", value)
 
@@ -126,6 +150,13 @@ Door.AddVar("AutoCloseValue", {
 Door.AddVar("Speed", {
 	Mode = DOOR_BOTH,
 	Saved = true,
+	Edit = {
+		title = "Speed",
+		type = "Float",
+		min = 1,
+		max = 500,
+		order = 5
+	},
 	Get = function(self) return self:GetNWFloat("DoorSpeed", 0) end,
 	Set = function(self, value)
 		self:SetKeyValue("speed", value)
@@ -133,19 +164,14 @@ Door.AddVar("Speed", {
 	end
 })
 
-Door.AddVar("Damage", {
-	Mode = DOOR_BOTH,
-	Saved = true,
-	Get = function(self) return self:GetNWFloat("DoorDamage", 0) end,
-	Set = function(self, value)
-		self:SetKeyValue("dmg", value)
-		self:SetNWFloat("DoorDamage", value)
-	end
-})
-
 Door.AddVar("ForceClose", {
 	Mode = DOOR_BOTH,
 	Saved = true,
+	Edit = {
+		title = "Force Closed",
+		type = "Boolean",
+		order = 6
+	},
 	Get = function(self) return self:GetNWFloat("DoorForce", false) end,
 	Set = function(self, value)
 		value = tobool(value)
@@ -155,61 +181,55 @@ Door.AddVar("ForceClose", {
 	end
 })
 
+Door.AddVar("Damage", {
+	Mode = DOOR_BOTH,
+	Saved = true,
+	Edit = {
+		title = "Damage per Frame",
+		type = "Float",
+		min = 0,
+		max = 200,
+		order = 7
+	},
+	Get = function(self) return self:GetNWFloat("DoorDamage", 0) end,
+	Set = function(self, value)
+		self:SetKeyValue("dmg", value)
+		self:SetNWFloat("DoorDamage", value)
+	end
+})
+
 function Door.Iterator()
 	return pairs(Door.All)
 end
 
-function Door.GetValue(door, key)
+function entity:GetDoorValue(key)
 	local data = Door.Vars[key]
 
 	if data.Mode == DOOR_SEPARATE then
-		return data.Get(door)
+		return data.Get(self)
 	elseif data.Mode == DOOR_MASTER or data.Mode == DOOR_BOTH then
-		return data.Get(door:GetMasterDoor())
+		return data.Get(self:GetMasterDoor())
 	end
-end
-
-function entity:GetDoorValue(key)
-	return Door.GetValue(self, key)
 end
 
 if SERVER then
-	function Door.SetValue(door, key, value)
+	function entity:SetDoorValue(key, value)
 		local data = Door.Vars[key]
 
 		if data.Mode == DOOR_SEPARATE then
-			data.Set(door, value)
+			data.Set(self, value)
 		elseif data.Mode == DOOR_MASTER then
-			data.Set(door:GetMasterDoor(), value)
-		elseif data.Mode == DOOR_BOTH and door:GetOtherDoor() != door then
-			data.Set(door, value)
-			data.Set(door:GetOtherDoor(), value)
+			data.Set(self:GetMasterDoor(), value)
+		elseif data.Mode == DOOR_BOTH then
+			data.Set(self, value)
+
+			if self:GetOtherDoor() != self then
+				data.Set(self:GetOtherDoor(), value)
+			end
 		end
-	end
-
-	function entity:SetDoorValue(key, value)
-		Door.SetValue(self, key, value)
-	end
-
-	function Door.GetSaveValue(door, key)
-		local data = Door.Vars[key]
-
-		if not data.Saved then
-			return
-		end
-
-		if data.Mode == DOOR_MASTER or data.Mode == DOOR_BOTH then
-			door = door:GetMasterDoor()
-		end
-
-		return door.DoorValues[key] or door.InitialDoorValues[key]
 	end
 
 	function entity:GetDoorSaveValue(key)
-		return Door.GetSaveValue(self, key)
-	end
-
-	function Door.SetSaveValue(door, key, value)
 		local data = Door.Vars[key]
 
 		if not data.Saved then
@@ -217,15 +237,25 @@ if SERVER then
 		end
 
 		if data.Mode == DOOR_MASTER or data.Mode == DOOR_BOTH then
-			door = door:GetMasterDoor()
+			self = self:GetMasterDoor()
 		end
 
-		door.DoorValues[key] = value
-		Door.QueueSave()
+		return self.DoorValues[key] or self.InitialDoorValues[key]
 	end
 
 	function entity:SetDoorSaveValue(key, value)
-		return Door.SetSaveValue(self, key, value)
+		local data = Door.Vars[key]
+
+		if not data.Saved then
+			return
+		end
+
+		if data.Mode == DOOR_MASTER or data.Mode == DOOR_BOTH then
+			self = self:GetMasterDoor()
+		end
+
+		self.DoorValues[key] = value
+		Door.QueueSave()
 	end
 
 	function Door.QueueSave()
@@ -378,7 +408,7 @@ if SERVER then
 				for index, value in pairs(mapData[id]) do
 					values[index] = value
 
-					Door.SetValue(door, index, value)
+					door:SetDoorValue(index, value)
 				end
 			end
 
@@ -467,10 +497,14 @@ if SERVER then
 
 		local value = payload.Value
 
-		Door.SetValue(door, key, value)
+		door:SetDoorValue(key, value)
 
 		if data.Saved then
-			Door.SetSaveValue(door, key, value)
+			if isfunction(data.Saved) then
+				data.Saved(door, value)
+			else
+				door:SetSaveValue(key, value)
+			end
 		end
 	end)
 end
