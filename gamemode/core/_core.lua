@@ -27,6 +27,7 @@ IncludeFile("sh_door.lua")
 IncludeFile("sh_plugin.lua")
 IncludeFile("sh_context.lua")
 IncludeFile("sh_entity.lua")
+IncludeFile("sh_edit.lua")
 
 IncludeFile("cl_fonts.lua")
 IncludeFile("cl_skin.lua")
