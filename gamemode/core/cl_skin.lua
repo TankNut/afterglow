@@ -37,6 +37,7 @@ end
 
 -- Overrides for hardcoded values
 
+SKIN.GwenTexture	= Material( "gwenskin/GModDefault.png" )
 SKIN.Colours = {}
 
 SKIN.Colours.Button = {}
@@ -50,6 +51,21 @@ SKIN.Colours.Label.Default = SKIN.Text.Normal
 SKIN.Colours.Label.Bright = SKIN.Text.Normal
 SKIN.Colours.Label.Dark = SKIN.Text.Normal
 SKIN.Colours.Label.Highlight = SKIN.Text.Normal
+
+SKIN.Colours.Properties = {}
+SKIN.Colours.Properties.Line_Normal			= GWEN.TextureColor( 4 + 8 * 12, 508 )
+SKIN.Colours.Properties.Line_Selected		= GWEN.TextureColor( 4 + 8 * 13, 508 )
+SKIN.Colours.Properties.Line_Hover			= GWEN.TextureColor( 4 + 8 * 12, 500 )
+SKIN.Colours.Properties.Title				= GWEN.TextureColor( 4 + 8 * 13, 500 )
+SKIN.Colours.Properties.Column_Normal		= GWEN.TextureColor( 4 + 8 * 14, 508 )
+SKIN.Colours.Properties.Column_Selected		= GWEN.TextureColor( 4 + 8 * 15, 508 )
+SKIN.Colours.Properties.Column_Hover		= GWEN.TextureColor( 4 + 8 * 14, 500 )
+SKIN.Colours.Properties.Column_Disabled		= Color( 240, 240, 240 )
+SKIN.Colours.Properties.Border				= GWEN.TextureColor( 4 + 8 * 15, 500 )
+SKIN.Colours.Properties.Label_Normal		= GWEN.TextureColor( 4 + 8 * 16, 508 )
+SKIN.Colours.Properties.Label_Selected		= GWEN.TextureColor( 4 + 8 * 17, 508 )
+SKIN.Colours.Properties.Label_Hover			= GWEN.TextureColor( 4 + 8 * 16, 500 )
+SKIN.Colours.Properties.Label_Disabled		= GWEN.TextureColor( 4 + 8 * 16, 508 )
 
 SKIN.Colours.TooltipText = Color(110, 102, 60)
 
