@@ -14,7 +14,7 @@ function PANEL:Rebuild()
 		return
 	end
 
-	for key, data in SortedPairsByMemberValue(Door.EditData, "Order") do
+	for key, data in SortedPairsByMemberValue(Door.Vars, "Order") do
 		self:AddVar(key, data)
 	end
 end
@@ -23,7 +23,11 @@ function PANEL:AddVar(key, data)
 	local edit = data.Edit
 	local door = self.Door
 
-	if data.Check and not data.Check(door, LocalPlayer()) then
+	if not edit then
+		return
+	end
+
+	if data.NoProp and door:IsPropDoor() then
 		return
 	end
 
@@ -38,7 +42,7 @@ function PANEL:AddVar(key, data)
 			return
 		end
 
-		row:SetValue(data.Get(door))
+		row:SetValue(door:GetDoorValue(key))
 	end
 
 	row.DataChanged = function(_, val)
