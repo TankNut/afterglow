@@ -107,6 +107,10 @@ function SKIN:PaintFrame(panel, w, h)
 end
 
 function SKIN:PaintButton(panel, w, h)
+	if not panel.m_bBackground then
+		return
+	end
+
 	local bool = panel.GetDisabled and panel:GetDisabled() or false
 
 	if panel.SkinVar then -- TODO: Better way of doing things like this?
