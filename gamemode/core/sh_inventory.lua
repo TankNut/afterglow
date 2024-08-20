@@ -1,4 +1,3 @@
-module("Inventory", package.seeall)
 Inventory = Inventory or {}
 Inventory.Class = Inventory.Class or {}
 Inventory.All = Inventory.All or {}

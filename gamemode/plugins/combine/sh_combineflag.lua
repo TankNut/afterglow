@@ -1,30 +1,30 @@
-module("Combine.Flag", package.seeall)
+Combine.Flag = Combine.Flag or {}
 
 local meta = FindMetaTable("Player")
 
-List = List or {}
-Default = Default or {}
+Combine.Flag.List = List or {}
+Combine.Flag.Default = Default or {}
 
-_G.FLAG = Default
+_G.FLAG = Combine.Flag.Default
 IncludeFile("class/base_combineflag.lua")
 _G.FLAG = nil
 
-function Add(name, data)
-	List[name] = setmetatable(data, {__index = Default})
+function Combine.Flag.Add(name, data)
+	Combine.Flag.List[name] = setmetatable(data, {__index = Combine.Flag.Default})
 end
 
-function AddFile(path, name)
+function Combine.Flag.AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
 	_G.FLAG = {}
 
 	IncludeFile(path)
-	Add(name, FLAG)
+	Combine.Flag.Add(name, FLAG)
 
 	_G.FLAG = nil
 end
 
-function AddFolder(basePath)
+function Combine.Flag.AddFolder(basePath)
 	basePath = engine.ActiveGamemode() .. "/gamemode/" .. basePath
 
 	local recursive
@@ -37,7 +37,7 @@ function AddFolder(basePath)
 				continue
 			end
 
-			AddFile(path .. "/" .. v)
+			Combine.Flag.AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -48,12 +48,12 @@ function AddFolder(basePath)
 	recursive(basePath)
 end
 
-function Get(name)
-	return List[name]
+function Combine.Flag.Get(name)
+	return Combine.Flag.List[name]
 end
 
-function GetOrDefault(name)
-	return List[name] or Default
+function Combine.Flag.GetOrDefault(name)
+	return Combine.Flag.List[name] or Default
 end
 
 hook.Add("GetCharacterFlagAttribute", "Plugin.Combine", function(flag, ply, name)
@@ -83,7 +83,7 @@ function meta:HasCombineFlag()
 end
 
 function meta:GetCombineFlagTable()
-	return GetOrDefault(self:GetCombineFlag())
+	return Combine.Flag.GetOrDefault(self:GetCombineFlag())
 end
 
 function meta:GetCombineFlagAttribute(name)
