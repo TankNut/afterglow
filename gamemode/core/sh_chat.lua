@@ -157,7 +157,7 @@ if CLIENT then
 	end
 
 	function Chat.Receive(name, data)
-		local command = List[name]
+		local command = Chat.List[name]
 		local message, consoleMessage = command:OnReceive(data)
 
 		if isstring(message) then
