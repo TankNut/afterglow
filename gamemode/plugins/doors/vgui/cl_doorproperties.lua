@@ -14,7 +14,7 @@ function PANEL:Rebuild()
 		return
 	end
 
-	for key, data in SortedPairsByMemberValue(Door.Vars, "Order") do
+	for key, data in SortedPairsByMemberValue(Doors.Vars, "Order") do
 		self:AddVar(key, data)
 	end
 end
