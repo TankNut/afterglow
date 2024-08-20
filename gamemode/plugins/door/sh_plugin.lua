@@ -3,26 +3,26 @@ DOOR_SEPARATE = 0
 DOOR_MASTER = 1
 DOOR_BOTH = 2
 
-Doors = Doors or {}
-Doors.Types = table.Lookup({
+Door = Door or {}
+Door.Types = table.Lookup({
 	"prop_door_rotating",
 	"func_door_rotating",
 	"func_door"
 })
 
-Doors.All = Doors.All or {}
-Doors.Vars = Doors.Vars or {}
+Door.All = Door.All or {}
+Door.Vars = Door.Vars or {}
 
-function Doors.Iterator()
-	return pairs(Doors.All)
+function Door.Iterator()
+	return pairs(Door.All)
 end
 
-IncludeFile("sh_doors.lua")
+IncludeFile("sh_door.lua")
 IncludeFile("sh_meta.lua")
 IncludeFile("sh_vars.lua")
 
-IncludeFolder("plugins/doors/vgui")
+IncludeFolder("plugins/door/vgui")
 
 hook.Add("LoadPluginContent", "Plugin.Doors", function()
-	Hud.AddFolder("plugins/doors/hudelements")
+	Hud.AddFolder("plugins/door/hudelements")
 end)

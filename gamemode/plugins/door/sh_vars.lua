@@ -1,5 +1,5 @@
-function Doors.AddVar(name, data)
-	Doors.Vars[name] = {
+function Door.AddVar(name, data)
+	Door.Vars[name] = {
 		Mode = data.Mode or DOOR_SEPARATE,
 		NoProp = data.NoProp,
 		Saved = data.Saved,
@@ -10,13 +10,13 @@ function Doors.AddVar(name, data)
 	}
 end
 
-Doors.AddVar("Locked", {
+Door.AddVar("Locked", {
 	Mode = DOOR_MASTER,
 	Get = function(self) return self:GetNWBool("DoorLocked", false) end,
 	Set = function(self, value) self:Fire(tobool(value) and "lock" or "unlock") end
 })
 
-Doors.AddVar("Usable", {
+Door.AddVar("Usable", {
 	NoProp = true,
 	Saved = true,
 	Edit = {
@@ -38,7 +38,7 @@ Doors.AddVar("Usable", {
 	end
 })
 
-Doors.AddVar("Touchable", {
+Door.AddVar("Touchable", {
 	NoProp = true,
 	Saved = true,
 	Edit = {
@@ -60,7 +60,7 @@ Doors.AddVar("Touchable", {
 	end
 })
 
-Doors.AddVar("Toggle", {
+Door.AddVar("Toggle", {
 	NoProp = true,
 	Saved = true,
 	Edit = {
@@ -82,7 +82,7 @@ Doors.AddVar("Toggle", {
 	end
 })
 
-Doors.AddVar("AutoCloseToggle", {
+Door.AddVar("AutoCloseToggle", {
 	Mode = DOOR_BOTH,
 	Saved = function(self, value)
 		self:SetDoorSaveValue("AutoClose", self:GetNWFloat("DoorAutoClose", -1))
@@ -106,7 +106,7 @@ Doors.AddVar("AutoCloseToggle", {
 	end
 })
 
-Doors.AddVar("AutoClose", {
+Door.AddVar("AutoClose", {
 	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {
@@ -130,7 +130,7 @@ Doors.AddVar("AutoClose", {
 	end
 })
 
-Doors.AddVar("Speed", {
+Door.AddVar("Speed", {
 	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {
@@ -147,7 +147,7 @@ Doors.AddVar("Speed", {
 	end
 })
 
-Doors.AddVar("ForceClose", {
+Door.AddVar("ForceClose", {
 	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {
@@ -164,7 +164,7 @@ Doors.AddVar("ForceClose", {
 	end
 })
 
-Doors.AddVar("Damage", {
+Door.AddVar("Damage", {
 	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {
@@ -181,7 +181,7 @@ Doors.AddVar("Damage", {
 	end
 })
 
-Doors.AddVar("Group", {
+Door.AddVar("Group", {
 	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {
@@ -195,7 +195,7 @@ Doors.AddVar("Group", {
 	end,
 })
 
-Doors.AddVar("Buyable", {
+Door.AddVar("Buyable", {
 	Saved = true,
 	Edit = {
 		title = "Buyable",
@@ -209,7 +209,7 @@ Doors.AddVar("Buyable", {
 	end,
 })
 
-Doors.AddVar("BuyGroup", {
+Door.AddVar("BuyGroup", {
 	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {
@@ -224,7 +224,7 @@ Doors.AddVar("BuyGroup", {
 	end,
 })
 
-Doors.AddVar("BuyPrice", {
+Door.AddVar("BuyPrice", {
 	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {

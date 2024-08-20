@@ -1,7 +1,7 @@
 local entity = FindMetaTable("Entity")
 
 function entity:GetDoorValue(key)
-	local data = Doors.Vars[key]
+	local data = Door.Vars[key]
 
 	if data.Mode == DOOR_SEPARATE then
 		return data.Get(self)
@@ -12,7 +12,7 @@ end
 
 if SERVER then
 	function entity:SetDoorValue(key, value)
-		local data = Doors.Vars[key]
+		local data = Door.Vars[key]
 
 		if data.Mode == DOOR_SEPARATE then
 			data.Set(self, value)
@@ -30,7 +30,7 @@ if SERVER then
 	end
 
 	function entity:GetDoorSaveValue(key)
-		local data = Doors.Vars[key]
+		local data = Door.Vars[key]
 
 		if not data.Saved then
 			return
@@ -44,7 +44,7 @@ if SERVER then
 	end
 
 	function entity:SetDoorSaveValue(key, value)
-		local data = Doors.Vars[key]
+		local data = Door.Vars[key]
 
 		if not data.Saved then
 			return
@@ -56,7 +56,7 @@ if SERVER then
 
 		self.DoorValues[key] = value
 
-		Doors.QueueSave()
+		Door.QueueSave()
 	end
 end
 

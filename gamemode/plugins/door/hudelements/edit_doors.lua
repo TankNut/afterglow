@@ -53,7 +53,7 @@ function CLASS:DrawDoors(depth, skybox, skybox3D)
 	local groups = {}
 	local buyGroups = {}
 
-	for door, class in Doors.Iterator() do
+	for door, class in Door.Iterator() do
 		if not IsValid(door) then
 			continue
 		end

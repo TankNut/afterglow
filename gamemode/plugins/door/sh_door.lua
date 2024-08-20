@@ -1,16 +1,16 @@
 if SERVER then
-	function Doors.QueueSave()
+	function Door.QueueSave()
 		timer.Create("DoorSave", 10, 1, function()
-			Doors.SaveData()
+			Door.SaveData()
 		end)
 	end
 
-	function Doors.SaveData()
+	function Door.SaveData()
 		timer.Remove("DoorSave")
 
 		local data = {}
 
-		for door in Doors.Iterator() do
+		for door in Door.Iterator() do
 			local id = door:MapCreationID()
 
 			if id != -1 then
@@ -35,13 +35,13 @@ if SERVER then
 end
 
 function GM:EntityIsDoor(ent)
-	return tobool(Doors.Types[ent:GetClass()])
+	return tobool(Door.Types[ent:GetClass()])
 end
 
 hook.Add("OnEntityCreated", "Door", function(ent)
 	if hook.Run("EntityIsDoor", ent) then
 		ent._IsDoor = true
-		Doors.All[ent] = ent:GetClass()
+		Door.All[ent] = ent:GetClass()
 
 		if SERVER then
 			timer.Simple(0, function()
@@ -60,13 +60,13 @@ hook.Add("EntityRemoved", "Door", function(ent, fullUpdate)
 		return
 	end
 
-	if Doors.All[ent] then
-		Doors.All[ent] = nil
+	if Door.All[ent] then
+		Door.All[ent] = nil
 	end
 end)
 
 if SERVER then
-	Doors.IsOpenCallbacks = {
+	Door.IsOpenCallbacks = {
 		["prop_door_rotating"] = function(self) return self:GetInternalVariable("m_eDoorState") != 0 end,
 		["func_door_rotating"] = function(self) return self:GetInternalVariable("m_toggle_state") == 0 end,
 		["func_door"] = function(self) return self:GetInternalVariable("m_toggle_state") == 0 end
@@ -74,8 +74,8 @@ if SERVER then
 
 	-- Only semi-reliable way of doing this
 	hook.Add("Think", "Door", function()
-		for door, class in Doors.Iterator() do
-			local open = Doors.IsOpenCallbacks[class](door)
+		for door, class in Door.Iterator() do
+			local open = Door.IsOpenCallbacks[class](door)
 
 			if door:GetDoorOpen() != open then
 				door:SetNWBool("DoorOpen", open)
@@ -96,7 +96,7 @@ if SERVER then
 			local group = ent:GetDoorValue("Group")
 
 			if group != "" then
-				for door in Doors.Iterator() do
+				for door in Door.Iterator() do
 					if door != ent and door:GetDoorValue("Group") == group then
 						-- Passing true here so we can detect it in the if statement and avoid an infinite server-crashing loop
 						door:Fire("Use", true, 0, activator, caller)
@@ -135,13 +135,13 @@ if SERVER then
 	hook.Add("InitPostEntity", "Door", coroutine.Bind(function()
 		local mapData = Data.GetMapData("doors", {})
 
-		for door in Doors.Iterator() do
+		for door in Door.Iterator() do
 			local initial = {}
 			local values = {}
 
 			local id = door:MapCreationID()
 
-			for key, data in pairs(Doors.Vars) do
+			for key, data in pairs(Door.Vars) do
 				if data.Saved then
 					initial[key] = data.Get(door)
 				end
@@ -186,7 +186,7 @@ if SERVER then
 		end
 
 		local key = payload.Key
-		local data = Doors.Vars[key]
+		local data = Door.Vars[key]
 
 		if not data or not data.Edit then
 			return
