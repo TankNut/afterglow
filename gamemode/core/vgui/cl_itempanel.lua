@@ -60,7 +60,7 @@ function PANEL:Paint(w, h)
 	end
 
 	if item:GetProperty("Equipped") then
-		draw.SimpleText("Equipped", "afterglow.labelsmall", x + 10, y + 1, self:GetSkin().Text.Primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("Equipped", "afterglow.labelsmall", x + 12, y + 1, self:GetSkin().Text.Primary, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 
 	local vbar = self.ScrollPanel:GetVBar()
