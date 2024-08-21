@@ -1,5 +1,5 @@
 local setFlag = Console.AddCommand("rpa_combine_flag_set", function(ply, targets, flag)
-	local flagTable = Combine.Flag.GetOrDefault(flag)
+	local flagTable = CombineFlag.GetOrDefault(flag)
 	local name = flagTable.Name
 
 	for _, target in pairs(targets) do
@@ -7,7 +7,7 @@ local setFlag = Console.AddCommand("rpa_combine_flag_set", function(ply, targets
 
 		target:SetCombineFlag(flag)
 
-		if flagTable == Combine.Flag.Default then
+		if flagTable == CombineFlag.Default then
 			Console.Feedback(ply, "NOTICE", "You've removed %s's combine flag", oldName)
 			Console.Feedback(target, "NOTICE", "%s has removed your combine flag.", ply)
 		else

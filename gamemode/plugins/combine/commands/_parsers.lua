@@ -1,7 +1,7 @@
 Console.Parser("CombineFlag", function(ply, args, last, options)
 	local flag = table.remove(args, 1):lower()
 
-	if not Combine.Flag.Get(flag) then
+	if not CombineFlag.Get(flag) then
 		return false, "Invalid flag."
 	end
 

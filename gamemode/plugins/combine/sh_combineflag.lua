@@ -1,30 +1,30 @@
-Combine.Flag = Combine.Flag or {}
+CombineFlag = CombineFlag or {}
 
 local meta = FindMetaTable("Player")
 
-Combine.Flag.List = List or {}
-Combine.Flag.Default = Default or {}
+CombineFlag.List = List or {}
+CombineFlag.Default = Default or {}
 
-_G.FLAG = Combine.Flag.Default
+_G.FLAG = CombineFlag.Default
 IncludeFile("class/base_combineflag.lua")
 _G.FLAG = nil
 
-function Combine.Flag.Add(name, data)
-	Combine.Flag.List[name] = setmetatable(data, {__index = Combine.Flag.Default})
+function CombineFlag.Add(name, data)
+	CombineFlag.List[name] = setmetatable(data, {__index = CombineFlag.Default})
 end
 
-function Combine.Flag.AddFile(path, name)
+function CombineFlag.AddFile(path, name)
 	name = name or path:GetFileFromFilename():sub(1, -5)
 
 	_G.FLAG = {}
 
 	IncludeFile(path)
-	Combine.Flag.Add(name, FLAG)
+	CombineFlag.Add(name, FLAG)
 
 	_G.FLAG = nil
 end
 
-function Combine.Flag.AddFolder(basePath)
+function CombineFlag.AddFolder(basePath)
 	basePath = engine.ActiveGamemode() .. "/gamemode/" .. basePath
 
 	local recursive
@@ -37,7 +37,7 @@ function Combine.Flag.AddFolder(basePath)
 				continue
 			end
 
-			Combine.Flag.AddFile(path .. "/" .. v)
+			CombineFlag.AddFile(path .. "/" .. v)
 		end
 
 		for _, v in pairs(folders) do
@@ -48,15 +48,15 @@ function Combine.Flag.AddFolder(basePath)
 	recursive(basePath)
 end
 
-function Combine.Flag.Get(name)
-	return Combine.Flag.List[name]
+function CombineFlag.Get(name)
+	return CombineFlag.List[name]
 end
 
-function Combine.Flag.GetOrDefault(name)
-	return Combine.Flag.List[name] or Default
+function CombineFlag.GetOrDefault(name)
+	return CombineFlag.List[name] or Default
 end
 
-hook.Add("GetCharacterFlagAttribute", "Plugin.Combine", function(flag, ply, name)
+hook.Add("GetCharacterFlagAttribute", "Plugin.Combine.CombineFlag", function(flag, ply, name)
 	if not ply:GetCombineFlagged() then
 		return
 	end
@@ -65,13 +65,13 @@ hook.Add("GetCharacterFlagAttribute", "Plugin.Combine", function(flag, ply, name
 end)
 
 if SERVER then
-	hook.Add("PostLoadCharacter", "Plugin.Combine", function(ply, id)
+	hook.Add("PostLoadCharacter", "Plugin.Combine.CombineFlag", function(ply, id)
 		if ply:GetCombineFlagged() then
 			hook.Run("OnCombineFlag", ply, true)
 		end
 	end)
 
-	hook.Add("UnloadCharacter", "Plugin.Combine", function(ply, id)
+	hook.Add("UnloadCharacter", "Plugin.Combine.CombineFlag", function(ply, id)
 		if ply:GetCombineFlagged() then
 			hook.Run("OnCombineUnflag", ply, true)
 		end
@@ -83,7 +83,7 @@ function meta:HasCombineFlag()
 end
 
 function meta:GetCombineFlagTable()
-	return Combine.Flag.GetOrDefault(self:GetCombineFlag())
+	return CombineFlag.GetOrDefault(self:GetCombineFlag())
 end
 
 function meta:GetCombineFlagAttribute(name)
