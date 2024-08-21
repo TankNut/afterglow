@@ -4,9 +4,7 @@ FLAG.Team = TEAM_CITIZEN
 FLAG.CharacterName = nil
 
 FLAG.BaseLanguage = "eng"
-FLAG.DefaultLanguages = {
-	eng = true
-}
+FLAG.DefaultLanguages = Config.Get("DefaultLanguages")
 
 FLAG.Weapons = {"weapon_rp_hands"}
 
