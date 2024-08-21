@@ -13,7 +13,7 @@ GM.Config.Languages = {
 
 -- Default languages characters are given during creation
 GM.Config.DefaultLanguages = {
-	{"eng", true}
+	eng = true
 }
 
 -- Characters
