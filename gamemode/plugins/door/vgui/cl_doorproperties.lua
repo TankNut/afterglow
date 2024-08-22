@@ -31,6 +31,10 @@ function PANEL:AddVar(key, data)
 		return
 	end
 
+	edit = table.Copy(edit)
+
+	data.PreEdit(door, edit)
+
 	local row = self:CreateRow(edit.category or "General", edit.title)
 
 	row:Setup(edit.type, edit)

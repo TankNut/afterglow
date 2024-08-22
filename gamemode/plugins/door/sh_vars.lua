@@ -6,7 +6,8 @@ function Door.AddVar(name, data)
 		Order = data.Edit and data.Edit.order or 0,
 		Edit = data.Edit,
 		Get = data.Get,
-		Set = data.Set
+		Set = data.Set,
+		PreEdit = data.PreEdit or function() end
 	}
 end
 
