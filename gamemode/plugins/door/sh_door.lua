@@ -151,7 +151,9 @@ if SERVER then
 				for index, value in pairs(mapData[id]) do
 					values[index] = value
 
-					door:SetDoorValue(index, value)
+					if Door.Vars[index] then
+						door:SetDoorValue(index, value)
+					end
 				end
 			end
 
