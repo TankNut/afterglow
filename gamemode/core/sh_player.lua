@@ -33,13 +33,7 @@ function GM:CanInteract(ply, ent)
 end
 
 function GM:PostPlayerSpawn(ply)
-	if CLIENT then
-		local weapon = ply:GetWeapon(hook.Run("SelectDefaultWeapon", ply))
-
-		if IsValid(weapon) then
-			input.SelectWeapon(weapon)
-		end
-	else
+	if SERVER then
 		Netstream.Send("PostPlayerSpawn", ply)
 	end
 end
@@ -51,6 +45,15 @@ if CLIENT then
 
 	Netstream.Hook("PostPlayerSpawn", function()
 		hook.Run("PostPlayerSpawn", LocalPlayer())
+	end)
+
+	Netstream.Hook("SelectDefaultWeapon", function()
+		local ply = LocalPlayer()
+		local weapon = ply:GetWeapon(hook.Run("SelectDefaultWeapon", ply))
+
+		if IsValid(weapon) then
+			input.SelectWeapon(weapon)
+		end
 	end)
 else
 	function GM:GetBaseArmor(ply) return ply:GetCharacterFlagAttribute("Armor") end
@@ -130,6 +133,8 @@ else
 		end
 
 		ply:SetActiveWeapon(NULL)
+
+		Netstream.Send("SelectDefaultWeapon", ply)
 
 		flag:OnSpawn(ply)
 	end
