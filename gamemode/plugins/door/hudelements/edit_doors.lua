@@ -78,10 +78,12 @@ function CLASS:DrawDoors(depth, skybox, skybox3D)
 			continue
 		end
 
+		local color = Door.GetAccessType(door).Color
+
 		render.DrawBox(door:GetPos(), door:GetAngles(),
 			door:OBBMins() - self.BoxSize,
 			door:OBBMaxs() + self.BoxSize,
-			ColorAlpha(Color(255, 0, 0), 50))
+			ColorAlpha(color, 50))
 	end
 
 	self:DrawGroups(groups, self.GroupColor)

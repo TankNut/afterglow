@@ -23,7 +23,7 @@ Door.AddVar("Usable", {
 	Edit = {
 		title = "+Use Opens",
 		type = "Boolean",
-		order = 0
+		order = 1
 	},
 	Get = function(self) return self:GetNWBool("DoorUsable", false) end,
 	Set = function(self, value)
@@ -45,7 +45,7 @@ Door.AddVar("Touchable", {
 	Edit = {
 		title = "Touch Opens",
 		type = "Boolean",
-		order = 1
+		order = 2
 	},
 	Get = function(self) return self:GetNWBool("DoorTouchOpen", false) end,
 	Set = function(self, value)
@@ -67,7 +67,7 @@ Door.AddVar("Toggle", {
 	Edit = {
 		title = "Toggle Open",
 		type = "Boolean",
-		order = 2
+		order = 3
 	},
 	Get = function(self) return self:GetNWBool("DoorToggle", false) end,
 	Set = function(self, value)
@@ -91,7 +91,7 @@ Door.AddVar("AutoCloseToggle", {
 	Edit = {
 		title = "Auto Close",
 		type = "Boolean",
-		order = 3
+		order = 4
 	},
 	Get = function(self) return self:GetNWFloat("DoorAutoClose", -1) != -1 end,
 	Set = function(self, value)
@@ -115,7 +115,7 @@ Door.AddVar("AutoClose", {
 		type = "Float",
 		min = 1,
 		max = 60,
-		order = 4
+		order = 5
 	},
 	Get = function(self) return self:GetNWFloat("DoorAutoClose", -1) end,
 	Set = function(self, value)
@@ -139,7 +139,7 @@ Door.AddVar("Speed", {
 		type = "Float",
 		min = 1,
 		max = 500,
-		order = 5
+		order = 6
 	},
 	Get = function(self) return self:GetNWFloat("DoorSpeed", 0) end,
 	Set = function(self, value)
@@ -154,7 +154,7 @@ Door.AddVar("ForceClose", {
 	Edit = {
 		title = "Force Closed",
 		type = "Boolean",
-		order = 6
+		order = 7
 	},
 	Get = function(self) return self:GetNWFloat("DoorForce", false) end,
 	Set = function(self, value)
@@ -173,7 +173,7 @@ Door.AddVar("Damage", {
 		type = "Float",
 		min = 0,
 		max = 200,
-		order = 7
+		order = 8
 	},
 	Get = function(self) return self:GetNWFloat("DoorDamage", 0) end,
 	Set = function(self, value)
@@ -188,7 +188,7 @@ Door.AddVar("Group", {
 	Edit = {
 		title = "Group",
 		type = "Generic",
-		order = -1
+		order = 0
 	},
 	Get = function(self) return self:GetNWString("DoorGroup", "") end,
 	Set = function(self, value)
@@ -196,17 +196,23 @@ Door.AddVar("Group", {
 	end,
 })
 
-Door.AddVar("Buyable", {
+Door.AddVar("Access", {
 	Saved = true,
 	Edit = {
-		title = "Buyable",
-		type = "Boolean",
-		category = "Ownership",
-		order = 0,
+		title = "Access",
+		type = "Combo",
+		order = -1,
 	},
-	Get = function(self) return self:GetNWBool("DoorBuyable", false) end,
+	PreEdit = function(door, edit)
+		edit.values = {}
+
+		for k, v in pairs(Door.AccessTypes) do
+			edit.values[v.Title] = k
+		end
+	end,
+	Get = function(self) return self:GetNWString("DoorAccess", "Default") end,
 	Set = function(self, value)
-		self:SetNWBool("DoorBuyable", tobool(value))
+		self:SetNWString("DoorAccess", value)
 	end,
 })
 

@@ -20,6 +20,7 @@ end
 IncludeFile("sh_door.lua")
 IncludeFile("sh_meta.lua")
 IncludeFile("sh_vars.lua")
+IncludeFile("sh_access.lua")
 
 IncludeFolder("plugins/door/vgui")
 
