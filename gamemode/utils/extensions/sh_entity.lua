@@ -1,6 +1,6 @@
-local entity = FindMetaTable("Entity")
+local meta = FindMetaTable("Entity")
 
-function entity:WithinRange(ent, range)
+function meta:WithinRange(ent, range)
 	local origin = ent:IsPlayer() and ent:EyePos() or ent:WorldSpaceCenter()
 	local distance = self:NearestPoint(origin):DistToSqr(origin)
 

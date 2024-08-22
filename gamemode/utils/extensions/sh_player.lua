@@ -9,3 +9,11 @@ function player.GetByUserGroup(usergroup)
 
 	return tab
 end
+
+local meta = FindMetaTable("Player")
+
+if SERVER then
+	function meta:Use(ent)
+		ent:Fire("Use", "!activator", 0, self)
+	end
+end
