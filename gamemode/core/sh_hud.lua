@@ -168,6 +168,10 @@ hook.Add("HUDShouldDraw", "Hud", function(name)
 	if disabled[name] then
 		return false
 	end
+
+	if name == "CHudCrosshair" and not IsValid(LocalPlayer():GetActiveWeapon()) then
+		return false
+	end
 end)
 
 hook.Add("HUDPaint", "Hud", function()
