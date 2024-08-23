@@ -21,10 +21,6 @@ function Combine.GetCID(seed)
 end
 
 function Combine.AddDoorTypes()
-	if not Door then
-		return
-	end
-
 	Door.AddAccessType("Combine", {
 		Color = Color(33, 106, 196),
 		Callback = function(self, ply)

@@ -1,4 +1,4 @@
--- This plugin uses NW and not Netvar because of PVS issues, don't try to change it
+-- This module uses NW and not Netvar because of PVS issues, don't try to change it
 DOOR_SEPARATE = 0
 DOOR_MASTER = 1
 DOOR_BOTH = 2
@@ -21,9 +21,3 @@ IncludeFile("sh_door.lua")
 IncludeFile("sh_meta.lua")
 IncludeFile("sh_vars.lua")
 IncludeFile("sh_access.lua")
-
-IncludeFolder("plugins/door/vgui")
-
-hook.Add("LoadPluginContent", "Plugin.Doors", function()
-	Hud.AddFolder("plugins/door/hudelements")
-end)
