@@ -3,6 +3,18 @@ Console.Commands = {}
 
 local writeLog = Log.Category("Console")
 
+-- Not sure if this is the best spot for this
+local printColor = Color(200, 200, 200)
+
+function Console.Print(...)
+	MsgC(printColor, ...)
+end
+
+function Console.PrintLine(...)
+	Console.Print(...)
+	Msg("\n")
+end
+
 function Console.AddCommand(commands, callback)
 	local command = setmetatable({
 		Callback = callback,
