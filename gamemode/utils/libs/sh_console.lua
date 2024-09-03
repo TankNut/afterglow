@@ -195,9 +195,7 @@ function Command:Invoke(ply, args)
 
 				continue
 			else
-				if not arg.Options.Silent then
-					Console.Feedback(ply, "ERROR", "Missing argument #%s (%s)", k, arg.Name or arg.Type)
-				end
+				Console.Feedback(ply, "ERROR", "Missing argument #%s (%s)", k, arg.Name or arg.Type)
 
 				return
 			end
