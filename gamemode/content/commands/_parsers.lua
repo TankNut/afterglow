@@ -114,7 +114,7 @@ if CLIENT then
 	local function itemList(class)
 		local format = "  %s (%s)"
 
-		if #class > 1 then
+		if #class > 0 then
 			Console.PrintLine(string.format("Available items: (Filter: %s)", class))
 
 			for item in SortedPairs(Item.List) do
