@@ -195,7 +195,9 @@ function Command:Invoke(ply, args)
 
 				continue
 			else
-				Console.Feedback(ply, "ERROR", "Missing argument #%s (%s)", k, arg.Name or arg.Type)
+				if not arg.Options.Silent then
+					Console.Feedback(ply, "ERROR", "Missing argument #%s (%s)", k, arg.Name or arg.Type)
+				end
 
 				return
 			end
@@ -204,7 +206,9 @@ function Command:Invoke(ply, args)
 		local ok, processed = arg.Callback(ply, args, k == #self.Arguments, arg.Options)
 
 		if not ok then
-			Console.Feedback(ply, "ERROR", "Failed to parse argument #%s (%s): %s", k, arg.Name or arg.Type, processed or "Unknown error")
+			if not arg.Options.Silent then
+				Console.Feedback(ply, "ERROR", "Failed to parse argument #%s (%s): %s", k, arg.Name or arg.Type, processed or "Unknown error")
+			end
 
 			return
 		end
