@@ -29,6 +29,10 @@ function Door.AddAccessType(name, data)
 	}
 end
 
+Door.AddAccessType("Default", {
+	Color = Color(0, 255, 0)
+})
+
 function Door.GetAccessType(door)
 	return Door.AccessTypes[door:GetDoorValue("Access")] or Door.AccessTypes.Default
 end
