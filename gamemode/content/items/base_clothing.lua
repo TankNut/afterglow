@@ -1,5 +1,7 @@
 DEFINE_BASECLASS("base_item")
 
+ITEM.Internal = true
+
 ITEM.Category = "Clothing"
 
 ITEM.Model = Model("models/items/item_item_crate.mdl")
