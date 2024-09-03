@@ -109,3 +109,51 @@ Console.Parser("Template", function(ply, args, last, options)
 
 	return true, template
 end)
+
+if CLIENT then
+	local function itemList(class)
+		local format = "  %s (%s)"
+
+		if #class > 1 then
+			Console.PrintLine(string.format("Available items: (Filter: %s)", class))
+
+			for item in SortedPairs(Item.List) do
+				local itemTable = Item.GetTable(item)
+
+				if string.find(item, class, 1, true) and hook.Run("CanSpawnItem", LocalPlayer(), itemTable) then
+					Console.PrintLine(string.format(format, item, itemTable.Name))
+				end
+			end
+		else
+			Console.PrintLine("Available items:")
+
+			for item in SortedPairs(Item.List) do
+				local itemTable = Item.GetTable(item)
+
+				if hook.Run("CanSpawnItem", LocalPlayer(), itemTable) then
+					Console.PrintLine(string.format(format, item, itemTable.Name))
+				end
+			end
+		end
+	end
+
+	Netstream.Hook("ItemList", itemList)
+end
+
+Console.Parser("Item", function(ply, args, last, options)
+	local item = arg(args, last):lower()
+
+	if not Item.Exists(item) or not hook.Run("CanSpawnItem", ply, Item.GetTable(item)) then
+		if options.List then
+			if CLIENT then
+				itemList(item)
+			else
+				Netstream.Send("ItemList", ply, item)
+			end
+		end
+
+		return false, "Invalid item."
+	end
+
+	return true, item
+end)
