@@ -112,6 +112,10 @@ function Item.AddFolder(basePath)
 	end
 end
 
+function Item.Exists(class)
+	return tobool(Item.List[class])
+end
+
 function Item.GetTable(name)
 	local item = Item.List[name]
 
