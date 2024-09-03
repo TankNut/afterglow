@@ -83,6 +83,9 @@ function ITEM:PropertyUpdated(key, old, val)
 end
 
 if SERVER then
+	function ITEM:ParseArguments(args)
+	end
+
 	function ITEM:GetReceivers(lookup)
 		local inventory = self:GetInventory()
 
