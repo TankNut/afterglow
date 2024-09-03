@@ -33,7 +33,14 @@ function PANEL:PaintAt(x, y, w, h)
 end
 
 function PANEL:Paint(w, h)
-	local color = self.VisiblePos % 2 == 0 and Color(40, 40, 40, 200) or Color(30, 30, 30, 200)
+	local item = self.Item
+	local color
+
+	if item:IsTempItem() then
+		color = self.VisiblePos % 2 == 0 and Color(20, 40, 20, 200) or Color(10, 30, 10, 200)
+	else
+		color = self.VisiblePos % 2 == 0 and Color(40, 40, 40, 200) or Color(30, 30, 30, 200)
+	end
 
 	if self.Selected and not dragndrop.IsDragging() then
 		color = Color(255, 0, 0, 20)
@@ -48,7 +55,6 @@ function PANEL:Paint(w, h)
 	end
 
 	local y = (h * 0.5) - 1
-	local item = self.Item
 
 	self.Scribe:Draw(5, y, 1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
