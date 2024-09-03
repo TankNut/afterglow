@@ -24,7 +24,6 @@ ITEM.Weight = 0
 ITEM.Internal = true
 
 -- Used for item displays
-ITEM.Amount = 1
 ITEM.Equipped = false
 
 IncludeFile("sh_actions.lua")

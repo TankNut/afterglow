@@ -53,7 +53,7 @@ function PANEL:Paint(w, h)
 	self.Scribe:Draw(5, y, 1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 	local x = self.Scribe:GetWide()
-	local amount = item:GetProperty("Amount")
+	local amount = item:GetAmount()
 
 	if amount > 1 then
 		x = x + draw.SimpleText(" x" .. amount, "afterglow.labelbig", x, y, self:GetSkin().Text.Disabled, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
