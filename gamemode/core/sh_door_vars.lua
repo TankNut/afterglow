@@ -1,3 +1,5 @@
+Door.Vars = Door.Vars or {}
+
 function Door.AddVar(name, data)
 	Door.Vars[name] = {
 		Mode = data.Mode or DOOR_SEPARATE,

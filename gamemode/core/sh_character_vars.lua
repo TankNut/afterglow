@@ -1,3 +1,5 @@
+Character.Vars = Character.Vars or {}
+
 local meta = FindMetaTable("Player")
 
 function Character.AddVar(key, data)

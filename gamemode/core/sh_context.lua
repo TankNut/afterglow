@@ -180,21 +180,3 @@ function meta:GetContextOptions(ent)
 
 	return options, ent
 end
-
-function GM:IsValidContextEntity(ply, ent)
-	return IsValid(ent) and ent:WithinRange(ply, Config.Get("ContextRange"))
-end
-
-function GM:GetContextOptions(ply)
-end
-
-function GM:GetEntityContextOptions(ply, ent, interact)
-	if ent:IsPlayer() then
-		Context.Add("examine", {
-			Name = "Examine",
-			Client = function()
-				ent:Examine()
-			end
-		})
-	end
-end

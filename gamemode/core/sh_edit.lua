@@ -23,6 +23,3 @@ hook.Add("GetEntityContextOptions", "Edit", function(ply, ent, interact)
 		hook.Run("GetEditModeOptions", ply, ent, interact)
 	end
 end)
-
-function GM:GetEditModeOptions(ply, ent, interact)
-end

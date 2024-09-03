@@ -87,10 +87,3 @@ end)
 hook.Add("Initialize", "Data", function()
 	Data.Initialize()
 end)
-
-function GM:DatabaseConnected()
-	Data.LoadTables()
-end
-
-function GM:PostInitDatabase()
-end

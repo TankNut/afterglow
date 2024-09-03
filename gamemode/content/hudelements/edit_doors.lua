@@ -1,4 +1,4 @@
-CLASS.Name = "Doors"
+CLASS.Name = "Editor - Doors"
 
 CLASS.Optional = true
 

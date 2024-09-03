@@ -1,11 +1,3 @@
-function Character.GetRules()
-	local rules = hook.Run("GetBaseCharacterRules")
-
-	hook.Run("ModifyCharacterRules", rules)
-
-	return rules
-end
-
 function GM:GetCharacterNameRules()
 	return {
 		Validate.Required(),
