@@ -17,6 +17,10 @@ function GM:GetItemDropLocation(ply)
 	return tr.HitPos + tr.HitNormal * 10, ang
 end
 
+function GM:CanPickupItem(ply, item)
+	return item:CanPickup(ply)
+end
+
 function GM:ItemEquipped(ply, item, loaded)
 	item:OnEquip(loaded)
 	item:FireEvent("EquipmentChanged")

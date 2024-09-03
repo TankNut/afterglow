@@ -96,7 +96,7 @@ if SERVER then
 			return
 		end
 
-		if self:CanPickup(ply) then
+		if hook.Run("CanPickupItem", ply, self) then
 			self:SetInventory(ply:GetInventory())
 		end
 	end
