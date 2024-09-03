@@ -194,7 +194,7 @@ function Command:Invoke(ply, args)
 				processedArgs[k] = arg.Fallback
 
 				continue
-			else
+			elseif not arg.Options.Force then
 				Console.Feedback(ply, "ERROR", "Missing argument #%s (%s)", k, arg.Name or arg.Type)
 
 				return
