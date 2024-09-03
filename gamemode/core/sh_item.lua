@@ -236,12 +236,6 @@ if SERVER then
 			end
 		end
 	end)
-
-	Item.PlayerCreate = coroutine.Bind(function(ply, name)
-		local item = Item.Create(name, {})
-
-		item:SetWorldPos(hook.Run("GetItemDropLocation", ply))
-	end)
 end
 
 hook.Add("OnReloaded", "Item", function()
