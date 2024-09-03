@@ -2,8 +2,12 @@ local boolValues = {
 	f = false
 }
 
+local function arg(args, last)
+	return last and table.concat(args, " ") or table.remove(args, 1)
+end
+
 Console.Parser("Bool", function(ply, args, last, options)
-	local val = table.remove(args, 1)
+	local val = arg(args, last)
 	local bool = boolValues[val]
 
 	if bool == nil then
@@ -14,11 +18,11 @@ Console.Parser("Bool", function(ply, args, last, options)
 end)
 
 Console.Parser("String", function(ply, args, last, options)
-	return true, last and table.concat(args, " ") or table.remove(args, 1)
+	return true, arg(args, last)
 end)
 
 Console.Parser("Number", function(ply, args, last, options)
-	local num = tonumber(table.remove(args, 1))
+	local num = tonumber(arg(args, last))
 
 	if num == nil then
 		return false, "Not a number."
@@ -28,7 +32,7 @@ Console.Parser("Number", function(ply, args, last, options)
 end)
 
 Console.Parser("Time", function(ply, args, last, options)
-	local duration = Duration.Parse(table.remove(args, 1), options.Format)
+	local duration = Duration.Parse(arg(args, last), options.Format)
 
 	if duration == nil then
 		return false, "Invalid duration."
@@ -38,13 +42,11 @@ Console.Parser("Time", function(ply, args, last, options)
 end)
 
 Console.Parser("Player", function(ply, args, last, options)
-	local match = last and table.concat(args, " ") or table.remove(args, 1)
-
-	return Command.FindPlayer(ply, match, options)
+	return Command.FindPlayer(ply, arg(args, last), options)
 end)
 
 Console.Parser("Language", function(ply, args, last, options)
-	local lang = table.remove(args, 1):lower()
+	local lang = arg(args, last):lower()
 
 	if not Language.Get(lang) then
 		return false, "Invalid language."
@@ -54,7 +56,7 @@ Console.Parser("Language", function(ply, args, last, options)
 end)
 
 Console.Parser("Badge", function(ply, args, last, options)
-	local badge = table.remove(args, 1):lower()
+	local badge = arg(args, last):lower()
 	local data = Badge.Get(badge)
 
 	if not data then
@@ -69,7 +71,7 @@ Console.Parser("Badge", function(ply, args, last, options)
 end)
 
 Console.Parser("UserGroup", function(ply, args, last, options)
-	local group = table.remove(args, 1):lower()
+	local group = arg(args, last):lower()
 
 	if not Admin.Ranks[group] then
 		return false, "Invalid usergroup."
@@ -89,7 +91,7 @@ Console.Parser("UserGroup", function(ply, args, last, options)
 end)
 
 Console.Parser("CharacterFlag", function(ply, args, last, options)
-	local flag = table.remove(args, 1):lower()
+	local flag = arg(args, last):lower()
 
 	if not CharacterFlag.Get(flag) then
 		return false, "Invalid flag."
@@ -99,7 +101,7 @@ Console.Parser("CharacterFlag", function(ply, args, last, options)
 end)
 
 Console.Parser("Template", function(ply, args, last, options)
-	local template = table.remove(args, 1):lower()
+	local template = arg(args, last):lower()
 
 	if not Template.Get(template) then
 		return false, "Invalid template."
