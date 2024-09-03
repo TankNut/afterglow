@@ -3,7 +3,9 @@ local boolValues = {
 }
 
 local function arg(args, last)
-	return last and table.concat(args, " ") or table.remove(args, 1)
+	local str = last and table.concat(args, " ") or table.remove(args, 1)
+
+	return str or ""
 end
 
 Console.Parser("Bool", function(ply, args, last, options)
