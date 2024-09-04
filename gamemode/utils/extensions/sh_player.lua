@@ -14,6 +14,6 @@ local meta = FindMetaTable("Player")
 
 if SERVER then
 	function meta:Use(ent)
-		ent:Fire("Use", "!activator", 0, self)
+		ent:Fire("Use", nil, 0, self, self)
 	end
 end

@@ -56,7 +56,7 @@ hook.Add("AcceptInput", "Door", function(ent, name, activator, caller, value)
 
 	if name == "lock" or name == "unlock" then
 		ent:SetNWBool("DoorLocked", name == "lock")
-	elseif name == "use" and not ent:IsPropDoor() and not value then
+	elseif name == "use" and not ent:IsPropDoor() and value != true then
 		local group = ent:GetDoorValue("Group")
 
 		if group != "" then
