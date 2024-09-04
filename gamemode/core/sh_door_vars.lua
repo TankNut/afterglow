@@ -250,3 +250,31 @@ Door.AddVar("BuyPrice", {
 		self:SetNWInt("DoorBuyPrice", value)
 	end,
 })
+
+Door.AddVar("Title", {
+	Saved = true,
+	Edit = {
+		title = "Title",
+		type = "Generic",
+		category = "Display",
+		order = 1
+	},
+	Get = function(self) return self:GetNWString("DoorTitle", "") end,
+	Set = function(self, value)
+		self:SetNWString("DoorTitle", value)
+	end
+})
+
+Door.AddVar("Subtitle", {
+	Saved = true,
+	Edit = {
+		title = "Subtitle",
+		type = "Generic",
+		category = "Display",
+		order = 2
+	},
+	Get = function(self) return self:GetNWString("DoorSubtitle", "") end,
+	Set = function(self, value)
+		self:SetNWString("DoorSubtitle", value)
+	end
+})
