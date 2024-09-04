@@ -199,6 +199,7 @@ Door.AddVar("Group", {
 })
 
 Door.AddVar("Access", {
+	Mode = DOOR_BOTH,
 	Saved = true,
 	Edit = {
 		title = "Access",
