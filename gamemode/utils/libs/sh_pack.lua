@@ -99,7 +99,7 @@ DecodeTypes = {
 	["("] = function(str, cache) -- Table pointer
 		local finish = string.find(str, ";")
 
-		return finish, cache[tonumber(string.sub(str, 1, finish - 1))]
+		return finish, cache[tonumber(string.sub(str, 1, finish - 1))], true
 	end,
 	["{"] = function(str) -- Table
 		local strindex = 1
@@ -111,9 +111,9 @@ DecodeTypes = {
 		local broken = false
 
 		local function HandleCache(val) -- Builds the cache that pointers refer back to
-			local index, decoded = Pack.Decode_raw(val, cache)
+			local index, decoded, isPointer = Pack.Decode_raw(val, cache)
 
-			if Pack.PointerTypes[TypeID(decoded)] then
+			if Pack.PointerTypes[TypeID(decoded)] and not isPointer then
 				table.insert(cache, decoded)
 			end
 
