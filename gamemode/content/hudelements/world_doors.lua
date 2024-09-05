@@ -13,7 +13,8 @@ function CLASS:Initialize()
 	self.Trace = {
 		filter = {},
 		whitelist = true,
-		output = self.TraceResult
+		output = self.TraceResult,
+		ignoreworld = true
 	}
 end
 
