@@ -12,9 +12,15 @@ GM.Config.Languages = {
 }
 
 -- Default languages characters are given during creation
-GM.Config.DefaultLanguages = {
-	eng = true
-}
+GM.Config.DefaultLanguages = table.Lookup({
+	"eng"
+})
+
+-- Money
+GM.Config.UseMoney = true
+GM.Config.MoneyName = {"Credit", "Credits"}
+
+GM.Config.DoorPrice = 20
 
 -- Characters
 GM.Config.MaxCharacters = 10
