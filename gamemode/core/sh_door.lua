@@ -25,12 +25,25 @@ function Door.AddAccessType(name, data)
 		Callback = data.Callback or function(self, ply) return true end,
 		Color = data.Color or color_white,
 		OnSuccess = data.OnSuccess or function(self, ply) end,
-		OnDenied = data.OnDenied or function(self, ply) end
+		OnDenied = data.OnDenied or function(self, ply) end,
+		DoorTitle = data.DoorTitle,
+		DoorSubtitle = data.DoorSubtitle
 	}
 end
 
 Door.AddAccessType("Default", {
 	Color = Color(0, 255, 0)
+})
+
+Door.AddAccessType("Buyable", {
+	Color = Color(255, 255, 100),
+	DoorSubtitle = function(self, door)
+		if door:GetDoorValue("Title") == "" then
+			return ""
+		end
+
+		return "This door is owned"
+	end
 })
 
 function Door.GetAccessType(door)

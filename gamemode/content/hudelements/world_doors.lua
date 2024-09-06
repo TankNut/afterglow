@@ -95,8 +95,20 @@ function CLASS:DrawDoors(depth, skybox, skybox3D)
 			continue
 		end
 
-		local title = door:GetDoorValue("Title")
-		local subtitle = door:GetDoorValue("Subtitle")
+		local accessType = Door.GetAccessType(door)
+		local title, subtitle
+
+		if accessType.DoorTitle then
+			title = isfunction(accessType.DoorTitle) and accessType:DoorTitle(door) or accessType.DoorTitle
+		else
+			title = door:GetDoorValue("Title")
+		end
+
+		if accessType.DoorSubtitle then
+			subtitle = isfunction(accessType.DoorSubtitle) and accessType:DoorSubtitle(door) or accessType.DoorSubtitle
+		else
+			subtitle = door:GetDoorValue("Subtitle")
+		end
 
 		if title == "" and subtitle == "" then
 			continue
