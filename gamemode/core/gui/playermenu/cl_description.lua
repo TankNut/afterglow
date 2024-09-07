@@ -85,7 +85,7 @@ local function func(self)
 		end
 	end)
 
-	hook.Add("CharacterDescriptionChanged", self.Description, function(_, ply)
+	hook.Add("OnCharacterDescriptionChanged", self.Description, function(_, ply)
 		if ply == LocalPlayer() then
 			updateDescription(self)
 		end

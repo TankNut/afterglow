@@ -7,7 +7,6 @@ IncludeFile("sv_data.lua")
 IncludeFile("sh_player_vars.lua")
 IncludeFile("sh_character.lua")
 IncludeFile("sv_character.lua")
-IncludeFile("sh_character_vars.lua")
 IncludeFile("sh_character_flags.lua")
 IncludeFile("sh_admin.lua")
 IncludeFile("sh_appearance.lua")
@@ -44,7 +43,7 @@ IncludeFolder("core/vgui")
 IncludeFolder("core/gui")
 IncludeFolder("core/gui/playermenu")
 
-IncludeFolder("core/net")
+IncludeFolder("core/character_vars")
 
 if SERVER then
 	for _, v in pairs(GM.Config.Content) do

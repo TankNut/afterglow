@@ -51,6 +51,8 @@ function PlayerVar.Add(key, data)
 				-- Write nil here to keep the database clean
 				PlayerVar.Save(ply, data.Field, value)
 			end
+
+			hook.Run("On" .. data.Accessor .. "Changed", ply, old, callValue)
 		end
 	else
 		meta["Get" .. data.Accessor] = function(ply)
@@ -78,14 +80,20 @@ function PlayerVar.Add(key, data)
 					-- Write nil here to keep the database clean
 					PlayerVar.Save(ply, data.Field, value)
 				end
+
+				hook.Run("On" .. data.Accessor .. "Changed", ply, old, callValue)
 			end
 		end
 
-		if CLIENT and data.Callback then
+		if CLIENT then
 			Netvar.AddEntityHook(data.Key, "PlayerVar", function(ply, old, value)
 				local callValue = value != nil and value or data.Default
 
-				data.Callback(ply, old, callValue)
+				if data.Callback then
+					data.Callback(ply, old, callValue)
+				end
+
+				hook.Run("On" .. data.Accessor .. "Changed", ply, old, callValue)
 			end)
 		end
 	end
