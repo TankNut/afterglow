@@ -38,6 +38,14 @@ local function func(self)
 
 	updateDescription(self)
 
+	if Config.Get("UseMoney") then
+		self.Money = bottom:Add("ScribeLabel")
+		self.Money:DockMargin(5, 0, 0, 0)
+		self.Money:Dock(LEFT)
+		self.Money:SetAlignment(TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		self.Money:SetText(string.format("<small><cnormal>%s: %s", Config.Get("MoneyName")[2]:FirstToUpper(), LocalPlayer():GetMoney()))
+	end
+
 	self.ChangeDescription = bottom:Add("DButton")
 	self.ChangeDescription:DockMargin(5, 0, 0, 0)
 	self.ChangeDescription:Dock(RIGHT)
