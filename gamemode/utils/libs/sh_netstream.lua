@@ -144,7 +144,7 @@ if SERVER then
 		local data = {
 			Name = name,
 			Final = final,
-			Length = payload and payload.Length,
+			Length = payload and payload.Length or 0,
 			Data = payload and payload.Data
 		}
 
