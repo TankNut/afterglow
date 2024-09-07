@@ -18,7 +18,7 @@ GM.Config.DefaultLanguages = table.Lookup({
 
 -- Money
 GM.Config.UseMoney = true
-GM.Config.MoneyName = {"Credit", "Credits"}
+GM.Config.MoneyName = {"credit", "credits"}
 
 GM.Config.DoorPrice = 20
 
