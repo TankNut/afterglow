@@ -19,10 +19,6 @@ function meta:CanInteract(ent)
 end
 
 if CLIENT then
-	function GM:SelectDefaultWeapon(ply)
-		return ply:GetCharacterFlagAttribute("Weapons")[1] or "weapon_physgun"
-	end
-
 	Netstream.Hook("PostPlayerSpawn", function()
 		hook.Run("PostPlayerSpawn", LocalPlayer())
 	end)
