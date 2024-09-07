@@ -14,7 +14,7 @@ function CLASS:UpdateInfo(force)
 		return
 	end
 
-	self.LastName = ply:GetVisibleName()
+	self.LastName = ply:GetVisibleName():Escape()
 	self.LastTeam = ply:Team()
 
 	local color = Hud.Skin.Text.Normal
