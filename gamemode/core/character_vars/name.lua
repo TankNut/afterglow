@@ -2,20 +2,46 @@ local meta = FindMetaTable("Player")
 
 Character.AddVar("Name", {
 	Private = true,
-	Default = "*INVALID*"
+	Default = "*INVALID*",
+	Callback = function(ply, old, new)
+		if SERVER and not CHARACTER_LOADING then
+			ply:UpdateName()
+			ply:LoadCharacterList()
+		end
+	end
 })
 
 PlayerVar.Add("VisibleName", {
 	Default = ""
 })
 
+PlayerVar.Add("ForcedCharacterName", {
+	Default = false
+})
+
 function meta:HasForcedCharacterName()
-	return tobool(hook.Run("GetCharacterName", self))
+	return self:GetForcedCharacterName()
 end
 
 if SERVER then
 	function meta:UpdateName()
-		self:SetVisibleName(hook.Run("GetCharacterName", self) or self:GetCharacterName())
+		local forced = hook.Run("GetCharacterNameOverride", self)
+
+		if forced then
+			self:SetForcedCharacterName(true)
+			self:SetVisibleName(forced)
+		else
+			self:SetForcedCharacterName(false)
+			self:SetVisibleName(hook.Run("GetCharacterName", self))
+		end
+	end
+
+	function GM:GetCharacterName(ply)
+		return ply:GetCharacterName()
+	end
+
+	function GM:GetCharacterNameOverride(ply)
+		return ply:GetCharacterFlagAttribute("CharacterName")
 	end
 
 	Netstream.Hook("SetCharacterName", function(ply, new)
@@ -33,16 +59,11 @@ if SERVER then
 			return
 		end
 
-		ply:SetCharacterName(ply, new)
+		hook.Run("SetCharacterName", ply, new)
 	end)
-end
 
-function GM:GetCharacterName(ply) return ply:GetCharacterFlagAttribute("CharacterName") end
-
-function GM:OnCharacterNameChanged(ply, old, new)
-	if SERVER and not CHARACTER_LOADING then
-		ply:UpdateName()
-		ply:LoadCharacterList()
+	function GM:SetCharacterName(ply, new)
+		ply:SetCharacterName(new)
 	end
 end
 

@@ -72,6 +72,7 @@ else
 
 		ply:UpdateTeam()
 		ply:UpdateName()
+		ply:UpdateDescription()
 
 		ply:SetMaxHealth(health)
 		ply:SetHealth(math.ceil(healthFraction * health))

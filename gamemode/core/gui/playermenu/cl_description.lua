@@ -1,5 +1,5 @@
 local function updateDescription(self)
-	local desc = LocalPlayer():GetCharacterDescription():Escape()
+	local desc = LocalPlayer():GetVisibleDescription():Escape()
 
 	self.Description:SetText(string.format("<iset=2><small><cnormal>%s", desc))
 	self.Description:SizeToContentsY()
@@ -52,7 +52,7 @@ local function func(self)
 				Max = Config.Get("MaxDescriptionLength"),
 				AllowedCharacters = Config.Get("DescriptionCharacters"),
 				Multiline = true,
-				Default = LocalPlayer():GetCharacterDescription()
+				Default = LocalPlayer():GetVisibleDescription()
 			})
 
 			Netstream.Send("SetCharacterDescription", new)
@@ -79,16 +79,14 @@ local function func(self)
 		end)()
 	end
 
-	hook.Add("CharacterNameChanged", self.CharacterName, function(_, ply, _, new)
+	hook.Add("OnVisibleNameChanged", self.CharacterName, function(ply, _, new)
 		if ply == LocalPlayer() then
 			self.CharacterName:SetText(new)
 		end
 	end)
 
-	hook.Add("OnCharacterDescriptionChanged", self.Description, function(_, ply)
-		if ply == LocalPlayer() then
-			updateDescription(self)
-		end
+	hook.Add("OnVisibleDescriptionChanged", self.Description, function(ply)
+		updateDescription(self)
 	end)
 end
 
