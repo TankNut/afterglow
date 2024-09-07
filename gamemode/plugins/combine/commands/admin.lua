@@ -1,5 +1,5 @@
 local setFlag = Console.AddCommand("rpa_combine_flag_set", function(ply, targets, flag)
-	local flagTable = CombineFlag.GetOrDefault(flag)
+	local flagTable = CombineFlag.Get(flag)
 	local name = flagTable.Name
 
 	for _, target in pairs(targets) do
