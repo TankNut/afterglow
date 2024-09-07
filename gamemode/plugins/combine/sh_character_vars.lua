@@ -17,6 +17,14 @@ Character.AddVar("CombineFlag", {
 				ply:SetCombineFlagged(false)
 			else
 				hook.Run("PlayerSetup", ply)
+
+				if ply:GetCombineName() == nil then
+					ply:SetCombineName(ply:GetCharacterName())
+				end
+
+				if ply:GetCombineDescription() == nil then
+					ply:SetCombineDescription(ply:GetCharacterDescription())
+				end
 			end
 		end
 	end
@@ -52,3 +60,4 @@ Character.AddVar("CombineSquadID", {
 		end
 	end
 })
+

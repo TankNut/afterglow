@@ -3,6 +3,7 @@ Combine = Combine or {}
 Combine.DefaultTeam = TEAM_COMBINE
 
 IncludeFile("sh_character_vars.lua")
+IncludeFile("sh_combine_name.lua")
 IncludeFile("sh_combineflag.lua")
 IncludeFile("sh_content.lua")
 IncludeFile("sh_hooks.lua")
