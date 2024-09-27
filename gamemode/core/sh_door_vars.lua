@@ -234,21 +234,12 @@ Door.AddVar("BuyGroup", {
 	end,
 })
 
-Door.AddVar("BuyPrice", {
+Door.AddVar("Buyer", {
 	Mode = DOOR_BOTH,
-	Saved = true,
-	Edit = {
-		title = "Price",
-		type = "Int",
-		category = "Ownership",
-		min = 0,
-		max = 100,
-		order = 2,
-	},
-	Get = function(self) return self:GetNWInt("DoorBuyPrice", 0) end,
+	Get = function(self) return self:GetNWEntity("DoorBuyer") end,
 	Set = function(self, value)
-		self:SetNWInt("DoorBuyPrice", value)
-	end,
+		self:SetNWEntity("DoorBuyer", value)
+	end
 })
 
 Door.AddVar("Title", {
