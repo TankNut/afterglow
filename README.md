@@ -1,7 +1,5 @@
 # Afterglow
 
-### [Discord](https://discord.gg/6UbUduHZBp)
-
 ### noun
 * light or radiance remaining in the sky after the sun has set.
 * good feelings remaining after a pleasurable or successful experience.
